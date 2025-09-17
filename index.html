@@ -1,335 +1,123 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Minecraft Name Watcher — TradingView style</title>
-
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
-  <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --accent:#00c2ff; --muted:#94a3b8; --glass: rgba(255,255,255,0.03);
-      --success:#22c55e; --danger:#ef4444;
-    }
-    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;}
-    body{background:linear-gradient(180deg,#071027 0%,#081426 100%); color:#e6eef8; padding:18px;}
-    .container{max-width:1100px;margin:0 auto;}
-    header{display:flex;align-items:center;gap:16px;margin-bottom:18px;}
-    h1{font-size:20px;margin:0}
-    .card{background:var(--card); border-radius:12px; padding:14px; box-shadow:0 6px 22px rgba(2,6,23,0.6); margin-bottom:12px;}
-    .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-    input[type="text"]{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit}
-    button{padding:10px 12px;border-radius:8px;border:none;background:var(--accent);color:#001;cursor:pointer}
-    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-    .list{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-    .tag{background:rgba(255,255,255,0.02);padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.02)}
-    .row{display:flex;gap:8px;align-items:center;justify-content:space-between}
-    #status{font-size:13px;color:var(--muted);margin-top:8px}
-    .log{height:160px;overflow:auto;padding:10px;border-radius:8px;background:rgba(0,0,0,0.15);margin-top:12px;font-family:monospace;font-size:13px}
-    .small{font-size:13px;color:var(--muted)}
-    .name-row{display:flex;gap:8px;align-items:center}
-    .name-item{display:flex;gap:12px;align-items:center;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02);min-width:220px}
-    .available{color:var(--success);font-weight:600}
-    .taken{color:var(--danger);font-weight:600}
-    footer{margin-top:14px;color:var(--muted);font-size:13px}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Name Watcher + NameMC quick-open</title>
+<style>
+  body{font-family:Inter,system-ui,Arial;background:#071227;color:#e6eef8;padding:20px}
+  .card{background:#0b1320;padding:14px;border-radius:10px;margin-bottom:12px}
+  button{background:#00c2ff;color:#001;border:none;padding:8px 10px;border-radius:8px;cursor:pointer}
+  .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#94a3b8}
+  .viewer{height:420px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);overflow:hidden;background:#071221;display:flex;align-items:center;justify-content:center}
+  .small{color:#94a3b8;font-size:13px}
+  a.link{color:#9be7ff}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Minecraft Name Watcher — TradingView style</h1>
-      <div class="small">Polite watcher using Mojang public API • Respects rate limits</div>
-    </header>
+  <div class="card">
+    <h2 style="margin:0 0 8px 0">NameMC quick access</h2>
+    <div class="small" style="margin-bottom:8px">
+      Full results pages are often blocked from iframes. Use the buttons below to open NameMC results directly or use NameMC's small official search box embedded here.
+    </div>
 
-    <div class="card">
-      <div class="controls">
-        <input id="nameInput" type="text" placeholder="Add username to watch (a-z, 3-16 chars)" />
-        <button id="addBtn">+ Add</button>
-        <label class="small">Poll interval (s):
-          <input id="intervalInput" type="number" value="15" min="5" style="width:70px;margin-left:8px;padding:6px;border-radius:6px;border:none"/>
-        </label>
-        <button id="startBtn">Start</button>
-        <button id="stopBtn" class="ghost" disabled>Stop</button>
-        <button id="clearLog" class="ghost">Clear Log</button>
+    <!-- Official NameMC embed search box (allowed) -->
+    <div style="margin-bottom:10px">
+      <label class="small">Search on NameMC (embedded search box):</label>
+      <div style="margin-top:8px">
+        <!-- NameMC offers an official embed widget (small / medium). This is allowed by the site. -->
+        <iframe src="https://namemc.com/embed?size=medium" width="400" height="38" style="border:0"></iframe>
       </div>
-
-      <div id="watchList" class="list" aria-live="polite" style="margin-top:12px"></div>
-      <div id="status" class="small">Idle</div>
+      <div class="small" style="margin-top:6px">Tip: type a name and press Enter to jump to NameMC search results in a new tab.</div>
     </div>
 
-    <div class="card">
-      <canvas id="chart" height="120"></canvas>
-      <div class="small" style="margin-top:8px">Chart: checks per minute & availability events</div>
+    <!-- Try to embed the exact results page; fallback to link if blocked -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button id="tryEmbed">Try embed 3-letter results</button>
+      <button id="openTab" class="ghost">Open NameMC results (3-letter) in new tab</button>
+      <button id="autoOpen" class="ghost">Auto-open results now</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <strong>NameMC viewer (may be blocked)</strong>
+      <span class="small">If blank, click "Open ... in new tab".</span>
     </div>
 
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div><strong>Activity log</strong></div>
-        <div class="small">Notifications must be allowed in browser</div>
-      </div>
-      <div id="log" class="log"></div>
+    <div id="viewer" class="viewer" style="margin-top:10px">
+      <div id="viewerMessage" class="small">Click “Try embed 3-letter results” — if NameMC blocks embedding the full page we’ll show a fallback and you can open results in a new tab.</div>
     </div>
 
-    <footer>
-      Uses Mojang public endpoints — do not abuse. For educational purposes only. See Mojang API docs / wiki.vg for details.
-    </footer>
+    <div id="fallback" style="margin-top:8px;display:none;">
+      <div class="small">Embedding blocked by NameMC. <a id="linkUrl" class="link" target="_blank" rel="noopener">Open NameMC results (3-letter) in a new tab</a></div>
+    </div>
   </div>
 
 <script>
-/*
-  Polite name watcher:
-  - Uses Mojang username endpoint: GET https://api.mojang.com/users/profiles/minecraft/{name}
-    (200 => taken, 204/404 => available / not found historically)
-  - Exponential backoff on 429 or network error.
-  - Chart shows checks/min and events.
-  - Respect the API: default interval 15s, minimum 5s. Do NOT use for automated sniping.
-*/
+const NAMEMC_URL = 'https://namemc.com/minecraft-names?sort=asc&length_op=eq&length=3&lang=&searches=0';
+const viewer = document.getElementById('viewer');
+const viewerMessage = document.getElementById('viewerMessage');
+const fallback = document.getElementById('fallback');
+const linkUrl = document.getElementById('linkUrl');
 
-const API_BASE = 'https://api.mojang.com/users/profiles/minecraft';
-const minIntervalSec = 5;
+linkUrl.href = NAMEMC_URL;
+linkUrl.innerText = 'Open NameMC results (3-letter) in a new tab';
 
-let watchNames = []; // {name, status}
-let timer = null;
-let intervalSec = 15;
-let backoffMultiplier = 1;
-let checksThisMinute = 0;
-let chartData = { labels: [], checks: [], events: [] };
-let chart = null;
+// Try to embed - will often be blocked by X-Frame-Options or CSP, so we test and fallback.
+document.getElementById('tryEmbed').onclick = () => {
+  fallback.style.display = 'none';
+  viewer.innerHTML = ''; // clear
+  viewer.appendChild(viewerMessage);
+  viewerMessage.innerText = 'Loading...';
+  const iframe = document.createElement('iframe');
+  iframe.src = NAMEMC_URL;
+  iframe.style.width = '100%';
+  iframe.style.height = '100%';
+  iframe.style.border = '0';
+  iframe.loading = 'lazy';
+  viewer.appendChild(iframe);
 
-const el = {
-  nameInput: document.getElementById('nameInput'),
-  addBtn: document.getElementById('addBtn'),
-  startBtn: document.getElementById('startBtn'),
-  stopBtn: document.getElementById('stopBtn'),
-  intervalInput: document.getElementById('intervalInput'),
-  watchList: document.getElementById('watchList'),
-  status: document.getElementById('status'),
-  log: document.getElementById('log'),
-  clearLog: document.getElementById('clearLog')
+  // after a short delay, check whether it rendered. Many blocked pages will be blank or about:blank.
+  setTimeout(()=>{
+    let blocked = false;
+    try {
+      // Accessing contentDocument will throw for cross-origin; but cross-origin is okay.
+      // We check if the iframe shows about:blank or has no content body (some blocked pages are blank).
+      const doc = iframe.contentDocument || iframe.contentWindow?.document;
+      if(!doc || !doc.body || doc.body.innerHTML.trim().length === 0){
+        blocked = true;
+      }
+    } catch(e){
+      // If access throws, that usually just means cross-origin (not necessarily blocked).
+      // But many sites that allow framing will render — we'll conservatively treat throws as 'possibly blocked'
+      // and then check visually by waiting a little longer and seeing if the iframe rendered (but we can't inspect cross-origin).
+      // To keep UX simple: treat certain errors as blocked for NameMC.
+      blocked = true;
+    }
+    if(blocked){
+      viewer.innerHTML = '<div class="small">Embedding blocked by NameMC (security headers). Use the button below to open results in a new tab.</div>';
+      fallback.style.display = 'block';
+    } else {
+      viewerMessage.remove();
+      fallback.style.display = 'none';
+    }
+  }, 700);
 };
 
-function log(msg){
-  const t = new Date().toLocaleTimeString();
-  el.log.innerText = `[${t}] ${msg}\n` + el.log.innerText;
-}
-function renderList(){
-  el.watchList.innerHTML = '';
-  watchNames.forEach(w=>{
-    const div = document.createElement('div');
-    div.className = 'name-item';
-    div.innerHTML = `<div style="min-width:120px"><strong>${w.name}</strong></div>
-                     <div class="${w.status==='available'?'available':'taken'}">${w.status||'unknown'}</div>
-                     <div style="margin-left:auto"><button data-name="${w.name}" class="rm">Remove</button></div>`;
-    el.watchList.appendChild(div);
-  });
-  Array.from(document.getElementsByClassName('rm')).forEach(b=>{
-    b.onclick = e=>{
-      const n = e.target.getAttribute('data-name');
-      watchNames = watchNames.filter(x=>x.name!==n);
-      renderList();
-    };
-  });
-}
-
-function addName(n){
-  n = n.trim();
-  if(!/^[a-z0-9_]{3,16}$/.test(n)){
-    alert('Invalid Minecraft username format (lowercase letters, numbers, underscore, 3-16 chars).');
-    return;
-  }
-  if(watchNames.some(w=>w.name===n)) return;
-  watchNames.push({name:n, status:'unknown'});
-  renderList();
-  log('Added ' + n);
-}
-
-el.addBtn.onclick = ()=>{ addName(el.nameInput.value); el.nameInput.value=''; }
-el.intervalInput.onchange = ()=> {
-  const v = parseInt(el.intervalInput.value||'15',10);
-  intervalSec = Math.max(minIntervalSec, v);
-  log('Interval set to ' + intervalSec + 's (please be polite)');
-}
-
-el.clearLog.onclick = ()=> { el.log.innerText = ''; }
-
-el.startBtn.onclick = ()=>{
-  if(watchNames.length===0){ alert('Add at least one name'); return; }
-  intervalSec = Math.max(minIntervalSec, parseInt(el.intervalInput.value||'15',10));
-  startWatching();
+// open in new tab always works
+document.getElementById('openTab').onclick = () => {
+  window.open(NAMEMC_URL, '_blank', 'noopener');
 };
-el.stopBtn.onclick = stopWatching;
 
-function startWatching(){
-  if(timer) return;
-  el.startBtn.disabled = true;
-  el.stopBtn.disabled = false;
-  el.status.innerText = 'Running — polling every ' + intervalSec + 's';
-  // reset counters
-  checksThisMinute = 0;
-  chartData = { labels:[], checks:[], events:[] };
-  initChart();
-  // minute bucket for checks per min
-  setInterval(()=> {
-    chartPushBucket(checksThisMinute);
-    checksThisMinute = 0;
-  }, 60*1000);
-  scheduleNextCheck(0);
-}
+// auto open (useful if iframe won't load, but be careful: opens a new tab immediately)
+document.getElementById('autoOpen').onclick = () => {
+  window.open(NAMEMC_URL, '_blank', 'noopener');
+};
 
-function stopWatching(){
-  if(timer){ clearTimeout(timer); timer = null; }
-  el.startBtn.disabled = false;
-  el.stopBtn.disabled = true;
-  el.status.innerText = 'Stopped';
-  log('Watcher stopped');
-}
+// Optionally auto-open on page load (commented out to avoid surprise popups)
+// window.open(NAMEMC_URL, '_blank', 'noopener');
 
-// schedule with current backoff multiplier
-function scheduleNextCheck(delaySec){
-  const s = Math.max(0,delaySec) * 1000;
-  timer = setTimeout(()=> runChecks(), s);
-}
-
-async function runChecks(){
-  if(watchNames.length===0){ stopWatching(); return; }
-  el.status.innerText = `Running — checking ${watchNames.length} name(s) (backoff x${backoffMultiplier})`;
-  for(const entry of watchNames){
-    try{
-      await checkSingle(entry);
-      // gentle delay between names to avoid burst
-      await sleep(200 + Math.random()*300);
-    } catch(err){
-      console.error('check error', err);
-      log('Network error checking ' + entry.name + ' — ' + (err.message||err));
-      // if network error, we'll increase backoff below
-    }
-  }
-  // update minute counter
-  checksThisMinute += watchNames.length;
-  // reset multiplier on success (keep small backoff)
-  backoffMultiplier = Math.max(1, backoffMultiplier * 0.9);
-  // schedule next
-  const nextSec = intervalSec * backoffMultiplier;
-  scheduleNextCheck(nextSec);
-}
-
-async function checkSingle(entry){
-  // Use Mojang public endpoint
-  const url = `${API_BASE}/${encodeURIComponent(entry.name)}`;
-  // The simple lookup returns 200 if the name exists, 204/404 if not — handle statuses safely
-  let resp;
-  try{
-    resp = await fetch(url, { method:'GET', cache: 'no-store' });
-  } catch(e){
-    // network error => increase backoff
-    backoffMultiplier = Math.min(60, backoffMultiplier*1.8);
-    throw e;
-  }
-
-  if(resp.status === 200){
-    // name taken
-    if(entry.status !== 'taken'){
-      entry.status = 'taken';
-      log(`${entry.name} — taken`);
-      chartAddEvent(entry.name, 'taken');
-    }
-  } else if(resp.status === 204 || resp.status === 404){
-    // likely available
-    if(entry.status !== 'available'){
-      entry.status = 'available';
-      log(`${entry.name} — AVAILABLE!`);
-      chartAddEvent(entry.name, 'available');
-      notify(`${entry.name} is available!`);
-    }
-  } else if(resp.status === 429){
-    log('Rate limited (429). Increasing backoff.');
-    backoffMultiplier = Math.min(60, backoffMultiplier*1.4);
-    // leave entry status unchanged
-  } else {
-    // other statuses — handle gracefully
-    const text = await resp.text().catch(()=> '');
-    log(`Unexpected response for ${entry.name}: ${resp.status} ${text.slice(0,80)}`);
-  }
-  renderList();
-}
-
-function notify(msg){
-  if(Notification.permission === 'granted'){
-    new Notification('Name Watcher', { body: msg });
-  } else if(Notification.permission !== 'denied'){
-    Notification.requestPermission().then(p => {
-      if(p === 'granted') new Notification('Name Watcher', { body: msg });
-    });
-  }
-}
-
-/* chart helpers */
-function initChart(){
-  const ctx = document.getElementById('chart').getContext('2d');
-  if(chart) chart.destroy();
-  chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: chartData.labels,
-      datasets: [
-        { label: 'Checks / min', data: chartData.checks, yAxisID: 'y' },
-        { label: 'Availability events', data: chartData.events, type: 'line', yAxisID: 'y2', tension:0.3, pointRadius:6 }
-      ]
-    },
-    options: {
-      responsive:true,
-      scales: {
-        y: { position:'left', beginAtZero:true },
-        y2: { position:'right', beginAtZero:true, grid: { display:false } }
-      },
-      plugins: { legend: { position:'top' } }
-    }
-  });
-}
-
-function chartPushBucket(count){
-  const label = new Date().toLocaleTimeString();
-  chartData.labels.push(label);
-  chartData.checks.push(count);
-  chartData.events.push(null);
-  if(chartData.labels.length > 30){
-    chartData.labels.shift();
-    chartData.checks.shift();
-    chartData.events.shift();
-  }
-  updateChart();
-}
-
-function chartAddEvent(name, type){
-  // put a marker on the last bucket (or create one)
-  const idx = chartData.labels.length ? chartData.labels.length - 1 : 0;
-  const val = type === 'available' ? 1 : 0.5;
-  // ensure arrays are consistent
-  while(chartData.labels.length <= idx){
-    chartData.labels.push(new Date().toLocaleTimeString());
-    chartData.checks.push(0);
-    chartData.events.push(null);
-  }
-  chartData.events[idx] = val;
-  updateChart();
-}
-
-function updateChart(){
-  if(!chart) initChart();
-  chart.data.labels = chartData.labels;
-  chart.data.datasets[0].data = chartData.checks;
-  chart.data.datasets[1].data = chartData.events;
-  chart.update();
-}
-
-function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
-
-// Initialize
-renderList();
-initChart();
-log('Ready. Add names and click Start. Remember: be polite to Mojang/NameMC and do not attempt to bypass protections.');
 </script>
 </body>
 </html>
