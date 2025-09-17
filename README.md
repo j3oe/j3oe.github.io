@@ -1,5 +1,3 @@
-# j3oee.github.io
-
 # Perceptual Empathy
 
 An interatice art piece to help visitors explore how perception can shift when thoughts, sounds, and sights compete for attention
