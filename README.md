@@ -1,32 +1,46 @@
-# Perceptual Empathy
+# Fuck You, Penguin (Fan Recreation)
 
-An interatice art piece to help visitors explore how perception can shift when thoughts, sounds, and sights compete for attention
-It's an **educational experiment**, not a clinical tool.
+A playful, single-file throwback site inspired by the **2008–2010 era edgy blog** [Fuck You, Penguin](https://knowyourmeme.com/memes/sites/fuck-you-penguin). Built for fun, nostalgia, and darkly sarcastic penguin content.
 
----
-
-## What it does
-- Simple visual and audio effects simulate overlapping sensations that can make focusing harder.
-- Adjustable "intensity" slider so users can control how strong the effects feel.
-- Pause/Stop button and ESC hotkey for immediate exit.
+![preview](https://source.unsplash.com/featured/?penguin&sig=42)
 
 ---
 
-## Purpose
-This prokect aims to **foster empathy and curiosity** about how our brains process sounds and sights under strain.
-It is **not** an accurate or complete representation or schizophrenia or any mental health condition
+## Features
+- **Dark, minimal design** inspired by late-2000s blogs
+- **Random penguin images** from [Unsplash](https://unsplash.com/) with `?penguin&sig=` seeds
+- **Caption generator** with multiple tones:
+  - Snark
+  - Nihil
+  - Absurd
+  - Wholesome (ironically)
+- **Download button** to save captioned penguins (browser cross-origin rules may block — fallback is right-click → save image)
+- 100% static: just an `index.html` file
 
 ---
 
-## Important
-- **Trigger warning:** Some people may find the visuals or sounds unsettling.
-- **Not medical advice:** Nothing here diagnoses or treats any condition.
-- **Resources:** If you feel distressed, please pause the demo and visit [https://findahelpline.com](https://findahelpline.com) or a local support service.
+## Getting Started
+1. Clone or fork this repo
+   ```bash
+   git clone https://github.com/YOURUSERNAME/fuck-you-penguin.git
+   ```
+2. Open `index.html` in your browser.
 
 ---
 
-## Running locally
-``` bash
-git clone https://github.com/j3oe/j3oe.github.io.git
-cd j3oe.github.io
-# open index.html in your browser
+## GitHub Pages Deployment
+1. Push to a GitHub repo (e.g. `fuck-you-penguin`).
+2. In repo settings → Pages → set source to `main` branch, root folder.
+3. Visit `https://yourusername.github.io/fuck-you-penguin/`.
+
+---
+
+## Notes
+- This is a **fan-made homage** and not affiliated with the original *Fuck You, Penguin* blog.
+- Images come from Unsplash’s random penguin feed.
+- Captions are generated in-browser; feel free to expand the tone lists inside `index.html`.
+
+---
+
+## License
+MIT License. Free to use, remix, and share.
