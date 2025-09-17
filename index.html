@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Forget You, Penguin</title>
+  <meta name="description" content="A sarcastic / dark-humor penguin blog generator inspired by late-2000s edgy blogs." />
+  <style>
+    :root{
+      --bg:#0b0b0d; --panel:#0f1012; --muted:#9aa0a6; --accent:#e63b53;
+      --glass: rgba(255,255,255,0.03);
+      --mono: 'Courier New', Courier, monospace;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:linear-gradient(180deg,#040406 0%, #0b0b0d 100%); color:#e6e7e8}
+    .wrap{max-width:980px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;gap:16px}
+    .logo{font-family:var(--mono);font-size:20px;letter-spacing:1px;color:var(--accent)}
+    h1{margin:0;font-size:28px}
+    p.lead{color:var(--muted);margin:6px 0 18px}
+
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+    button{background:var(--glass);border:1px solid rgba(255,255,255,0.05);padding:10px 14px;border-radius:10px;color:inherit;cursor:pointer}
+    button.primary{background:linear-gradient(90deg, rgba(230,59,83,0.14), rgba(230,59,83,0.08));border-color:rgba(230,59,83,0.25)}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.02)}
+
+    .preview{display:grid;grid-template-columns:1fr;gap:12px}
+    .post{display:flex;gap:12px;align-items:flex-start}
+    .imgwrap{width:400px;max-width:100%;border-radius:10px;overflow:hidden;flex-shrink:0}
+    img.media{width:100%;height:auto;display:block}
+
+    .caption{font-family:var(--mono);background:rgba(0,0,0,0.45);padding:14px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+    .caption p{margin:0;font-size:18px}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+
+    .small{font-size:13px;color:var(--muted)}
+
+    /* responsive */
+    @media(min-width:760px){.preview{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">F*** Y U</div>
+      <div>
+        <h1>Forget You, Penguin</h1>
+        <p class="lead">A tiny throwback to 2008–2010 edgeblogs. Generate sarcastic penguin posts dark, silly, and shamelessly dramatic.</p>
+      </div>
+    </header>
+
+    <div class="controls card" style="margin-top:10px">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button id="randBtn" class="primary">Generate new post</button>
+        <button id="saveBtn">Download image</button>
+        <select id="tone" title="Tone" aria-label="Tone selector">
+          <option value="snark">Snark</option>
+          <option value="nihil">Nihil</option>
+          <option value="absurd">Absurd</option>
+          <option value="wholesome">Wholesome (ironically)</option>
+        </select>
+        <label class="small" style="margin-left:8px">Image source: <strong><a href="https://unsplash.com/s/photos/penguin" target="_blank">Unsplash Penguin Photos</a></strong></label>
+      </div>
+      <div class="small" style="margin-top:8px">Tip: right-click images to open in new tab. This is a playful fan-recreation, not the original site.</div>
+    </div>
+
+    <main class="card preview" style="margin-top:14px">
+      <article class="post" id="post">
+        <div class="imgwrap">
+          <img id="media" class="media" src="https://images.unsplash.com/photo-1506619216599-9d16d0903dfd?auto=format&fit=crop&w=800&q=80" alt="penguin image">
+        </div>
+        <div style="flex:1">
+          <div class="caption" id="caption"><p>Loading edgy penguin content...</p></div>
+          <div style="margin-top:8px;color:var(--muted)" id="meta">— generated just now</div>
+        </div>
+      </article>
+      <footer class="card small">This project is an original homage. Want the full repo (index.html only) ready for GitHub Pages? It's available in this canvas. Customize captions, fonts, or add old-school guestbook behavior.</footer>
+    </main>
+  </div>
+
+  <script>
+    // tiny caption generator + image randomizer
+    const captions = {
+      snark: [
+        "You look at me like I'm about to apologize. I'm a penguin. I never apologize.",
+        "Cute? Nah. I'm cold, tired, and emotionally unavailable.",
+        "Go ahead, take my photo. My privacy is ice.",
+        "If you wanted warmth, visit a toaster."
+      ],
+      nihil: [
+        "The ice melts. So will your excuses.",
+        "Everything ends. Especially this afternoon.",
+        "We all waddle toward the void. Let's look fetching doing it.",
+        "Hope is a fish that never bites."
+      ],
+      absurd: [
+        "I once signed a treaty with a walrus. We lost.",
+        "This penguin only communicates via interpretive dance and cryptic tweets.",
+        "My hobbies include existential loafing and competitive staring.",
+        "Ask me about my cactus collection."
+      ],
+      wholesome: [
+        "I forgive you. Now give me a fish.",
+        "Tiny flippers. Big heart. You got this.",
+        "Be kind. Be ridiculous. Be a penguin.",
+        "Smile — it confuses predators."
+      ]
+    };
+
+    const media = document.getElementById('media');
+    const captionEl = document.getElementById('caption');
+    const meta = document.getElementById('meta');
+    const randBtn = document.getElementById('randBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const toneSel = document.getElementById('tone');
+
+    function nowISO(){return new Date().toLocaleString()}
+
+    const unsplashPenguins = [
+      "https://images.unsplash.com/photo-1506619216599-9d16d0903dfd?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1615198336152-c3eaeed0064e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1582142281700-9a94a42f055e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1581888227599-779811ca0d8d?auto=format&fit=crop&w=800&q=80"
+    ];
+
+    function generate(){
+      const tone = toneSel.value;
+      const list = captions[tone] || captions['snark'];
+      const c = list[Math.floor(Math.random()*list.length)];
+
+      // pick random Unsplash penguin photo from list
+      const s = Math.floor(Math.random()*unsplashPenguins.length);
+      media.src = unsplashPenguins[s];
+
+      captionEl.innerHTML = `<p>${c}</p>`;
+      meta.textContent = `— generated ${nowISO()} • tone: ${tone}`;
+
+      media.dataset.seed = s;
+      captionEl.dataset.text = c;
+    }
+
+    randBtn.addEventListener('click',()=>generate());
+
+    saveBtn.addEventListener('click',async()=>{
+      try{
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = media.src;
+        await img.decode();
+
+        const canvas = document.createElement('canvas');
+        const w = Math.min(img.width, 1200);
+        const h = Math.round(img.height * (w/img.width));
+        canvas.width = w; canvas.height = h + 160;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#0b0b0d'; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(img,0,0,w,h);
+
+        ctx.fillStyle = 'rgba(0,0,0,0.65)';
+        ctx.fillRect(0,h,canvas.width,160);
+
+        ctx.font = '18px Courier New, monospace';
+        ctx.fillStyle = '#ffffff';
+        const text = captionEl.dataset.text || captionEl.innerText || '';
+        wrapText(ctx,text,12,h+36,canvas.width-24,22);
+
+        ctx.font = '12px Arial'; ctx.fillStyle = '#b8b8b8';
+        ctx.fillText(meta.textContent,12,h+130);
+
+        const url = canvas.toDataURL('image/png');
+        const a = document.createElement('a'); a.href = url; a.download = 'fuck-you-penguin.png';
+        a.click();
+      }catch(err){
+        alert('Could not generate download. Browser blocking cross-origin images is common. Try opening the image in a new tab and saving it manually.');
+        console.error(err);
+      }
+    });
+
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight){
+      const words = text.split(' ');
+      let line = '';
+      for(let n=0;n<words.length;n++){
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        if(testWidth > maxWidth && n > 0){
+          ctx.fillText(line, x, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      ctx.fillText(line, x, y);
+    }
+
+    generate();
+  </script>
+</body>
+</html>
