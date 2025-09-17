@@ -1,4 +1,4 @@
-# Fuck You, Penguin (Fan Recreation)
+# Forget You, Penguin (Fan Recreation)
 
 A playful, single-file throwback site inspired by the **2008–2010 era edgy blog** [Fuck You, Penguin](https://knowyourmeme.com/memes/sites/fuck-you-penguin). Built for fun, nostalgia, and darkly sarcastic penguin content.
 
