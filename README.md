@@ -1,46 +1,40 @@
-# Forget You, Penguin (Fan Recreation)
+# The Hidden Truth Journal
 
-A playful, single-file throwback site inspired by the **2008–2010 era edgy blog** [Fuck You, Penguin](https://knowyourmeme.com/memes/sites/fuck-you-penguin). Built for fun, nostalgia, and darkly sarcastic penguin content.
-
-![preview]([https://source.unsplash.com/featured/?penguin&sig=42](https://unsplash.com/photos/white-and-black-penguin-on-snow-covered-ground-during-daytime-Ak81Vc-kCf4))
+A parody 2009-style conspiracy blog that rants endlessly about absurd and ridiculous government schemes. This is a fan-made, humorous recreation of chaotic “crazy blog” energy.
 
 ---
 
 ## Features
-- **Dark, minimal design** inspired by late-2000s blogs
-- **Random penguin images** from [Unsplash](https://unsplash.com/) with `?penguin&sig=` seeds
-- **Caption generator** with multiple tones:
-  - Snark
-  - Nihil
-  - Absurd
-  - Wholesome (ironically)
-- **Download button** to save captioned penguins (browser cross-origin rules may block — fallback is right-click → save image)
-- 100% static: just an `index.html` file
+- **Random conspiracy posts** generated on load and on button click.
+- **Infinite absurd content**, combining classic conspiracy buzzwords (pigeons, chemtrails, lizard people, fluoride, satellites, etc.).
+- **Dark retro blog aesthetic**, typewriter fonts, neon colors, sketchy layout.
+- **Button "New Revelation"** instantly generates a new post.
+- **No external images** — purely text-based parody.
 
 ---
 
 ## Getting Started
-1. Clone or fork this repo
+1. Clone or download this repo:
    ```bash
-   git clone https://github.com/j3oe/j3oe.github.io.git
+   git clone https://github.com/YOURUSERNAME/hidden-truth-journal.git
    ```
-2. Open `index.html` in your browser.
+2. Open `index.html` in a browser.
 
 ---
 
 ## GitHub Pages Deployment
-1. Push to a GitHub repo
+1. Push to a GitHub repository (e.g. `hidden-truth-journal`).
 2. In repo settings → Pages → set source to `main` branch, root folder.
-3. Visit `[https://github.com/j3oe/j3oe.github.io]`.
+3. Visit `https://yourusername.github.io/hidden-truth-journal/`.
 
 ---
 
 ## Notes
-- This is a **fan-made homage** and not affiliated with the original *Fuck You, Penguin* blog.
-- Images come from Unsplash’s random penguin feed.
-- Captions are generated in-browser; feel free to expand the tone lists inside `index.html`.
+- This is a **satirical project**; it does not promote actual conspiracy theories.
+- You can customize the buzzwords in `index.html` to generate your own unique absurd posts.
+- Perfect for creating chaotic, humorous content in a retro-blog style.
 
 ---
 
 ## License
-MIT License. Free to use, remix, and share.
+MIT License. Free to use, modify, and share.
