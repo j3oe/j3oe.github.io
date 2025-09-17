@@ -2,7 +2,7 @@
 
 A playful, single-file throwback site inspired by the **2008–2010 era edgy blog** [Fuck You, Penguin](https://knowyourmeme.com/memes/sites/fuck-you-penguin). Built for fun, nostalgia, and darkly sarcastic penguin content.
 
-![preview](https://source.unsplash.com/featured/?penguin&sig=42)
+![preview]([https://source.unsplash.com/featured/?penguin&sig=42](https://unsplash.com/photos/white-and-black-penguin-on-snow-covered-ground-during-daytime-Ak81Vc-kCf4))
 
 ---
 
