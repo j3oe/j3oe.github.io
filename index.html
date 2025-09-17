@@ -6,64 +6,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      background: #111;
-      color: #e0e0e0;
-      font-family: "Courier New", monospace;
-      line-height: 1.6;
+      background: #050505;
+      color: #f5f5f5;
+      font-family: 'Courier New', monospace;
+      line-height: 1.8;
       margin: 0;
       padding: 0;
+      text-shadow: 0 0 3px #ff0000, 0 0 5px #00ff00;
     }
     header {
       background: #000;
-      color: #0f0;
+      color: #ff00ff;
       text-align: center;
-      padding: 1.5rem;
-      border-bottom: 3px double #f00;
+      padding: 2rem 1rem;
+      border-bottom: 5px dashed #00ffff;
+      filter: drop-shadow(0 0 10px #ff0000);
     }
     header h1 {
       margin: 0;
-      font-size: 2rem;
+      font-size: 2.2rem;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
+      text-shadow: 0 0 5px #ff0000, 0 0 10px #00ff00;
+    }
+    header p {
+      font-size: 1rem;
+      color: #00ff00;
+      text-shadow: 0 0 3px #ff00ff;
     }
     main {
-      max-width: 700px;
+      max-width: 750px;
       margin: 2rem auto;
-      padding: 1.5rem;
-      background: #1a1a1a;
-      border: 2px solid #f00;
-      border-radius: 6px;
-      box-shadow: 0 0 20px #0f0;
+      padding: 2rem;
+      background: #1a0000;
+      border: 3px solid #ff0000;
+      border-radius: 8px;
+      box-shadow: 0 0 25px #ff00ff, 0 0 35px #00ff00;
     }
     h2 {
-      color: #f33;
+      color: #ff3300;
       text-transform: uppercase;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
+      text-shadow: 0 0 5px #ff00ff;
     }
     .post {
-      margin-bottom: 2rem;
+      margin-bottom: 3rem;
     }
     button {
       background: #000;
-      color: #0f0;
-      border: 2px solid #f00;
-      padding: 0.8rem 1.2rem;
+      color: #ff00ff;
+      border: 3px dotted #00ff00;
+      padding: 1rem 1.5rem;
       cursor: pointer;
       font-family: inherit;
-      font-size: 1rem;
+      font-size: 1.1rem;
       text-transform: uppercase;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
+      filter: drop-shadow(0 0 5px #ff0000);
       transition: all 0.2s ease-in-out;
     }
     button:hover {
-      background: #f00;
-      color: #fff;
+      background: #ff0000;
+      color: #000;
+      text-shadow: 0 0 10px #00ff00;
+      transform: rotate(-2deg) scale(1.05);
     }
     footer {
       text-align: center;
-      padding: 1rem;
+      padding: 1.5rem;
       font-size: 0.9rem;
-      color: #666;
+      color: #ff00ff;
+      text-shadow: 0 0 5px #00ff00;
     }
   </style>
 </head>
@@ -79,7 +92,7 @@
   </main>
 
   <footer>
-    &copy; 2009–2025 The Hidden Truth Journal. Open your eyes.
+    &copy; 2025 The Hidden Truth Journal. Open your eyes.
   </footer>
 
   <script>
@@ -136,7 +149,6 @@
       `;
     }
 
-    // Generate first post on load
     generatePost();
   </script>
 </body>
