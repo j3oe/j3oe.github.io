@@ -22,16 +22,16 @@ A playful, single-file throwback site inspired by the **2008–2010 era edgy blo
 ## Getting Started
 1. Clone or fork this repo
    ```bash
-   git clone https://github.com/YOURUSERNAME/fuck-you-penguin.git
+   git clone https://github.com/j3oe/j3oe.github.io.git
    ```
 2. Open `index.html` in your browser.
 
 ---
 
 ## GitHub Pages Deployment
-1. Push to a GitHub repo (e.g. `fuck-you-penguin`).
+1. Push to a GitHub repo
 2. In repo settings → Pages → set source to `main` branch, root folder.
-3. Visit `https://yourusername.github.io/fuck-you-penguin/`.
+3. Visit `[https://github.com/j3oe/j3oe.github.io]`.
 
 ---
 
