@@ -1,0 +1,1 @@
+document.getElementById('root').innerHTML = `<h1 style="color:white; background:black; text-align:center; padding:2rem;">Černý Blog</h1>`;
