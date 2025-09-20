@@ -4,10 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Černý Blog</title>
-<link rel="stylesheet" href="./index.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="root"></div>
-<script type="module" src="./main.js"></script>
+<div id="loading" class="loading">
+  <button id="enter" aria-label="Otevřít blog">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="cross">
+      <rect width="64" height="64" fill="none"/>
+      <g fill="none" stroke="white" stroke-width="2">
+        <path d="M32 10 v44" stroke-linecap="round"/>
+        <path d="M10 32 h44" stroke-linecap="round"/>
+        <path d="M48 14 v8" stroke-linecap="round"/>
+        <path d="M44 18 h8" stroke-linecap="round"/>
+        <path d="M48 46 v8" stroke-linecap="round"/>
+        <path d="M44 50 h8" stroke-linecap="round"/>
+        <path d="M16 14 v8" stroke-linecap="round"/>
+        <path d="M12 18 h8" stroke-linecap="round"/>
+        <path d="M16 46 v8" stroke-linecap="round"/>
+        <path d="M12 50 h8" stroke-linecap="round"/>
+      </g>
+    </svg>
+  </button>
+</div>
+
+<main id="mainContent" class="hidden">
+  <header>
+    <h1>Černý Blog</h1>
+  </header>
+  <section id="posts">
+    <article class="post" data-title="Úvod do blogu" data-date="20. září 2025" data-excerpt="Toto je moderní, černý a elegantní blog. Klikněte na příspěvek a čtěte dál.">
+      <h2>Úvod do blogu</h2>
+      <p>20. září 2025</p>
+      <p>Toto je moderní, černý a elegantní blog. Klikněte na příspěvek a čtěte dál.</p>
+    </article>
+    <article class="post" data-title="Kratší úvaha o historii" data-date="18. září 2025" data-excerpt="Krátký text, který odkazuje na historické prvky měst a památek. Styl je minimální a přehledný.">
+      <h2>Kratší úvaha o historii</h2>
+      <p>18. září 2025</p>
+      <p>Krátký text, který odkazuje na historické prvky měst a památek. Styl je minimální a přehledný.</p>
+    </article>
+    <article class="post" data-title="Jak vytvořit minimalistický design" data-date="15. září 2025" data-excerpt="Tipy, jak dosáhnout čistého designu s tmavým motivem a jednoduchou typografií.">
+      <h2>Jak vytvořit minimalistický design</h2>
+      <p>15. září 2025</p>
+      <p>Tipy, jak dosáhnout čistého designu s tmavým motivem a jednoduchou typografií.</p>
+    </article>
+  </section>
+</main>
+
+<div id="modal" class="modal hidden">
+  <button id="closeModal">Zavřít</button>
+  <h2 id="modalTitle"></h2>
+  <p id="modalDate"></p>
+  <p id="modalExcerpt"></p>
+</div>
+
+<script src="main.js"></script>
 </body>
 </html>
