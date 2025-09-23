@@ -1,62 +1,124 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Černý Blog</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Můj Blog</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    #loading-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 9999;
+      transition: opacity 1s ease;
+    }
+
+    #loading-screen img {
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #blog {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+      padding: 2rem;
+      color: white;
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+
+    #blog.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section {
+      margin-bottom: 2rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      border-top: 1px solid #333;
+    }
+  </style>
 </head>
 <body>
-<div id="loading" class="loading">
-  <button id="enter" aria-label="Otevřít blog">
-    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" class="cross">
-      <rect width="64" height="64" fill="none"/>
-      <g fill="none" stroke="white" stroke-width="2">
-        <path d="M32 10 v44" stroke-linecap="round"/>
-        <path d="M10 32 h44" stroke-linecap="round"/>
-        <path d="M48 14 v8" stroke-linecap="round"/>
-        <path d="M44 18 h8" stroke-linecap="round"/>
-        <path d="M48 46 v8" stroke-linecap="round"/>
-        <path d="M44 50 h8" stroke-linecap="round"/>
-        <path d="M16 14 v8" stroke-linecap="round"/>
-        <path d="M12 18 h8" stroke-linecap="round"/>
-        <path d="M16 46 v8" stroke-linecap="round"/>
-        <path d="M12 50 h8" stroke-linecap="round"/>
-      </g>
-    </svg>
-  </button>
-</div>
 
-<main id="mainContent" class="hidden">
-  <header>
-    <h1>Černý Blog</h1>
-  </header>
-  <section id="posts">
-    <article class="post" data-title="Úvod do blogu" data-date="20. září 2025" data-excerpt="Toto je moderní, černý a elegantní blog. Klikněte na příspěvek a čtěte dál.">
-      <h2>Úvod do blogu</h2>
-      <p>20. září 2025</p>
-      <p>Toto je moderní, černý a elegantní blog. Klikněte na příspěvek a čtěte dál.</p>
-    </article>
-    <article class="post" data-title="Kratší úvaha o historii" data-date="18. září 2025" data-excerpt="Krátký text, který odkazuje na historické prvky měst a památek. Styl je minimální a přehledný.">
-      <h2>Kratší úvaha o historii</h2>
-      <p>18. září 2025</p>
-      <p>Krátký text, který odkazuje na historické prvky měst a památek. Styl je minimální a přehledný.</p>
-    </article>
-    <article class="post" data-title="Jak vytvořit minimalistický design" data-date="15. září 2025" data-excerpt="Tipy, jak dosáhnout čistého designu s tmavým motivem a jednoduchou typografií.">
-      <h2>Jak vytvořit minimalistický design</h2>
-      <p>15. září 2025</p>
-      <p>Tipy, jak dosáhnout čistého designu s tmavým motivem a jednoduchou typografií.</p>
-    </article>
-  </section>
-</main>
+  <div id="loading-screen">
+    <img src="assets/spinner.png" alt="Načítání..." />
+  </div>
 
-<div id="modal" class="modal hidden">
-  <button id="closeModal">Zavřít</button>
-  <h2 id="modalTitle"></h2>
-  <p id="modalDate"></p>
-  <p id="modalExcerpt"></p>
-</div>
+  <div id="blog">
+    <section>
+      <h1>Vítejte na mém blogu</h1>
+      <p>Ahoj! Jsem rád, že jste zavítali. Tento blog je místo, kde sdílím své myšlenky, návody a experimenty.</p>
+    </section>
 
-<script src="main.js"></script>
+    <section>
+      <h2>Nejnovější příspěvek: Vytváření načítací obrazovky</h2>
+      <p>Vytvořit elegantní načítací obrazovku pro GitHub Pages je jednodušší, než si myslíte. Stačí trocha CSS animace a JavaScriptu.</p>
+      <ul>
+        <li>Použijte obrázek spinneru z vašeho repozitáře</li>
+        <li>Animujte ho pomocí CSS</li>
+        <li>Odhalte obsah pomocí plynulého přechodu</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Další projekty</h2>
+      <p>Zde je pár věcí, na kterých pracuji:</p>
+      <ol>
+        <li><strong>Portfolio web</strong> – Čistý přehled mé práce.</li>
+        <li><strong>Markdown blog engine</strong> – Statický blog založený na markdown souborech.</li>
+        <li><strong>CSS umění</strong> – Hraní si s tvary a přechody.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>O mně</h2>
+      <p>Jsem vývojář, který miluje čistý design, chytrý kód a dobrou kávu. Stavím věci pro web a občas o tom píšu.</p>
+    </section>
+
+    <footer>
+      &copy; 2025 Můj Blog. Vytvořeno s ❤️ a točícím PNG.
+    </footer>
+  </div>
+
+  <script>
+    const loadingScreen = document.getElementById('loading-screen');
+    const blog = document.getElementById('blog');
+
+    loadingScreen.addEventListener('click', () => {
+      loadingScreen.style.opacity = '0';
+      loadingScreen.style.pointerEvents = 'none';
+      blog.classList.add('visible');
+      document.body.style.overflow = 'auto';
+    });
+  </script>
+
 </body>
 </html>
