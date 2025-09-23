@@ -1,1 +1,3 @@
-***If you are to steal any of my work don't change or delete anything that's inside of the assets folder because the things that are inside of said folder make it so the main script works and actually does things instead of just is bad***
+## ***If you are to steal any of my work don't change or delete anything that's inside of the assets folder because the things that are inside of said folder make it so the main script works and actually does things instead of just is bad***
+
+- ***If using this script then make sure to credit me as well***
