@@ -9,3 +9,7 @@ I’m the sole creator of this project every line of code every idea all built i
 # My GitHub Stats
 
 ![Trophy](https://github-profile-trophy.vercel.app/?username=j3oe&theme=radical)
+
+![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=j3oe&theme=radical)
+
+![Metrics](https://raw.githubusercontent.com/j3oe/j3oe/main/github-metrics.svg)
