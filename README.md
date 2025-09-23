@@ -9,4 +9,4 @@ If you have suggestions, feedback or just want to say hi I’d genuinely appreci
 
 # My GitHub Stats
 
-![Trophy](https://github-profile-trophy.vercel.app/?username=j3oe&theme=radical)
+![Metrics](https://raw.githubusercontent.com/j3oe/j3oe/main/github-metrics.svg)
