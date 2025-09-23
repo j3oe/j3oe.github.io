@@ -1,3 +1,121 @@
-<div id="loading-screen">
-  <img src="assets/cross.png" alt="Načítání..." />
-</div>
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Josephův Blog</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    #loading-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 9999;
+      transition: opacity 1s ease;
+    }
+
+    #loading-screen img {
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #blog {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+      padding: 2rem;
+      color: white;
+      max-height: 100vh;
+      overflow-y: auto;
+      background-color: black;
+    }
+
+    #blog.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section {
+      margin-bottom: 2rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      border-top: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Načítací obrazovka s cross.png -->
+  <div id="loading-screen">
+    <img src="assets/cross.png" alt="Načítání..." />
+  </div>
+
+  <!-- Obsah blogu -->
+  <div id="blog">
+    <section>
+      <h1>Ahoj, jmenuji se Joseph</h1>
+      <p>Vítejte na mém osobním blogu! Jsem vývojář a tvůrce webů, který miluje čistý design, funkční kód a kreativitu.</p>
+    </section>
+
+    <section>
+      <h2>Moje zkušenosti</h2>
+      <p>V minulosti jsem vlastnil několik webových stránek, z nichž některé dosáhly neuvěřitelné návštěvnosti — až <strong>400 000 lidí</strong> navštívilo jeden z mých projektů. Byla to úžasná cesta plná učení, růstu a zpětné vazby od komunity.</p>
+    </section>
+
+    <section>
+      <h2>Co najdete na tomto blogu</h2>
+      <ul>
+        <li>Moje projekty a nápady</li>
+        <li>Tipy pro vývoj webových stránek</li>
+        <li>Osobní postřehy ze světa technologií</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Kontakt</h2>
+      <p>Pokud se chcete spojit nebo máte otázky, neváhejte mě kontaktovat přes GitHub nebo e-mail.</p>
+    </section>
+
+    <footer>
+      &copy; 2025 Josephův Blog. Děkuji za návštěvu!
+    </footer>
+  </div>
+
+  <script>
+    const loadingScreen = document.getElementById('loading-screen');
+    const blog = document.getElementById('blog');
+
+    loadingScreen.addEventListener('click', () => {
+      loadingScreen.style.opacity = '0';
+      loadingScreen.style.pointerEvents = 'none';
+      blog.classList.add('visible');
+      document.body.style.overflow = 'auto';
+    });
+  </script>
+
+</body>
+</html>
