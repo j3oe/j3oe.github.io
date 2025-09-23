@@ -8,4 +8,4 @@ I’m the sole creator of this project every line of code every idea all built i
 
 # My GitHub Stats
 
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=j3oe&show_icons=true&theme=radical)
+![GitHub Stats](https://github-profile-trophy.vercel.app/?username=j3oe)
