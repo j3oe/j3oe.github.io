@@ -275,19 +275,19 @@ button{cursor:pointer}
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Remove hash & scroll to top
+  // Scroll to top and remove hash
   if(window.location.hash) history.replaceState(null,'',window.location.pathname);
   window.scrollTo(0,0);
 
-  // ===== Loading screen =====
+  // ===== Loading Screen =====
   const loadingScreen = document.getElementById('loadingScreen');
   const aboutSection = document.getElementById('about');
-  loadingScreen.addEventListener('click',()=>{
+  loadingScreen.addEventListener('click', ()=>{
     loadingScreen.classList.add('fade-out');
-    loadingScreen.addEventListener('transitionend',()=>{
+    loadingScreen.addEventListener('transitionend', ()=>{
       loadingScreen.style.display='none';
       aboutSection.scrollIntoView({behavior:'smooth'});
-    },{once:true});
+    }, {once:true});
   });
 
   // ===== Skills Tooltip =====
@@ -300,12 +300,12 @@ document.addEventListener("DOMContentLoaded", () => {
       tooltip.classList.add('visible');
     });
   });
-  tooltipClose.addEventListener('click',()=>tooltip.classList.remove('visible'));
-  window.addEventListener('click',e=>{ if(e.target===tooltip) tooltip.classList.remove('visible'); });
+  tooltipClose.addEventListener('click', ()=>tooltip.classList.remove('visible'));
+  window.addEventListener('click', e => { if(e.target===tooltip) tooltip.classList.remove('visible'); });
 
   // ===== Projects =====
   const projectModal = document.getElementById('projectModal');
-  const projectBody  = document.getElementById('projectBody');
+  const projectBody = document.getElementById('projectBody');
   const projectClose = document.getElementById('projectClose');
 
   const projectBodies = {
@@ -325,67 +325,67 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   document.querySelectorAll('.project').forEach(p=>{
-    p.addEventListener('click',()=>{
-      const key = p.dataset.project;
+    p.addEventListener('click', ()=>{
+      // Always close modal first
+      projectModal.style.display = "none";
 
-      // Reset modal content
+      const key = p.dataset.project;
       projectBody.innerHTML = projectBodies[key] || "<p>No content.</p>";
       projectModal.style.display = "flex";
 
-      // ===== Attach only the relevant listener =====
+      // Only attach relevant listener
       if(key==="1"){
         let score=0;
         const gameBtn = document.getElementById('gameBtn');
         const gameScore = document.getElementById('gameScore');
         const newBtn = gameBtn.cloneNode(true);
-        gameBtn.parentNode.replaceChild(newBtn,gameBtn);
-        newBtn.addEventListener('click',()=>{score++; gameScore.textContent="Score: "+score;});
+        gameBtn.parentNode.replaceChild(newBtn, gameBtn);
+        newBtn.addEventListener('click', ()=>{ score++; gameScore.textContent="Score: "+score; });
       }
 
       if(key==="2"){
-        const calcRun=document.getElementById('calcRun');
-        const calcInput=document.getElementById('calcInput');
-        const calcResult=document.getElementById('calcResult');
+        const calcRun = document.getElementById('calcRun');
+        const calcInput = document.getElementById('calcInput');
+        const calcResult = document.getElementById('calcResult');
         const newBtn = calcRun.cloneNode(true);
-        calcRun.parentNode.replaceChild(newBtn,calcRun);
-        newBtn.addEventListener('click',()=>{
-          try{ const res = math.evaluate(calcInput.value); calcResult.textContent="Result: "+res; }
-          catch(err){ calcResult.textContent="Error: "+err; }
+        calcRun.parentNode.replaceChild(newBtn, calcRun);
+        newBtn.addEventListener('click', ()=>{
+          try { const res = math.evaluate(calcInput.value); calcResult.textContent="Result: "+res; }
+          catch(err) { calcResult.textContent="Error: "+err; }
         });
       }
 
       if(key==="3"){
-        const saveNote=document.getElementById('saveNote');
-        const noteInput=document.getElementById('noteInput');
-        const noteList=document.getElementById('noteList');
+        const saveNote = document.getElementById('saveNote');
+        const noteInput = document.getElementById('noteInput');
+        const noteList = document.getElementById('noteList');
         let notes=[];
         const newBtn = saveNote.cloneNode(true);
-        saveNote.parentNode.replaceChild(newBtn,saveNote);
-        newBtn.addEventListener('click',()=>{
-          if(noteInput.value.trim()){ notes.push(noteInput.value.trim()); noteInput.value=''; noteList.innerHTML=notes.map(n=>`<p>- ${n}</p>`).join(''); }
+        saveNote.parentNode.replaceChild(newBtn, saveNote);
+        newBtn.addEventListener('click', ()=>{
+          if(noteInput.value.trim()){ notes.push(noteInput.value.trim()); noteInput.value=''; noteList.innerHTML = notes.map(n=>`<p>- ${n}</p>`).join(''); }
         });
       }
-
     });
   });
 
-  projectClose.addEventListener('click',()=>projectModal.style.display="none");
-  window.addEventListener('click',e=>{ if(e.target===projectModal) projectModal.style.display="none"; });
+  projectClose.addEventListener('click', ()=>projectModal.style.display="none");
+  window.addEventListener('click', e => { if(e.target===projectModal) projectModal.style.display="none"; });
 
   // ===== Code Playground =====
   const runBtn = document.getElementById('playgroundRun');
-  const input  = document.getElementById('playgroundInput');
+  const input = document.getElementById('playgroundInput');
   const output = document.getElementById('playgroundOutput');
-  runBtn.addEventListener('click',()=>{
+  runBtn.addEventListener('click', ()=>{
     try{ output.textContent = math.evaluate(input.value); }
     catch(err){ output.textContent = "Error: "+err; }
   });
 
   // ===== Dev Log =====
   const devBtn = document.getElementById('devlogRender');
-  const devIn  = document.getElementById('devlogInput');
+  const devIn = document.getElementById('devlogInput');
   const devOut = document.getElementById('devlogOutput');
-  devBtn.addEventListener('click',()=>{
+  devBtn.addEventListener('click', ()=>{
     let text = devIn.value.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>").replace(/\*(.*?)\*/g,"<i>$1</i>").replace(/\n/g,"<br>");
     devOut.innerHTML = text;
   });
