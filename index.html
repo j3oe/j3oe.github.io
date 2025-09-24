@@ -1,281 +1,197 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Josephuv Blog</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      background-color: black;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Segoe UI', sans-serif;
-      color: white;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Josephuv Portfolio</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    overflow: hidden;
+  }
 
-    /* Loading screen */
-    #loading-screen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      z-index: 9999;
-      transition: opacity 1s ease;
-    }
+  /* Loading Screen */
+  #loading-screen {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    z-index:9999;
+    transition: opacity 1s ease;
+  }
 
-    #loading-screen img {
-      width: 120px;
-      height: 120px;
-      animation: spin 2s linear infinite;
-    }
+  #loading-screen img {
+    width:120px;
+    height:120px;
+    animation:spin 2s linear infinite;
+  }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
-    /* Blog content */
-    #blog {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 1s ease, transform 1s ease;
-      padding: 2rem;
-      max-height: 100vh;
-      overflow-y: auto;
-      background-color: black;
-    }
+  /* Blog container */
+  #blog {
+    opacity:0;
+    transform:translateY(30px);
+    transition: opacity 1s ease, transform 1s ease;
+    padding:2rem;
+    max-height:100vh;
+    overflow-y:auto;
+    background:black;
+  }
 
-    #blog.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  #blog.visible {
+    opacity:1;
+    transform:translateY(0);
+    overflow-y:auto;
+  }
 
-    section {
-      margin-bottom: 2rem;
-    }
+  section {
+    margin-bottom:2rem;
+  }
 
-    footer {
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
-      color: #aaa;
-      border-top: 1px solid #333;
-    }
+  footer {
+    text-align:center;
+    padding:1rem;
+    font-size:0.9rem;
+    color:#aaa;
+    border-top:1px solid #333;
+  }
 
-    /* Animated dots */
-    #dots {
-      color: white;
-    }
+  /* Animated dots */
+  #dots { color:white; }
 
-    /* Portfolio & pills */
-    .skill-group {
-      margin-top: 1rem;
-    }
+  /* Pills */
+  .skill-group h3 { color:#ccc; margin-bottom:0.5rem; }
+  .pills { display:flex; flex-wrap:wrap; gap:0.5rem; }
+  .pill {
+    background:#222;
+    color:#fff;
+    padding:0.5rem 1rem;
+    border-radius:999px;
+    cursor:pointer;
+    transition:0.3s;
+  }
+  .pill:hover { background:#555; transform:translateY(-2px); }
 
-    .skill-group h3 {
-      margin-bottom: 0.5rem;
-      color: #ccc;
-    }
-
-    .pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .pill {
-      background-color: #222;
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      transition: background-color 0.3s, transform 0.3s;
-      cursor: pointer;
-    }
-
-    .pill:hover {
-      background-color: #555;
-      transform: translateY(-2px);
-    }
-
-    /* Modal styles */
-    .modal {
-      position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #111;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.7);
-      max-width: 400px;
-      width: 90%;
-      display: none;
-      z-index: 10000;
-      color: white;
-    }
-
-    .modal h3 {
-      margin-top: 0;
-      color: #fff;
-    }
-
-    .modal p {
-      margin-bottom: 1rem;
-    }
-
-    .modal-close {
-      background-color: #222;
-      color: white;
-      padding: 0.3rem 0.7rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      float: right;
-    }
-
-    .modal-close:hover {
-      background-color: #555;
-    }
-
-    /* Overlay */
-    #modal-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.7);
-      display: none;
-      z-index: 9999;
-    }
-  </style>
+  /* Info box */
+  .info-box {
+    display:none;
+    background:#111;
+    padding:1rem 1.5rem;
+    margin-top:1rem;
+    border-left: 4px solid #00ffcc;
+    border-radius:5px;
+    max-width:600px;
+    color:white;
+  }
+</style>
 </head>
 <body>
 
-  <!-- Loading screen -->
-  <div id="loading-screen">
-    <img src="assets/cross.png" alt="Nacitani..." />
-  </div>
+<!-- Loading Screen -->
+<div id="loading-screen">
+  <img src="assets/cross.png" alt="Nacitani...">
+</div>
 
-  <!-- Blog content -->
-  <div id="blog">
-    <section>
-      <h1>Hello<span id="dots"></span></h1>
-    </section>
+<!-- Blog content -->
+<div id="blog">
+  <section>
+    <h1>Hello<span id="dots"></span></h1>
+  </section>
 
-    <section>
-      <h2>About Me</h2>
-      <p>I'm a passionate software developer with experience in web and UI/UX development. I enjoy building efficient, scalable, and visually appealing applications while continuously learning new technologies and practices.</p>
-    </section>
+  <section>
+    <h2>About Me</h2>
+    <p>I'm a passionate developer focusing on web and UI/UX development. I love building efficient, interactive, and visually appealing applications.</p>
+  </section>
 
-    <section>
-      <h2>Portfolio & Skills</h2>
-      
-      <div class="skill-group">
-        <h3>Web Development</h3>
-        <div class="pills">
-          <span class="pill" data-description="HTML is the backbone of web content structure.">HTML</span>
-          <span class="pill" data-description="CSS is used for styling web pages, creating layouts and visual designs.">CSS</span>
-          <span class="pill" data-description="JavaScript makes web pages interactive and dynamic.">JavaScript</span>
-          <span class="pill" data-description="React is a modern JS framework for building responsive UI.">React</span>
-          <span class="pill" data-description="Node.js allows server-side JavaScript development.">Node.js</span>
-        </div>
+  <section>
+    <h2>Skills & Portfolio</h2>
+
+    <div class="skill-group">
+      <h3>Web Development</h3>
+      <div class="pills">
+        <span class="pill" data-info="HTML structures the content of webpages.">HTML</span>
+        <span class="pill" data-info="CSS styles websites and layouts for visual appeal.">CSS</span>
+        <span class="pill" data-info="JavaScript adds interactivity and dynamic behavior.">JavaScript</span>
+        <span class="pill" data-info="React is a JavaScript library for building responsive UI components.">React</span>
+        <span class="pill" data-info="Node.js enables server-side JavaScript development.">Node.js</span>
       </div>
+    </div>
 
-      <div class="skill-group">
-        <h3>UI / UX Development</h3>
-        <div class="pills">
-          <span class="pill" data-description="Figma is a tool for designing UI mockups and prototypes.">Figma</span>
-          <span class="pill" data-description="Adobe XD helps create UI/UX designs and interactive prototypes.">Adobe XD</span>
-          <span class="pill" data-description="Tailwind CSS allows quick styling with utility-first classes.">Tailwind CSS</span>
-          <span class="pill" data-description="Responsive Design ensures your site works on all devices.">Responsive Design</span>
-          <span class="pill" data-description="Accessibility ensures web content is usable by everyone.">Accessibility</span>
-        </div>
+    <div class="skill-group">
+      <h3>UI / UX Development</h3>
+      <div class="pills">
+        <span class="pill" data-info="Figma is used to design UI prototypes and mockups.">Figma</span>
+        <span class="pill" data-info="Adobe XD is a tool for creating interactive UI/UX designs.">Adobe XD</span>
+        <span class="pill" data-info="Tailwind CSS allows rapid styling using utility classes.">Tailwind CSS</span>
+        <span class="pill" data-info="Responsive Design ensures the site adapts to all devices.">Responsive Design</span>
+        <span class="pill" data-info="Accessibility ensures websites are usable for everyone.">Accessibility</span>
       </div>
-    </section>
+    </div>
 
-    <section>
-      <h2>Kontakt</h2>
-      <p>Mate li jakekoli dotazy nebo zajem o spolupraci, nevahejte me kontaktovat prostrednictvim e mailu nebo GitHubu.</p>
-      <ul>
-        <li><strong>E mail:</strong> <a href="mailto:j0seph@outlook.it">j0seph@outlook.it</a></li>
-        <li><strong>GitHub:</strong> <a href="https://github.com/j3oe" target="_blank">github.com/j3oe</a></li>
-      </ul>
-    </section>
+    <!-- Info Box -->
+    <div class="info-box" id="info-box"></div>
 
-    <footer>
-      &copy; 2025 Josephuv Blog. Dekuji za navstevu!
-    </footer>
-  </div>
+  </section>
 
-  <!-- Modal & overlay -->
-  <div id="modal-overlay"></div>
-  <div class="modal" id="skill-modal">
-    <button class="modal-close" id="modal-close">X</button>
-    <h3 id="modal-title"></h3>
-    <p id="modal-description"></p>
-  </div>
+  <section>
+    <h2>Kontakt</h2>
+    <p>Mate li jakekoli dotazy nebo zajem o spolupraci, nevahejte me kontaktovat.</p>
+    <ul>
+      <li><strong>Email:</strong> <a href="mailto:j0seph@outlook.it">j0seph@outlook.it</a></li>
+      <li><strong>GitHub:</strong> <a href="https://github.com/j3oe" target="_blank">github.com/j3oe</a></li>
+    </ul>
+  </section>
 
-  <!-- Scripts -->
-  <script>
-    // Animated dots
-    const dots = document.getElementById('dots');
-    let dotCount = 0;
-    let increasing = true;
+  <footer>
+    &copy; 2025 Josephuv Blog. Dekuji za navstevu!
+  </footer>
+</div>
 
-    setInterval(() => {
-      if (increasing) {
-        dotCount++;
-        if (dotCount >= 3) increasing = false;
-      } else {
-        dotCount--;
-        if (dotCount <= 0) increasing = true;
-      }
-      dots.textContent = '.'.repeat(dotCount);
-    }, 500);
+<!-- Scripts -->
+<script>
+  // Animated dots
+  const dots = document.getElementById('dots');
+  let dotCount=0; let increasing=true;
+  setInterval(()=>{
+    if(increasing){ dotCount++; if(dotCount>=3) increasing=false; } 
+    else{ dotCount--; if(dotCount<=0) increasing=true; }
+    dots.textContent='.'.repeat(dotCount);
+  },500);
 
-    // Loading screen
-    const loadingScreen = document.getElementById('loading-screen');
-    const blog = document.getElementById('blog');
+  // Loading screen
+  const loadingScreen = document.getElementById('loading-screen');
+  const blog = document.getElementById('blog');
+  loadingScreen.addEventListener('click',()=>{
+    loadingScreen.style.opacity='0';
+    loadingScreen.style.pointerEvents='none';
+    blog.classList.add('visible');
+    document.body.style.overflow='auto';
+  });
 
-    loadingScreen.addEventListener('click', () => {
-      loadingScreen.style.opacity = '0';
-      loadingScreen.style.pointerEvents = 'none';
-      blog.classList.add('visible');
-      document.body.style.overflow = 'auto';
+  // Clickable pills info
+  const pills = document.querySelectorAll('.pill');
+  const infoBox = document.getElementById('info-box');
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      infoBox.textContent = pill.getAttribute('data-info');
+      infoBox.style.display = 'block';
+      infoBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
-
-    // Modal functionality
-    const pills = document.querySelectorAll('.pill');
-    const modal = document.getElementById('skill-modal');
-    const modalOverlay = document.getElementById('modal-overlay');
-    const modalTitle = document.getElementById('modal-title');
-    const modalDescription = document.getElementById('modal-description');
-    const modalClose = document.getElementById('modal-close');
-
-    pills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        modalTitle.textContent = pill.textContent;
-        modalDescription.textContent = pill.getAttribute('data-description');
-        modal.style.display = 'block';
-        modalOverlay.style.display = 'block';
-      });
-    });
-
-    modalClose.addEventListener('click', () => {
-      modal.style.display = 'none';
-      modalOverlay.style.display = 'none';
-    });
-
-    modalOverlay.addEventListener('click', () => {
-      modal.style.display = 'none';
-      modalOverlay.style.display = 'none';
-    });
-  </script>
+  });
+</script>
 
 </body>
 </html>
