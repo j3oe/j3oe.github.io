@@ -15,9 +15,8 @@ body{
   background:#000;
   color:#eee;
   font-family:Segoe UI, sans-serif;
-  overflow-x:hidden;
-  opacity:0;               /* Start hidden for fade-in */
-  transform: translateY(20px); /* Slight slide up */
+  opacity:0;                 /* start hidden for fade-in */
+  transform: translateY(20px); /* slight slide up */
   transition: opacity 1s ease, transform 1s ease;
 }
 body.visible{
@@ -35,10 +34,8 @@ button{cursor:pointer}
 /* === Loading Screen === */
 #loadingScreen{
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  top:0; left:0;
+  width:100%; height:100%;
   background:#000;
   display:flex;
   justify-content:center;
@@ -46,22 +43,14 @@ button{cursor:pointer}
   z-index:2000;
   transition: opacity 0.8s ease;
 }
-#loadingScreen.fade-out {
-  opacity:0;
-}
+#loadingScreen.fade-out { opacity:0; }
 #loadingScreen img{
-  display:block;
   width:180px;
   height:180px;
   animation: spin 2s linear infinite;
   cursor:pointer;
 }
-
-/* Spin animation */
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+@keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
 
 /* === About Me === */
 .about-box{
@@ -298,12 +287,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadingImg = document.getElementById('loadingImg');
   const body = document.body;
 
-  // Cross click triggers fade out + main page fade-in
-  loadingImg.addEventListener('click', () => {
+  // Cross click triggers fade-out and reveal main content (no navigation)
+  loadingImg.addEventListener('click', e => {
+    e.preventDefault(); // safety
     loadingScreen.classList.add('fade-out');
     loadingScreen.addEventListener('transitionend', () => {
       loadingScreen.style.display='none';
-      body.classList.add('visible'); // fade in main content
+      body.classList.add('visible'); // show content
     }, { once:true });
   });
 
