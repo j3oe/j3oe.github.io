@@ -67,15 +67,11 @@ input, textarea {width:100%; padding:0.5rem; border-radius:5px; border:1px solid
         <img src="assets/project3.png" alt="Project 3">
         <p>Note-taking Tool – Save your notes in your browser using local storage.</p>
       </div>
+      <div class="project" data-project="math">
+        <img src="assets/math.png" alt="Math Snippet">
+        <p>Interactive Math – Test calculations directly in a modal.</p>
+      </div>
     </div>
-  </section>
-
-  <!-- Interactive Math Snippet -->
-  <section>
-    <h2>Math Snippet</h2>
-    <input type="text" id="mathInput" placeholder="Type a math expression, e.g., 5+3*2">
-    <button onclick="runMath()">Calculate</button>
-    <p id="mathOutput"></p>
   </section>
 
   <!-- Modal -->
@@ -143,24 +139,28 @@ input, textarea {width:100%; padding:0.5rem; border-radius:5px; border:1px solid
         };
         const saved = localStorage.getItem('myNote'); if(saved) textarea.value = saved;
         modalBody.appendChild(textarea); modalBody.appendChild(btn); modalBody.appendChild(status);
+
+      } else if(id==='math'){ // Interactive Math
+        const input = document.createElement('input'); input.placeholder='Type a math expression, e.g., 5+3*2'; input.id='mathInputModal';
+        const btn = document.createElement('button'); btn.textContent='Calculate';
+        const output = document.createElement('p'); output.id='mathOutputModal';
+        btn.onclick = ()=>{
+          const code = input.value;
+          try{
+            let result = Function('"use strict"; return ('+code+')')();
+            output.textContent = 'Result: '+result;
+          }catch(err){
+            output.textContent = 'Error: '+err;
+          }
+        };
+        modalBody.appendChild(input); modalBody.appendChild(btn); modalBody.appendChild(output);
       }
     });
   });
 
+  // Close modal
   closeBtn.onclick = ()=>{ modal.style.display='none'; }
   window.onclick = e=>{ if(e.target===modal) modal.style.display='none'; }
-
-  // Math snippet
-  function runMath(){
-    const code = document.getElementById('mathInput').value;
-    const output = document.getElementById('mathOutput');
-    try{
-      let result = Function('"use strict"; return ('+code+')')();
-      output.textContent = 'Result: '+result;
-    }catch(err){
-      output.textContent = 'Error: '+err;
-    }
-  }
 </script>
 
 </body>
