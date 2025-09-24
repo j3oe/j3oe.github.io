@@ -205,6 +205,13 @@ button{cursor:pointer}
   margin-top:20px;
 }
 #contact img{width:24px;height:24px;}
+.contact-link {
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.contact-link:hover {
+  transform: scale(1.1);
+  background: #666;
+}
 </style>
 </head>
 <body>
@@ -296,15 +303,15 @@ button{cursor:pointer}
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  let activeUI = null; // Tracks currently open UI
+  let activeUI = null;
+  const loadingScreen = document.getElementById('loadingScreen');
+  const aboutSection = document.getElementById('about');
 
   // Scroll to top on load
   if(window.location.hash) history.replaceState(null,'',window.location.pathname);
   window.scrollTo(0,0);
 
   // ===== Loading Screen =====
-  const loadingScreen = document.getElementById('loadingScreen');
-  const aboutSection = document.getElementById('about');
   loadingScreen.addEventListener('click', ()=>{
     loadingScreen.classList.add('fade-out');
     loadingScreen.addEventListener('transitionend', ()=>{
@@ -318,7 +325,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const tooltipText = document.getElementById('tooltipText');
   const tooltipClose = document.getElementById('tooltipClose');
 
-  // Only skill pills NOT in contact section trigger tooltip
   document.querySelectorAll('.skill-pill:not(.contact-link)').forEach(pill => {
     pill.addEventListener('click', () => {
       if(activeUI && activeUI !== tooltip){ activeUI.style.display='none'; activeUI.classList.remove('visible'); }
@@ -361,7 +367,6 @@ document.addEventListener("DOMContentLoaded", () => {
       projectModal.style.display = "flex";
       activeUI = projectModal;
 
-      // Project-specific buttons
       if(key==="1"){
         let score=0;
         const gameBtn = document.getElementById('gameBtn');
