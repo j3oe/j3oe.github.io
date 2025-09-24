@@ -12,6 +12,7 @@
       height: 100%;
       overflow: hidden;
       font-family: 'Segoe UI', sans-serif;
+      color: white;
     }
 
     #loading-screen {
@@ -43,7 +44,6 @@
       transform: translateY(30px);
       transition: opacity 1s ease, transform 1s ease;
       padding: 2rem;
-      color: white;
       max-height: 100vh;
       overflow-y: auto;
       background-color: black;
@@ -65,16 +65,47 @@
       color: #aaa;
       border-top: 1px solid #333;
     }
+
+    /* Portfolio styles */
+    .skill-group {
+      margin-top: 1rem;
+    }
+
+    .skill-group h3 {
+      margin-bottom: 0.5rem;
+      color: #ccc;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pill {
+      background-color: #222;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      transition: background-color 0.3s, transform 0.3s;
+      cursor: default;
+    }
+
+    .pill:hover {
+      background-color: #555;
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
 
-  <!-- Načítací obrazovka s cross.png -->
+  <!-- Loading screen -->
   <div id="loading-screen">
     <img src="assets/cross.png" alt="Nacitani..." />
   </div>
 
-  <!-- Obsah blogu -->
+  <!-- Blog content -->
   <div id="blog">
     <section>
       <h1>Hello<span id="dots"></span></h1>
@@ -82,18 +113,33 @@
 
     <section>
       <h2>About Me</h2>
-      <ul>
-        <li>Passionate software developer with a strong focus on building efficient and scalable solutions.</li>
-        <li>Experienced in creating executable programs and practical tools since 2022.</li>
-        <li>Continuously exploring new technologies and best practices to improve code quality and user experience.</li>
-      </ul>
+      <p>I'm a passionate software developer with experience in web and UI/UX development. I enjoy building efficient, scalable, and visually appealing applications while continuously learning new technologies and practices.</p>
     </section>
-   
+
     <section>
-      <h2>Coding Journey</h2>
-      <p>When I first started coding, I quickly realized that it is all about trial and error. Your first idea rarely works perfectly, and debugging can be both frustrating and oddly rewarding. Every error, from a misplaced semicolon to a misbehaving function, became a lesson that taught me patience, persistence, and the importance of methodical thinking. At first, staring at a blank editor felt overwhelming, like standing at the edge of a vast, uncharted world with no map. The sheer number of possibilities, the infinite lines of code, and the hidden logic behind every function were intimidating. I would often open a new project with high hopes, only to watch it fail within seconds, leaving me staring at a wall of error messages that made me question whether I truly understood anything at all. Yet, over time, I learned to approach coding with humility, to start small, and to embrace mistakes not as failures but as signposts guiding me toward a solution.
-      ... (rest of your coding journey content)
-      </p>
+      <h2>Portfolio & Skills</h2>
+      
+      <div class="skill-group">
+        <h3>Web Development</h3>
+        <div class="pills">
+          <span class="pill">HTML</span>
+          <span class="pill">CSS</span>
+          <span class="pill">JavaScript</span>
+          <span class="pill">React</span>
+          <span class="pill">Node.js</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <h3>UI / UX Development</h3>
+        <div class="pills">
+          <span class="pill">Figma</span>
+          <span class="pill">Adobe XD</span>
+          <span class="pill">Tailwind CSS</span>
+          <span class="pill">Responsive Design</span>
+          <span class="pill">Accessibility</span>
+        </div>
+      </div>
     </section>
 
     <section>
