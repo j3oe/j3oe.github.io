@@ -5,187 +5,134 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Josephuv Portfolio</title>
 <style>
-  body, html { margin:0; padding:0; font-family:'Segoe UI', sans-serif; background:black; color:white; overflow:hidden; scroll-behavior:smooth;}
-  
+  body, html {margin:0; padding:0; font-family:'Segoe UI',sans-serif; background:black; color:white; overflow:hidden; scroll-behavior:smooth;}
+
   /* Loading Screen */
   #loading-screen {position:fixed; top:0; left:0; width:100%; height:100%; display:flex; justify-content:center; align-items:center; background:black; cursor:pointer; z-index:9999; transition:opacity 1s ease;}
   #loading-screen img {width:max(60px,10vw); height:auto; animation:spin 2s linear infinite;}
   @keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 
-  /* Main blog */
-  main#blog {opacity:0; transform:translateY(30px); transition:opacity 1s ease, transform 1s ease; padding:2rem; max-height:100vh; overflow-y:auto;}
-  main#blog.visible {opacity:1; transform:translateY(0);}
-  section {margin-bottom:2rem; opacity:0; transform:translateY(20px); transition:opacity 1s ease, transform 1s ease;}
-  section.visible {opacity:1; transform:translateY(0);}
-  footer {text-align:center; padding:1rem; font-size:0.9rem; color:#aaa; border-top:1px solid #333;}
-
-  /* Navigation */
-  nav {position:fixed; top:0; right:0; padding:1rem; display:flex; flex-direction:column; gap:0.5rem; z-index:1000;}
-  nav a {color:#00ffcc; text-decoration:none; font-weight:bold; transition:0.3s;}
-  nav a:hover {text-shadow:0 0 10px #00ffcc;}
-
-  /* Animated dots */
-  #dots {color:white;}
-
-  /* Pills */
-  .skill-group h3 {color:#ccc; margin-bottom:0.5rem;}
-  .pills {display:flex; flex-wrap:wrap; gap:0.5rem;}
-  .pill {background:#222; color:#fff; padding:0.5rem 1rem; border-radius:999px; cursor:pointer; transition:0.3s, box-shadow 0.3s; position:relative; border:1px solid #444;}
-  .pill:hover, .pill:focus {outline:none; background:#111; transform:translateY(-2px); box-shadow:0 0 10px #00ffcc,0 0 20px #00ffcc33; border-color:#00ffcc;}
-  .pill:hover::after, .pill:focus::after {content:''; position:absolute; top:-4px; left:-4px; right:-4px; bottom:-4px; border-radius:999px; box-shadow:0 0 20px #00ffcc33; animation:pulse 1.2s infinite;}
-  @keyframes pulse {0%{transform:scale(1);opacity:0.5;}50%{transform:scale(1.1);opacity:0.7;}100%{transform:scale(1);opacity:0.5;}}
+  /* Gallery */
+  .gallery {display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; padding:2rem;}
+  .project {background:#111; border:1px solid #00ffcc; border-radius:8px; padding:1rem; text-align:center; cursor:pointer; transition:0.3s; position:relative;}
+  .project:hover {box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33; transform:translateY(-2px);}
+  .project img {max-width:100%; border-radius:5px;}
 
   /* Tooltip */
   .tooltip {position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0.8); opacity:0; pointer-events:none; background-color:#111; padding:1rem 1.5rem; border-radius:8px; color:#fff; border:1px solid #00ffcc; box-shadow:0 0 15px #00ffcc66,0 0 30px #00ffcc33; transition:opacity 0.3s ease, transform 0.3s ease; max-width:80%; text-align:center; font-size:1rem; z-index:1000;}
   .tooltip.visible {opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1);}
 
-  /* Math Snippet */
-  .snippet {margin-bottom:2rem; background:#111; border:1px solid #00ffcc; border-radius:8px; padding:1rem;}
-  .snippet label {display:block; margin-bottom:0.5rem; color:#ccc;}
-  .snippet input {width:100%; padding:0.5rem; border-radius:5px; border:1px solid #444; background:#111; color:white; margin-bottom:0.5rem;}
-  .snippet button {padding:0.5rem 1rem; border:none; border-radius:5px; background:#00ffcc; color:black; font-weight:bold; cursor:pointer; transition:0.3s;}
-  .snippet button:hover {box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33;}
-  .snippet .output {background:#111; color:#0f0; padding:0.5rem; border-radius:5px; min-height:1.5em; font-family:monospace;}
+  /* Modal */
+  .modal {display:none; position:fixed; z-index:10000; left:0; top:0; width:100%; height:100%; overflow:auto; background:rgba(0,0,0,0.8);}
+  .modal-content {background:#111; margin:10% auto; padding:1rem; border:1px solid #00ffcc; width:90%; max-width:500px; border-radius:8px; color:white; position:relative;}
+  .close {color:#00ffcc; position:absolute; top:10px; right:20px; font-size:2rem; font-weight:bold; cursor:pointer;}
 
-  /* Project Gallery */
-  .gallery {display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem;}
-  .project {background:#111; border:1px solid #00ffcc; border-radius:8px; padding:1rem; text-align:center; transition:0.3s;}
-  .project:hover {box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33; transform:translateY(-2px);}
-  .project img {max-width:100%; border-radius:5px;}
+  /* Buttons */
+  button {padding:0.5rem 1rem; border:none; border-radius:5px; background:#00ffcc; color:black; font-weight:bold; cursor:pointer; transition:0.3s; margin-top:0.5rem;}
+  button:hover {box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33;}
+  input, textarea {width:100%; padding:0.5rem; border-radius:5px; border:1px solid #444; background:#111; color:white; margin-bottom:0.5rem;}
 </style>
 </head>
 <body>
 
 <!-- Loading Screen -->
-<div id="loading-screen"><img src="assets/cross.png" alt="Loading animation"></div>
-
-<!-- Navigation -->
-<nav>
-  <a href="#about">About Me</a>
-  <a href="#skills">Skills</a>
-  <a href="#math">Math</a>
-  <a href="#projects">Projects</a>
-</nav>
+<div id="loading-screen">
+  <img src="assets/cross.png" alt="Loading animation">
+</div>
 
 <main id="blog">
-  <section><h1>Hello<span id="dots"></span></h1></section>
-
-  <section id="about">
-    <h2>About Me</h2>
-    <p>I’ve been coding for a few years, exploring games, academic projects, and AI APIs. Every project teaches me new ways to think about code, design, and technology.</p>
-  </section>
-
-  <section id="skills">
-    <h2>Skills & Portfolio</h2>
-    <div class="skill-group">
-      <h3>Web Development</h3>
-      <div class="pills">
-        <span class="pill" data-info="HTML structures webpages." tabindex="0">HTML</span>
-        <span class="pill" data-info="CSS styles pages." tabindex="0">CSS</span>
-        <span class="pill" data-info="JS adds interactivity." tabindex="0">JavaScript</span>
-        <span class="pill" data-info="React for UI components." tabindex="0">React</span>
-        <span class="pill" data-info="Node.js for backend JS." tabindex="0">Node.js</span>
-      </div>
+  <div class="gallery">
+    <!-- Project 1 -->
+    <div class="project" data-project="1">
+      <img src="assets/project1.png" alt="Project 1">
+      <p>Game Prototype</p>
     </div>
-    <div class="skill-group">
-      <h3>UI / UX</h3>
-      <div class="pills">
-        <span class="pill" data-info="Figma for UI mockups." tabindex="0">Figma</span>
-        <span class="pill" data-info="Adobe XD for interactive design." tabindex="0">Adobe XD</span>
-        <span class="pill" data-info="Tailwind CSS rapid styling." tabindex="0">Tailwind CSS</span>
-        <span class="pill" data-info="Responsive design for devices." tabindex="0">Responsive Design</span>
-        <span class="pill" data-info="Accessibility ensures usability." tabindex="0">Accessibility</span>
-      </div>
-    </div>
-    <div class="tooltip" id="tooltip"></div>
-  </section>
 
-  <section id="math">
-    <h2>Interactive Math Snippet</h2>
-    <div class="snippet">
-      <label for="mathInput">Enter a math expression:</label>
-      <input type="text" id="mathInput" placeholder="e.g., 5*7+2">
-      <button onclick="runMath()">Run</button>
-      <pre class="output" id="mathOutput"></pre>
+    <!-- Project 2 -->
+    <div class="project" data-project="2">
+      <img src="assets/project2.png" alt="Project 2">
+      <p>AI API Experiment</p>
     </div>
-  </section>
 
-  <section id="projects">
-    <h2>Project Gallery</h2>
-    <div class="gallery">
-      <div class="project">
-        <img src="assets/project1.png" alt="Project 1">
-        <p>Game Prototype</p>
-      </div>
-      <div class="project">
-        <img src="assets/project2.png" alt="Project 2">
-        <p>AI API Experiment</p>
-      </div>
-      <div class="project">
-        <img src="assets/project3.png" alt="Project 3">
-        <p>Note-taking Tool</p>
-      </div>
+    <!-- Project 3 -->
+    <div class="project" data-project="3">
+      <img src="assets/project3.png" alt="Project 3">
+      <p>Note-taking Tool</p>
     </div>
-  </section>
+  </div>
 
-  <footer>&copy; 2025 Josephuv Blog. Děkuji za návštěvu!</footer>
+  <!-- Modal -->
+  <div class="modal" id="projectModal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
 </main>
 
 <script>
-  // Animated dots
-  const dots = document.getElementById('dots');
-  let dotCount=0, increasing=true;
-  setInterval(()=>{
-    dotCount = increasing? dotCount+1 : dotCount-1;
-    if(dotCount>=3) increasing=false;
-    if(dotCount<=0) increasing=true;
-    dots.textContent = '.'.repeat(dotCount);
-  },500);
-
   // Loading screen
   const loadingScreen = document.getElementById('loading-screen');
   const blog = document.getElementById('blog');
   loadingScreen.addEventListener('click',()=>{
     loadingScreen.style.opacity='0';
     loadingScreen.style.pointerEvents='none';
-    blog.classList.add('visible');
+    blog.style.opacity='1';
     document.body.style.overflow='auto';
-    revealSections();
   });
 
-  // Section reveal animation
-  const sections = document.querySelectorAll('main#blog section');
-  function revealSections(){
-    sections.forEach((section,i)=>{ setTimeout(()=>{section.classList.add('visible'); }, i*200); });
-  }
+  // Projects modal logic
+  const projects = document.querySelectorAll('.project');
+  const modal = document.getElementById('projectModal');
+  const modalBody = document.getElementById('modalBody');
+  const closeBtn = modal.querySelector('.close');
 
-  // Click-only tooltip
-  const tooltip = document.getElementById('tooltip');
-  const pills = document.querySelectorAll('.pill');
-  let tooltipVisible=false;
-  pills.forEach(pill=>{
-    pill.addEventListener('click', e=>{
-      e.stopPropagation();
-      tooltip.textContent = pill.getAttribute('data-info');
-      tooltip.classList.add('visible');
-      tooltipVisible=true;
+  projects.forEach(project=>{
+    project.addEventListener('click', ()=>{
+      const id = project.dataset.project;
+      modal.style.display = 'block';
+      modalBody.innerHTML = ''; // Clear previous content
+
+      if(id==='1'){ // Game Prototype
+        const output = document.createElement('p'); output.id = 'gameOutput';
+        const btn = document.createElement('button'); btn.textContent='Click Me!';
+        let clickCount=0;
+        btn.onclick = ()=>{ clickCount++; output.textContent='Count: '+clickCount; }
+        output.textContent='Click the button to increase count!';
+        modalBody.appendChild(output); modalBody.appendChild(btn);
+
+      } else if(id==='2'){ // AI API Experiment
+        const input = document.createElement('input'); input.id='aiInput'; input.placeholder='Ask a question...';
+        const btn = document.createElement('button'); btn.textContent='Send';
+        const output = document.createElement('p'); output.id='aiOutput';
+        btn.onclick = ()=>{
+          const question = input.value.trim();
+          if(!question){ output.textContent='Please type a question.'; return; }
+          const responses = ["Interesting question!","Try experimenting.","Let me think...","Several ways to do that.","Here's an idea."];
+          output.textContent='AI Response: '+responses[Math.floor(Math.random()*responses.length)];
+        };
+        modalBody.appendChild(input); modalBody.appendChild(btn); modalBody.appendChild(output);
+
+      } else if(id==='3'){ // Note-taking Tool
+        const textarea = document.createElement('textarea'); textarea.id='noteInput'; textarea.rows=5; textarea.placeholder='Type your notes here...';
+        const btn = document.createElement('button'); btn.textContent='Save Note';
+        const status = document.createElement('p'); status.id='noteStatus';
+        btn.onclick = ()=>{
+          const note = textarea.value;
+          if(!note){ status.textContent='Nothing to save!'; return; }
+          localStorage.setItem('myNote', note);
+          status.textContent='Note saved!';
+        };
+        const saved = localStorage.getItem('myNote'); if(saved) textarea.value = saved;
+        modalBody.appendChild(textarea); modalBody.appendChild(btn); modalBody.appendChild(status);
+      }
     });
   });
-  document.addEventListener('click', ()=>{
-    if(tooltipVisible){ tooltip.classList.remove('visible'); tooltipVisible=false; }
-  });
 
-  // Math snippet
-  function runMath(){
-    const code = document.getElementById('mathInput').value;
-    const output = document.getElementById('mathOutput');
-    try{
-      let result = Function('"use strict"; return ('+code+')')();
-      output.textContent = result;
-    }catch(err){
-      output.textContent = 'Error: '+err;
-    }
-  }
+  // Close modal
+  closeBtn.onclick = ()=>{ modal.style.display='none'; }
+  window.onclick = e=>{ if(e.target===modal) modal.style.display='none'; }
 </script>
+
 </body>
 </html>
