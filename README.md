@@ -1,7 +1,7 @@
 # Information
 
 I’m the sole creator of this project every line of code, every idea, every feature is built independently.  
-I strive to write clean, efficient, and thoughtful code while exploring new technologies and pushing my own boundaries.  
+I try to write clean, efficient, and thoughtful code while exploring new technologies and pushing my own boundaries.  
 
 If you have suggestions, feedback, or just want to say hi, I’d genuinely appreciate hearing from you. I love connecting with other developers, learning new perspectives, and improving my projects.
 
