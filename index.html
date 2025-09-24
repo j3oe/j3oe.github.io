@@ -1,586 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Josephuv Portfolio — Working Projects</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Portfolio</title>
 <style>
-  :root{
-    --bg:#0f0f10;
-    --panel:#111;
-    --muted:#bbb;
-    --accent:#ccc; /* gray accent */
-    --card:#1a1a1a;
+  body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
   }
-  html,body{height:100%; margin:0; background:var(--bg); color:#eee; font-family: "Segoe UI", Roboto, sans-serif;}
-  header{padding:20px 24px; border-bottom:1px solid #222; color:var(--muted);}
-  main{max-width:1100px; margin:24px auto; padding:0 18px 80px;}
-  h1{margin:0 0 8px 0; color:var(--accent);}
-  p{color:#ddd; line-height:1.5;}
+  h1,h2,h3 { text-align:center; }
+  a { color:#888; }
 
-  /* Sections */
-  section{margin:28px 0; padding:18px; background:transparent;}
-  .section-title{color:var(--accent); margin-bottom:12px;}
+  /* ===== Project Grid ===== */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap: 1rem;
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  .project {
+    background: #111;
+    border: 1px solid #333;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.3s;
+  }
+  .project:hover { background: #222; }
 
-  /* Pills */
-  .pills { display:flex; flex-wrap:wrap; gap:8px; }
-  .pill {
-    background:var(--panel);
-    color:var(--muted);
-    padding:8px 14px;
-    border-radius:999px;
+  /* ===== Project Modal ===== */
+  .modal {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.8);
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+  }
+  .modal-content {
+    background:#111;
+    padding:1.5rem;
+    width:90%;
+    max-width:600px;
     border:1px solid #444;
+    border-radius:12px;
+    position:relative;
+    overflow:auto;
+    max-height:80vh;
+  }
+  .modal-close {
+    position:absolute;
+    top:10px;
+    right:15px;
+    font-size:28px;
     cursor:pointer;
-    transition:all .18s;
+    color:#888;
   }
-  .pill:hover, .pill.active { background:var(--accent); color:#000; box-shadow:0 6px 18px rgba(170,170,170,.08); border-color:#999; }
 
-  #pillInfo{ margin-top:12px; background:var(--card); border:1px solid #333; padding:12px; border-radius:8px; color:#ddd; min-height:48px; }
-
-  /* Projects grid */
-  .projects-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:16px;
+  /* ===== Skills Pills ===== */
+  .skill-group {
+    max-width:900px;
+    margin:2rem auto;
+    padding:0 1rem;
   }
-  .project-card{
-    background:var(--card);
-    border:1px solid #333;
+  .pills {
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.5rem;
+  }
+  .pill {
+    background:#222;
+    color:#fff;
+    padding:0.5rem 1rem;
+    border-radius:999px;
+    border:1px solid #555;
+    cursor:pointer;
+    transition:0.3s;
+  }
+  .pill:hover { background:#444; }
+  .tooltip {
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:#222;
+    color:#fff;
+    padding:1rem 1.5rem;
+    border:1px solid #555;
     border-radius:10px;
-    padding:14px;
+    display:none;
+    max-width:300px;
+    text-align:center;
+    z-index:1000;
+  }
+
+  /* ===== Playground & Dev Log ===== */
+  .play-container {
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+    max-width:900px;
+    margin:2rem auto;
+    background:#111;
+    padding:1rem;
+    border:1px solid #333;
+    border-radius:12px;
+  }
+  .play-container textarea {
+    width:100%;
+    min-height:250px;
+    font-family:monospace;
+    font-size:16px;
+    line-height:1.4;
+    background:#000;
+    color:#eee;
+    padding:1rem;
+    border:1px solid #444;
+    resize:vertical;
+    overflow:auto;
+  }
+  .play-container button {
+    align-self:flex-start;
+    padding:0.5rem 1rem;
+    background:#444;
+    border:1px solid #666;
+    color:#fff;
     cursor:pointer;
-    transition:transform .14s, box-shadow .14s;
+    border-radius:8px;
+    transition:background 0.3s;
   }
-  .project-card:hover{ transform:translateY(-6px); box-shadow:0 14px 30px rgba(0,0,0,.6); border-color:#666; }
-  .project-title{ font-weight:600; color:var(--muted); margin-bottom:6px; }
-  .project-sub{ color:#aaa; font-size:0.95rem; }
-
-  /* Modal */
-  .modal-overlay{
-    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.72); z-index:9999;
-    align-items:center; justify-content:center; padding:20px; overflow:auto;
+  .play-container button:hover { background:#666; }
+  .play-output {
+    width:100%;
+    min-height:200px;
+    background:#000;
+    color:#0f0;
+    padding:1rem;
+    border:1px solid #444;
+    overflow:auto;
+    font-family:monospace;
+    font-size:15px;
+    border-radius:8px;
   }
-  .modal-overlay.show{ display:flex; }
-  .modal{
-    width:100%; max-width:760px; background:var(--panel); border-radius:10px; border:1px solid #333;
-    box-shadow:0 30px 80px rgba(0,0,0,0.7);
-    overflow:hidden;
+
+  footer {
+    text-align:center;
+    color:#666;
+    padding:2rem;
+    font-size:14px;
   }
-  .modal-header{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:12px 16px; border-bottom:1px solid #222; background:linear-gradient(0deg, rgba(255,255,255,0.01), transparent);
-  }
-  .modal-title{ color:var(--accent); margin:0; font-size:1.05rem; }
-  .modal-close{
-    background:transparent; border:0; font-size:22px; color:var(--muted); cursor:pointer; padding:6px 8px; border-radius:6px;
-  }
-  .modal-close:hover{ background:#222; color:#fff; }
-  .modal-body{ padding:16px; color:#ddd; max-height:70vh; overflow:auto; }
-
-  /* small controls */
-  .controls{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
-  .btn { background:var(--accent); color:#000; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; }
-  .btn.ghost { background:transparent; color:var(--muted); border:1px solid #444; }
-
-  /* game canvas */
-  canvas{ background:#000; border:1px solid #333; border-radius:8px; display:block; max-width:100%; }
-
-  /* simple playground / devlog */
-  textarea, input[type="text"]{ width:100%; padding:8px; border-radius:6px; background:#0b0b0b; color:#ddd; border:1px solid #222; resize:vertical; }
-  button.small { padding:8px 12px; border-radius:6px; border:0; cursor:pointer; }
-  iframe.preview { width:100%; height:260px; border-radius:6px; border:0; margin-top:8px; background:#fff; }
-  #devLogPreview { background:var(--card); padding:12px; border-radius:8px; margin-top:8px; color:#ddd; }
-  @media (max-width:700px){ .modal{ max-width:95% } }
-
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Josephuv Portfolio</h1>
-  <div style="color:#aaa">Interactive Projects — Game, Calculator, Notes</div>
-</header>
+<h1>My Interactive Portfolio</h1>
 
-<main>
+<!-- ===== Projects ===== -->
+<h2>Projects</h2>
+<div class="project-grid">
+  <div class="project" data-project="1">Project 1<br>Game Prototype</div>
+  <div class="project" data-project="2">Project 2<br>AI API Experiment</div>
+  <div class="project" data-project="3">Project 3<br>Note-taking Tool</div>
+</div>
 
-  <!-- ABOUT ME -->
-  <section id="about">
-    <div class="section-title"><h2>About Me</h2></div>
-    <p>I've been coding for several years — building games, web apps and small tools that explore UI/UX and AI interactions. I enjoy turning ideas into playable, clickable demos.</p>
-  </section>
-
-  <!-- SKILLS -->
-  <section id="skills">
-    <div class="section-title"><h2>Skills</h2></div>
-    <div class="pills" id="pills">
-      <div class="pill" data-info="HTML, CSS and JS: structure, style, behavior.">Web Development</div>
-      <div class="pill" data-info="Designing the visual layer — color, layout, components.">UI Design</div>
-      <div class="pill" data-info="Mapping flows, wireframes and the user's journey.">UX Design</div>
-      <div class="pill" data-info="Media queries, flexible grids and fluid experiences.">Responsive Design</div>
-      <div class="pill" data-info="Rapid mockups with Figma/Adobe XD and prototypes.">Prototyping</div>
-      <div class="pill" data-info="React & component-driven development for SPAs.">React Development</div>
-      <div class="pill" data-info="Node.js & Express: backend basics and APIs.">Backend Basics</div>
-      <div class="pill" data-info="Git & GitHub: version control & collaboration.">Git & GitHub</div>
-      <div class="pill" data-info="Accessibility: ARIA, keyboard nav, readable content.">Accessibility</div>
-    </div>
-    <div id="pillInfo">Click a pill to see details.</div>
-  </section>
-
-  <!-- PROJECTS -->
-  <section id="projects">
-    <div class="section-title"><h2>Projects</h2></div>
-    <div class="projects-grid" id="projectsGrid">
-      <div class="project-card" data-project="1">
-        <div class="project-title">Project 1</div>
-        <div class="project-sub">Game Prototype — Catch the Dot</div>
-      </div>
-      <div class="project-card" data-project="2">
-        <div class="project-title">Project 2</div>
-        <div class="project-sub">Calculator — Interactive</div>
-      </div>
-      <div class="project-card" data-project="3">
-        <div class="project-title">Project 3</div>
-        <div class="project-sub">Note-taking Tool — Save in browser</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CODE PLAYGROUND -->
-  <section id="playground">
-    <div class="section-title"><h2>Code Playground</h2></div>
-    <textarea id="codeInput" rows="10"><!-- Example: -->
-<h1 style="color:gray;">Hello World!</h1>
-<script>console.log('From iframe')</script></textarea>
-    <div style="margin-top:8px;">
-      <button class="btn" id="runBtn">Run Code</button>
-    </div>
-    <iframe id="playPreview" class="preview" sandbox="allow-scripts allow-same-origin"></iframe>
-  </section>
-
-  <!-- DEV LOG -->
-  <section id="devlog">
-    <div class="section-title"><h2>Developer Log</h2></div>
-    <textarea id="markdownInput" rows="6"># Dev Log
-Today I implemented interactive project demos (Game, Calculator, Notes).</textarea>
-    <div style="margin-top:8px;">
-      <button class="btn" id="renderBtn">Render Markdown</button>
-    </div>
-    <div id="devLogPreview"></div>
-  </section>
-
-</main>
-
-<!-- Modal -->
-<div class="modal-overlay" id="modalOverlay" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-header">
-      <h3 class="modal-title" id="modalTitle">Project</h3>
-      <button class="modal-close modal-close-btn" id="modalCloseBtn" aria-label="Close">✕</button>
-    </div>
-    <div class="modal-body" id="modalBody"></div>
+<div id="projectModal" class="modal">
+  <div class="modal-content">
+    <span class="modal-close" id="projectClose">&times;</span>
+    <div id="projectBody"></div>
   </div>
 </div>
 
-<!-- marked.js for markdown -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- ===== Skills ===== -->
+<h2>Skills</h2>
+<div class="skill-group">
+  <div class="pills">
+    <span class="pill" data-info="Building structured web content.">Web Development</span>
+    <span class="pill" data-info="Designing beautiful layouts.">UI Design</span>
+    <span class="pill" data-info="Improving user experiences.">UX Design</span>
+    <span class="pill" data-info="Responsive layouts for all devices.">Responsive Design</span>
+    <span class="pill" data-info="Turning ideas into clickable mockups.">Prototyping</span>
+  </div>
+</div>
+<div class="tooltip" id="tooltip"></div>
+
+<!-- ===== Code Playground ===== -->
+<h2>Code Playground</h2>
+<div class="play-container">
+  <textarea id="playgroundInput" placeholder="// Type JavaScript here"></textarea>
+  <button id="playgroundRun">Run</button>
+  <pre class="play-output" id="playgroundOutput"></pre>
+</div>
+
+<!-- ===== Dev Log ===== -->
+<h2>Dev Log</h2>
+<div class="play-container">
+  <textarea id="devlogInput" placeholder="Write Markdown here..."></textarea>
+  <button id="devlogRender">Render</button>
+  <div class="play-output" id="devlogOutput"></div>
+</div>
+
+<footer>&copy; 2025 Your Portfolio</footer>
 
 <script>
-/* All scripts in one block */
-document.addEventListener('DOMContentLoaded', () => {
-  /* ---------- pills ---------- */
-  const pillInfoBox = document.getElementById('pillInfo');
-  document.querySelectorAll('#pills .pill').forEach(p => {
-    p.addEventListener('click', () => {
-      document.querySelectorAll('#pills .pill').forEach(x => x.classList.remove('active'));
-      p.classList.add('active');
-      pillInfoBox.textContent = p.dataset.info || 'No details.';
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ===== PROJECTS ===== */
+  const projectBodies = {
+    1: `
+      <h3>Game Prototype</h3>
+      <p>Click the button to increase your score.</p>
+      <button id="gameBtn">Click Me</button>
+      <p>Score: <span id="gameScore">0</span></p>
+    `,
+    2: `
+      <h3>AI API Experiment - Calculator</h3>
+      <p>A simple calculator to mimic API processing.</p>
+      <input id="calcA" type="number" placeholder="Number A"> +
+      <input id="calcB" type="number" placeholder="Number B">
+      <button id="calcBtn">Calculate</button>
+      <p>Result: <span id="calcResult">0</span></p>
+    `,
+    3: `
+      <h3>Note-taking Tool</h3>
+      <p>Write a note and save it locally in your browser.</p>
+      <textarea id="noteText" style="width:100%;height:120px;"></textarea><br>
+      <button id="noteSave">Save Note</button>
+      <button id="noteLoad">Load Note</button>
+      <p>Saved Note:</p>
+      <pre id="noteOutput"></pre>
+    `
+  };
+
+  const projectModal = document.getElementById("projectModal");
+  const projectBody = document.getElementById("projectBody");
+  const projectClose = document.getElementById("projectClose");
+
+  document.querySelectorAll(".project").forEach(p => {
+    p.addEventListener("click", () => {
+      const key = p.dataset.project;
+      projectBody.innerHTML = projectBodies[key] || "<p>No content.</p>";
+      projectModal.style.display = "flex";
+
+      // Initialize mini apps after DOM insertion
+      if (key === "1") initGame();
+      if (key === "2") initCalc();
+      if (key === "3") initNotes();
     });
   });
 
-  /* ---------- modal plumbing ---------- */
-  const overlay = document.getElementById('modalOverlay');
-  const modal = overlay.querySelector('.modal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalBody = document.getElementById('modalBody');
-  const modalCloseBtn = document.getElementById('modalCloseBtn');
-
-  let activeCleanup = null; // a function to cleanup event listeners / intervals when closing
-
-  function openModal(title) {
-    modalTitle.textContent = title;
-    modalBody.innerHTML = '';
-    overlay.classList.add('show');
-    overlay.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-  function closeModal() {
-    overlay.classList.remove('show');
-    overlay.style.display = 'none';
-    document.body.style.overflow = '';
-    // cleanup active project resources
-    if (typeof activeCleanup === 'function') {
-      try { activeCleanup(); } catch (e) { console.error(e); }
-      activeCleanup = null;
-    }
-  }
-  modalCloseBtn.addEventListener('click', closeModal);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
-
-  /* ---------- project routing ---------- */
-  document.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const id = card.dataset.project;
-      if (id === '1') renderGamePrototype();
-      if (id === '2') renderCalculator();
-      if (id === '3') renderNotesTool();
-    });
+  projectClose.addEventListener("click", () => projectModal.style.display = "none");
+  window.addEventListener("click", e => {
+    if (e.target === projectModal) projectModal.style.display = "none";
   });
 
-  /* ---------- Project 1: Game Prototype (Catch the Dot) ---------- */
-  function renderGamePrototype() {
-    openModal('Project 1 — Catch the Dot');
-
-    // Create DOM
-    const container = document.createElement('div');
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.gap = '10px';
-    const desc = document.createElement('div'); desc.innerHTML = '<strong>Catch the Dot</strong> — click the red dot on the canvas as many times as you can in 20s.';
-    const scoreEl = document.createElement('div'); scoreEl.textContent = 'Score: 0';
-    const timerEl = document.createElement('div'); timerEl.textContent = 'Time: 20s';
-    const canvas = document.createElement('canvas'); canvas.width = 600; canvas.height = 320;
-    canvas.style.maxWidth = '100%';
-    canvas.style.borderRadius = '8px';
-    const controls = document.createElement('div'); controls.className = 'controls';
-    const startBtn = document.createElement('button'); startBtn.className='btn'; startBtn.textContent='Start';
-    const resetBtn = document.createElement('button'); resetBtn.className='btn ghost'; resetBtn.textContent='Reset';
-    controls.appendChild(startBtn); controls.appendChild(resetBtn);
-
-    container.appendChild(desc);
-    container.appendChild(scoreEl);
-    container.appendChild(timerEl);
-    container.appendChild(canvas);
-    container.appendChild(controls);
-    modalBody.appendChild(container);
-
-    // State
-    const ctx = canvas.getContext('2d');
+  function initGame(){
     let score = 0;
-    let timeLeft = 20;
-    let running = false;
-    let target = { x: 80, y: 80, r: 24 };
-    let rafId = null;
-    let moveTimer = null;
-    let countdown = null;
-
-    function spawnTarget() {
-      const r = 12 + Math.random()*24;
-      target.r = r;
-      const pad = r + 6;
-      target.x = pad + Math.random() * (canvas.width - pad*2);
-      target.y = pad + Math.random() * (canvas.height - pad*2);
-    }
-    function draw() {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle = '#010101';
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-      // dot
-      ctx.beginPath();
-      ctx.fillStyle = '#d9534f';
-      ctx.shadowColor = 'rgba(217,83,79,0.6)';
-      ctx.shadowBlur = 12;
-      ctx.arc(target.x, target.y, target.r, 0, Math.PI*2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
-      ctx.closePath();
-      rafId = requestAnimationFrame(draw);
-    }
-    function onCanvasClick(e){
-      if(!running) return;
-      const rect = canvas.getBoundingClientRect();
-      const cx = (e.clientX - rect.left) * (canvas.width / rect.width);
-      const cy = (e.clientY - rect.top) * (canvas.height / rect.height);
-      const dx = cx - target.x, dy = cy - target.y;
-      if(Math.sqrt(dx*dx + dy*dy) <= target.r){
-        score++;
-        scoreEl.textContent = 'Score: ' + score;
-        spawnTarget();
-      }
-    }
-    function startGame(){
-      if(running) return;
-      running = true;
-      score = 0; timeLeft = 20;
-      scoreEl.textContent = 'Score: 0';
-      timerEl.textContent = 'Time: 20s';
-      spawnTarget();
-      moveTimer = setInterval(spawnTarget, 900);
-      countdown = setInterval(()=>{
-        timeLeft--;
-        timerEl.textContent = 'Time: ' + timeLeft + 's';
-        if(timeLeft <= 0) stopGame();
-      },1000);
-      draw();
-    }
-    function stopGame(){
-      running = false;
-      cancelAnimationFrame(rafId);
-      clearInterval(moveTimer);
-      clearInterval(countdown);
-      timerEl.textContent = 'Time: 0s';
-      // show result
-      const res = document.createElement('div');
-      res.style.marginTop = '8px';
-      res.style.color = '#ddd';
-      res.innerHTML = `<strong>Game Over</strong> — Your score: ${score}`;
-      // append or update
-      const old = modalBody.querySelector('.game-result');
-      if(old) old.replaceWith(res);
-      else { res.className = 'game-result'; modalBody.appendChild(res); }
-    }
-    function resetGame(){
-      running = false;
-      cancelAnimationFrame(rafId);
-      clearInterval(moveTimer); clearInterval(countdown);
-      score = 0; timeLeft = 20;
-      scoreEl.textContent = 'Score: 0'; timerEl.textContent = 'Time: 20s';
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-    }
-
-    // attach listeners
-    canvas.addEventListener('click', onCanvasClick);
-    startBtn.addEventListener('click', startGame);
-    resetBtn.addEventListener('click', resetGame);
-
-    // register cleanup
-    activeCleanup = () => {
-      running = false;
-      cancelAnimationFrame(rafId);
-      clearInterval(moveTimer); clearInterval(countdown);
-      canvas.removeEventListener('click', onCanvasClick);
-      startBtn.removeEventListener('click', startGame);
-      resetBtn.removeEventListener('click', resetGame);
-    };
-  }
-
-  /* ---------- Project 2: Calculator ---------- */
-  function renderCalculator(){
-    openCalcModal('Project 2 — Calculator');
-    function openCalcModal(title){
-      openModal(title);
-    }
-
-    // Build calculator UI with DOM and attach listeners
-    const wrapper = document.createElement('div');
-    wrapper.style.maxWidth = '320px';
-    wrapper.style.margin = '0 auto';
-    const display = document.createElement('input');
-    display.type = 'text';
-    display.id = 'calcDisplay';
-    display.readOnly = true;
-    display.style.height = '44px';
-    display.style.fontSize = '18px';
-    display.style.textAlign = 'right';
-    display.style.marginBottom = '8px';
-    display.value = '';
-
-    const grid = document.createElement('div');
-    grid.style.display = 'grid';
-    grid.style.gridTemplateColumns = 'repeat(4,1fr)';
-    grid.style.gap = '6px';
-
-    const keys = ['7','8','9','/','4','5','6','*','1','2','3','-','0','.','=','+'];
-    keys.forEach(k=>{
-      const btn = document.createElement('button');
-      btn.className = 'small';
-      btn.textContent = k;
-      btn.style.height = '40px';
-      btn.style.fontSize = '16px';
-      btn.addEventListener('click', ()=>{
-        if(k === '='){
-          // eval safely-ish
-          try {
-            // restrict characters slightly (digits, operators, parentheses, dot, spaces)
-            const safe = display.value.replace(/[^0-9+\-*/().\s]/g,'');
-            const result = Function('"use strict"; return (' + safe + ')')();
-            display.value = String(result);
-          } catch (err) { display.value = 'Error'; }
-        } else {
-          display.value += k;
-        }
-      });
-      grid.appendChild(btn);
+    document.getElementById('gameBtn').addEventListener('click',()=>{
+      score++;
+      document.getElementById('gameScore').textContent = score;
     });
-
-    const clearBtn = document.createElement('button');
-    clearBtn.textContent = 'Clear';
-    clearBtn.className = 'small';
-    clearBtn.style.gridColumn = 'span 4';
-    clearBtn.addEventListener('click', ()=> display.value = '');
-
-    wrapper.appendChild(display);
-    wrapper.appendChild(grid);
-    wrapper.appendChild(clearBtn);
-    modalBody.appendChild(wrapper);
-
-    // cleanup
-    activeCleanup = () => {
-      // no intervals to clear; remove node listeners by removing wrapper
-      wrapper.remove();
-    };
   }
 
-  /* ---------- Project 3: Notes Tool ---------- */
-  function renderNotesTool(){
-    openModal('Project 3 — Notes Tool');
-
-    // layout
-    const wrap = document.createElement('div');
-    wrap.className = 'notes-wrap';
-    wrap.style.display = 'flex';
-    wrap.style.gap = '12px';
-    wrap.style.flexDirection = 'row';
-
-    // list
-    const list = document.createElement('div');
-    list.className = 'notes-list';
-    list.style.width = '36%';
-    list.style.background = '#0c0c0c';
-    list.style.borderRadius = '8px';
-    list.style.padding = '8px';
-    list.style.border = '1px solid #222';
-    list.style.maxHeight = '320px';
-    list.style.overflow = 'auto';
-
-    // editor
-    const editor = document.createElement('div');
-    editor.className = 'notes-editor';
-    editor.style.flex = '1';
-    editor.style.display = 'flex';
-    editor.style.flexDirection = 'column';
-    editor.style.gap = '8px';
-
-    const titleInput = document.createElement('input');
-    titleInput.placeholder = 'Note title';
-    const bodyInput = document.createElement('textarea');
-    bodyInput.rows = 8;
-    bodyInput.placeholder = 'Write your note here...';
-    const controls = document.createElement('div'); controls.className = 'controls';
-    const saveBtn = document.createElement('button'); saveBtn.className='btn'; saveBtn.textContent = 'Save Note';
-    const delBtn = document.createElement('button'); delBtn.className='btn ghost'; delBtn.textContent = 'Delete Note';
-    const status = document.createElement('div'); status.style.color = '#ccc';
-
-    controls.appendChild(saveBtn); controls.appendChild(delBtn);
-    editor.appendChild(titleInput); editor.appendChild(bodyInput); editor.appendChild(controls); editor.appendChild(status);
-
-    wrap.appendChild(list); wrap.appendChild(editor);
-    modalBody.appendChild(wrap);
-
-    const STORAGE_KEY = 'joseph_notes_v2';
-    let notes = [];
-    let currentId = null;
-
-    function loadNotes(){
-      try { notes = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e){ notes = []; }
-      renderList();
-    }
-    function saveNotes(){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
-    }
-    function renderList(){
-      list.innerHTML = '';
-      if(notes.length===0){
-        const info = document.createElement('div'); info.style.color = '#999'; info.textContent = 'No notes yet.';
-        list.appendChild(info); return;
-      }
-      notes.slice().reverse().forEach(n=>{
-        const btn = document.createElement('button');
-        btn.className = 'note-item';
-        btn.textContent = n.title || '(untitled)';
-        btn.style.display = 'block';
-        btn.style.width = '100%';
-        btn.style.marginBottom = '8px';
-        btn.style.textAlign = 'left';
-        btn.style.background = 'transparent';
-        btn.style.border = 'none';
-        btn.style.color = '#ddd';
-        btn.style.padding = '8px';
-        btn.style.borderRadius = '6px';
-        btn.addEventListener('click', ()=> {
-          currentId = n.id;
-          titleInput.value = n.title;
-          bodyInput.value = n.body;
-          status.textContent = 'Loaded note.';
-        });
-        list.appendChild(btn);
-      });
-    }
-
-    function createOrUpdate(){
-      const t = titleInput.value.trim();
-      const b = bodyInput.value.trim();
-      if(!t && !b){ status.textContent = 'Cannot save empty note.'; return; }
-      if(currentId){
-        const idx = notes.findIndex(x => x.id === currentId);
-        if(idx !== -1){ notes[idx].title = t; notes[idx].body = b; notes[idx].updated = Date.now(); }
-        status.textContent = 'Note updated.';
-      } else {
-        const n = { id: Date.now().toString(), title: t, body: b, updated: Date.now() };
-        notes.push(n);
-        currentId = n.id;
-        status.textContent = 'Note saved.';
-      }
-      saveNotes(); renderList();
-    }
-    function deleteNote(){
-      if(!currentId){ status.textContent = 'No note selected.'; return; }
-      notes = notes.filter(x => x.id !== currentId);
-      currentId = null; titleInput.value=''; bodyInput.value='';
-      saveNotes(); renderList();
-      status.textContent = 'Note deleted.';
-    }
-
-    saveBtn.addEventListener('click', createOrUpdate);
-    delBtn.addEventListener('click', deleteNote);
-
-    // init
-    loadNotes();
-
-    // cleanup
-    activeCleanup = () => {
-      saveBtn.removeEventListener('click', createOrUpdate);
-      delBtn.removeEventListener('click', deleteNote);
-    };
+  function initCalc(){
+    document.getElementById('calcBtn').addEventListener('click',()=>{
+      const a = parseFloat(document.getElementById('calcA').value) || 0;
+      const b = parseFloat(document.getElementById('calcB').value) || 0;
+      document.getElementById('calcResult').textContent = a + b;
+    });
   }
 
-  /* ---------- Code Playground ---------- */
-  const runBtn = document.getElementById('runBtn');
-  const codeInput = document.getElementById('codeInput');
-  const playPreview = document.getElementById('playPreview');
+  function initNotes(){
+    const save = document.getElementById('noteSave');
+    const load = document.getElementById('noteLoad');
+    const text = document.getElementById('noteText');
+    const output = document.getElementById('noteOutput');
+    save.addEventListener('click', ()=>{
+      localStorage.setItem('note', text.value);
+    });
+    load.addEventListener('click', ()=>{
+      output.textContent = localStorage.getItem('note') || '';
+    });
+  }
+
+  /* ===== SKILL PILLS ===== */
+  const tooltip = document.getElementById("tooltip");
+  document.querySelectorAll(".pill").forEach(p => {
+    p.addEventListener("click", e => {
+      tooltip.textContent = p.dataset.info;
+      tooltip.style.display = "block";
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener("click", () => tooltip.style.display = "none");
+
+  /* ===== CODE PLAYGROUND ===== */
+  const runBtn = document.getElementById('playgroundRun');
+  const input  = document.getElementById('playgroundInput');
+  const output = document.getElementById('playgroundOutput');
   runBtn.addEventListener('click', () => {
-    const blob = new Blob([codeInput.value], { type: 'text/html' });
-    playPreview.src = URL.createObjectURL(blob);
+    try {
+      const result = Function('"use strict"; return (' + input.value + ')')();
+      output.textContent = String(result);
+    } catch (err) {
+      output.textContent = "Error: " + err;
+    }
   });
 
-  /* ---------- Dev Log (Markdown render) ---------- */
-  const renderBtn = document.getElementById('renderBtn');
-  const markdownInput = document.getElementById('markdownInput');
-  const devLogPreview = document.getElementById('devLogPreview');
-  renderBtn.addEventListener('click', () => {
-    devLogPreview.innerHTML = marked.parse(markdownInput.value);
+  /* ===== DEV LOG ===== */
+  const devBtn = document.getElementById('devlogRender');
+  const devIn  = document.getElementById('devlogInput');
+  const devOut = document.getElementById('devlogOutput');
+  devBtn.addEventListener('click', () => {
+    let text = devIn.value
+      .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+      .replace(/\*(.*?)\*/g, "<i>$1</i>")
+      .replace(/\n/g, "<br>");
+    devOut.innerHTML = text;
   });
-  // initial render
-  devLogPreview.innerHTML = marked.parse(markdownInput.value);
 
-  /* ---------- Utility: openModal wrapper used in some functions ---------- */
-  function openModal(title){
-    modalTitle.textContent = title;
-    modalBody.innerHTML = '';
-    overlay.classList.add('show');
-    overlay.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-}); // end DOMContentLoaded
+});
 </script>
+
 </body>
 </html>
