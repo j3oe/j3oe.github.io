@@ -81,19 +81,34 @@
     border-radius:999px;
     cursor:pointer;
     transition:0.3s;
+    position: relative;
   }
   .pill:hover { background:#555; transform:translateY(-2px); }
 
-  /* Info box */
-  .info-box {
-    display:none;
-    background:#111;
-    padding:1rem 1.5rem;
-    margin-top:1rem;
-    border-left: 4px solid #00ffcc;
-    border-radius:5px;
-    max-width:600px;
-    color:white;
+  /* Tooltip modal */
+  .tooltip {
+    position: absolute;
+    background-color: #111;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    max-width: 250px;
+    color: #fff;
+    border: 1px solid #00ffcc;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+    font-size: 0.9rem;
+  }
+
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #111;
+    top: -6px;
+    left: 20px;
   }
 </style>
 </head>
@@ -140,8 +155,8 @@
       </div>
     </div>
 
-    <!-- Info Box -->
-    <div class="info-box" id="info-box"></div>
+    <!-- Tooltip container -->
+    <div class="tooltip" id="tooltip"></div>
 
   </section>
 
@@ -180,16 +195,27 @@
     document.body.style.overflow='auto';
   });
 
-  // Clickable pills info
+  // Tooltip for pills
   const pills = document.querySelectorAll('.pill');
-  const infoBox = document.getElementById('info-box');
+  const tooltip = document.getElementById('tooltip');
 
   pills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      infoBox.textContent = pill.getAttribute('data-info');
-      infoBox.style.display = 'block';
-      infoBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    pill.addEventListener('click', (e) => {
+      tooltip.textContent = pill.getAttribute('data-info');
+      tooltip.style.display = 'block';
+
+      // Position tooltip above the pill
+      const rect = pill.getBoundingClientRect();
+      tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + window.scrollY + 'px';
+      tooltip.style.left = rect.left + 'px';
     });
+  });
+
+  // Hide tooltip when clicking anywhere else
+  document.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('pill')) {
+      tooltip.style.display = 'none';
+    }
   });
 </script>
 
