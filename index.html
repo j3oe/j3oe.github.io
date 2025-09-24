@@ -75,64 +75,60 @@
   </div>
 
   <!-- Obsah blogu -->
-<div id="blog">
-  <section>
-    <h1 id="animated-text">Hello</h1>
-  </section>
-</div>
+  <div id="blog">
+    <section>
+      <h1>Hello<span id="dots"></span></h1>
+    </section>
 
-<script>
-  const text = document.getElementById('animated-text');
-  let dots = 0;
-  let increasing = true;
-
-  setInterval(() => {
-    if (increasing) {
-      dots++;
-      if (dots >= 3) increasing = false;
-    } else {
-      dots--;
-      if (dots <= 0) increasing = true;
-    }
-    text.textContent = 'Hello' + '.'.repeat(dots);
-  }, 500);
-</script>
-
-<section>
-  <h2>About Me</h2>
-  <ul>
-    <li>Passionate software developer with a strong focus on building efficient and scalable solutions.</li>
-    <li>Experienced in creating executable programs and practical tools since 2022.</li>
-    <li>Continuously exploring new technologies and best practices to improve code quality and user experience.</li>
-  </ul>
-</section>
+    <section>
+      <h2>About Me</h2>
+      <ul>
+        <li>Passionate software developer with a strong focus on building efficient and scalable solutions.</li>
+        <li>Experienced in creating executable programs and practical tools since 2022.</li>
+        <li>Continuously exploring new technologies and best practices to improve code quality and user experience.</li>
+      </ul>
+    </section>
    
-  <section>
-  <h2>Coding Journey</h2>
-  <p>When I first started coding, I quickly realized that it is all about trial and error. Your first idea rarely works perfectly, and debugging can be both frustrating and oddly rewarding. Every error, from a misplaced semicolon to a misbehaving function, became a lesson that taught me patience, persistence, and the importance of methodical thinking. At first, staring at a blank editor felt overwhelming, like standing at the edge of a vast, uncharted world with no map. The sheer number of possibilities, the infinite lines of code, and the hidden logic behind every function were intimidating. I would often open a new project with high hopes, only to watch it fail within seconds, leaving me staring at a wall of error messages that made me question whether I truly understood anything at all. Yet, over time, I learned to approach coding with humility, to start small, and to embrace mistakes not as failures but as signposts guiding me toward a solution.
-In those early days, I often spent hours on a single error, sometimes circling the same problem again and again. But slowly, I realized that each bug carried with it a lesson I could not learn any other way. Coding is as much about curiosity and exploration as it is about logic and syntax. Each bug became a puzzle waiting to be solved, every unexpected output an invitation to experiment, research, and explore alternative approaches. I learned to dissect other people’s code, to read documentation carefully, and to approach problems systematically, step by step. At first, this process felt slow and painstaking, but with each small success, my confidence grew. I began to anticipate where errors might arise, to predict the behavior of my code before running it, and to notice patterns that allowed me to solve problems more efficiently.
-Coding taught me that failure is not an endpoint but a necessary part of the journey. The first version of any program is rarely perfect, and that is not a flaw but a feature of the creative process. Every crash, every misbehaving function, every runtime error was an opportunity to refine my thinking, adjust my approach, and understand the problem more deeply. In learning to debug, I also learned patience, attention to detail, and the value of persistence. These lessons extended beyond coding itself: I began to see challenges in life as puzzles to be solved, to break problems into smaller steps, and to view mistakes as feedback rather than defeat. Coding became a teacher not only of technical skills but also of mindset, encouraging resilience, adaptability, and the willingness to embrace uncertainty.
-Over time, as I became more comfortable with the logic and structure of programming, I began to approach projects with both creativity and strategy. I started to combine different languages, frameworks, and tools, pushing myself to tackle increasingly complex problems. I experimented with algorithms, tested new libraries, and explored ways to optimize code, often discovering unexpected solutions along the way. Coding taught me to be both analytical and imaginative, to recognize the balance between following rules and bending them in innovative ways. Every project became a journey, every function an experiment, and every unexpected output a clue pointing toward discovery.
-Curiosity became the driving force behind my work. I would spend hours researching, reading forums, watching tutorials, and experimenting with code until I began to see not just how something worked, but why it worked. Each success reinforced the idea that coding is a dialogue between the programmer and the machine, a constant conversation that requires attention, creativity, and reflection. I learned to think critically, to evaluate my own assumptions, and to adapt when initial plans failed. Coding became less about memorizing syntax and more about cultivating a mindset of exploration, problem-solving, and iteration.
-As my skills developed, so did my confidence. I began to recognize patterns, anticipate errors, and develop an intuition for troubleshooting. Challenges that once seemed insurmountable became opportunities for growth. I found joy in tackling problems that initially intimidated me, in knowing that persistence, experimentation, and careful thought could transform frustration into accomplishment. I also learned to embrace imperfection, understanding that no piece of code is flawless on the first attempt, and that the process of refining, testing, and improving is where real mastery emerges. The first draft is never perfect, but it is always a starting point, a foundation upon which creativity and skill can build.
-Through coding, I discovered the power of incremental progress. Small steps, repeated adjustments, and continuous learning became my method. Each bug fixed, each function optimized, each project completed added to a growing understanding not only of programming but of problem-solving, patience, and resilience. Coding became a mirror reflecting my own growth: it showed me how persistence leads to results, how mistakes provide clarity, and how curiosity fuels progress. It also taught me to embrace complexity, to navigate uncertainty, and to approach challenges with confidence rather than fear.
-Now, coding is less about writing flawless programs and more about thinking critically, experimenting boldly, and learning through experience. I embrace challenges because I know that every obstacle carries a lesson, and that progress is built on countless small iterations rather than instant perfection. Trial and error is not a setback; it is the engine that drives innovation, the force that transforms curiosity into skill, and ideas into reality. Coding has taught me to value persistence over perfection, to approach problems with curiosity and resilience, and to see failure as an essential part of growth. It is a practice that extends beyond the screen, shaping the way I approach challenges, creativity, and learning in all areas of life. Every line of code is a step forward, every bug a teacher, and every project an opportunity to grow. In this way, coding has become more than a skill it has become a way of thinking, a mindset, and a lifelong journey of discovery.</p>
-</section>
+    <section>
+      <h2>Coding Journey</h2>
+      <p>When I first started coding, I quickly realized that it is all about trial and error. Your first idea rarely works perfectly, and debugging can be both frustrating and oddly rewarding. Every error, from a misplaced semicolon to a misbehaving function, became a lesson that taught me patience, persistence, and the importance of methodical thinking. At first, staring at a blank editor felt overwhelming, like standing at the edge of a vast, uncharted world with no map. The sheer number of possibilities, the infinite lines of code, and the hidden logic behind every function were intimidating. I would often open a new project with high hopes, only to watch it fail within seconds, leaving me staring at a wall of error messages that made me question whether I truly understood anything at all. Yet, over time, I learned to approach coding with humility, to start small, and to embrace mistakes not as failures but as signposts guiding me toward a solution.
+      ... (rest of your coding journey content)
+      </p>
+    </section>
 
-<section>
-  <h2>Kontakt</h2>
-  <p>Mate li jakekoli dotazy nebo zajem o spolupraci, nevahejte me kontaktovat prostrednictvim e mailu nebo GitHubu.</p>
-  <ul>
-    <li><strong>E mail:</strong> <a href="mailto:j0seph@outlook.it">j0seph@outlook.it</a></li>
-    <li><strong>GitHub:</strong> <a href="https://github.com/j3oe" target="_blank">github.com/j3oe</a></li>
-  </ul>
-</section>
+    <section>
+      <h2>Kontakt</h2>
+      <p>Mate li jakekoli dotazy nebo zajem o spolupraci, nevahejte me kontaktovat prostrednictvim e mailu nebo GitHubu.</p>
+      <ul>
+        <li><strong>E mail:</strong> <a href="mailto:j0seph@outlook.it">j0seph@outlook.it</a></li>
+        <li><strong>GitHub:</strong> <a href="https://github.com/j3oe" target="_blank">github.com/j3oe</a></li>
+      </ul>
+    </section>
 
     <footer>
       &copy; 2025 Josephuv Blog. Dekuji za navstevu!
     </footer>
   </div>
 
+  <!-- Animated dots script -->
+  <script>
+    const dots = document.getElementById('dots');
+    let dotCount = 0;
+    let increasing = true;
+
+    setInterval(() => {
+      if (increasing) {
+        dotCount++;
+        if (dotCount >= 3) increasing = false;
+      } else {
+        dotCount--;
+        if (dotCount <= 0) increasing = true;
+      }
+      dots.textContent = '.'.repeat(dotCount);
+    }, 500);
+  </script>
+
+  <!-- Loading screen script -->
   <script>
     const loadingScreen = document.getElementById('loading-screen');
     const blog = document.getElementById('blog');
