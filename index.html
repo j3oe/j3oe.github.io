@@ -218,6 +218,11 @@ button{cursor:pointer}
 .contact-link:hover img {
   transform: rotate(15deg) scale(1.1);
 }
+.delete-note {
+  color:#f55;
+  cursor:pointer;
+  margin-left:5px;
+}
 </style>
 </head>
 <body>
@@ -313,11 +318,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadingScreen = document.getElementById('loadingScreen');
   const aboutSection = document.getElementById('about');
 
-  // Scroll to top on load
   if(window.location.hash) history.replaceState(null,'',window.location.pathname);
   window.scrollTo(0,0);
 
-  // ===== Loading Screen =====
+  // Loading Screen
   loadingScreen.addEventListener('click', ()=>{
     loadingScreen.classList.add('fade-out');
     loadingScreen.addEventListener('transitionend', ()=>{
@@ -326,7 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, {once:true});
   });
 
-  // ===== Skills Tooltip =====
+  // Skills Tooltip
   const tooltip = document.getElementById('skillTooltip');
   const tooltipText = document.getElementById('tooltipText');
   const tooltipClose = document.getElementById('tooltipClose');
@@ -344,7 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
   tooltipClose.addEventListener('click', ()=> { tooltip.classList.remove('visible'); tooltip.style.display='none'; if(activeUI===tooltip) activeUI=null; });
   window.addEventListener('click', e => { if(e.target===tooltip){ tooltip.classList.remove('visible'); tooltip.style.display='none'; if(activeUI===tooltip) activeUI=null; } });
 
-  // ===== Projects =====
+  // Projects
   const projectModal = document.getElementById('projectModal');
   const projectBody = document.getElementById('projectBody');
   const projectClose = document.getElementById('projectClose');
@@ -399,15 +403,31 @@ document.addEventListener("DOMContentLoaded", () => {
         const noteInput = document.getElementById('noteInput');
         const noteList = document.getElementById('noteList');
         let notes = JSON.parse(localStorage.getItem('notes') || '[]');
-        noteList.innerHTML = notes.map(n=>`<p>- ${n}</p>`).join('');
+
+        const renderNotes = () => {
+          noteList.innerHTML = notes.map((n,i) =>
+            `<p>- ${n} <span class="delete-note" data-index="${i}">✖</span></p>`).join('');
+
+          document.querySelectorAll('.delete-note').forEach(del => {
+            del.addEventListener('click', (e)=>{
+              const index = e.target.dataset.index;
+              notes.splice(index,1);
+              localStorage.setItem('notes', JSON.stringify(notes));
+              renderNotes();
+            });
+          });
+        };
+
+        renderNotes();
+
         const newBtn = saveNote.cloneNode(true);
         saveNote.parentNode.replaceChild(newBtn, saveNote);
         newBtn.addEventListener('click', ()=>{
           if(noteInput.value.trim()){
             notes.push(noteInput.value.trim());
             noteInput.value='';
-            noteList.innerHTML = notes.map(n=>`<p>- ${n}</p>`).join('');
             localStorage.setItem('notes', JSON.stringify(notes));
+            renderNotes();
           }
         });
       }
@@ -417,7 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
   projectClose.addEventListener('click', ()=>{ projectModal.style.display="none"; if(activeUI===projectModal) activeUI=null; });
   window.addEventListener('click', e => { if(e.target===projectModal){ projectModal.style.display="none"; if(activeUI===projectModal) activeUI=null; } });
 
-  // ===== Code Playground =====
+  // Code Playground
   const runBtn = document.getElementById('playgroundRun');
   const input = document.getElementById('playgroundInput');
   const output = document.getElementById('playgroundOutput');
@@ -426,20 +446,19 @@ document.addEventListener("DOMContentLoaded", () => {
     catch(err){ output.textContent = "Error: "+err; }
   });
 
-  // ===== Dev Log =====
+  // Dev Log
   const devBtn = document.getElementById('devlogRender');
   const devIn = document.getElementById('devlogInput');
   const devOut = document.getElementById('devlogOutput');
 
-  // Load saved dev log
-  if(localStorage.getItem('devlog')) devIn.value = localStorage.getItem('devlog');
+  // Load dev log from localStorage
+  devIn.value = localStorage.getItem('devLog') || '';
 
   devBtn.addEventListener('click', ()=>{
     let text = devIn.value.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>").replace(/\*(.*?)\*/g,"<i>$1</i>").replace(/\n/g,"<br>");
     devOut.innerHTML = text;
-    localStorage.setItem('devlog', devIn.value); // Save to localStorage
+    localStorage.setItem('devLog', devIn.value);
   });
-
 });
 </script>
 </body>
