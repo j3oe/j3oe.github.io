@@ -5,28 +5,91 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Josephuv Portfolio</title>
 <style>
-body, html {margin:0; padding:0; font-family:'Segoe UI',sans-serif; background:black; color:white; scroll-behavior:smooth; overflow:hidden;}
+body, html {
+  margin:0; padding:0;
+  font-family:'Segoe UI',sans-serif;
+  background:black; color:white;
+  scroll-behavior:smooth;
+  overflow:hidden;
+}
 
-#loading-screen {position:fixed; top:0; left:0; width:100%; height:100%; display:flex; justify-content:center; align-items:center; background:black; cursor:pointer; z-index:9999; transition:opacity 1s ease;}
-#loading-screen img {width:max(60px,10vw); height:auto; animation:spin 2s linear infinite;}
+#loading-screen {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  display:flex; justify-content:center; align-items:center;
+  background:black; cursor:pointer; z-index:9999;
+  transition:opacity 1s ease;
+}
+#loading-screen img {
+  width:max(60px,10vw); height:auto;
+  animation:spin 2s linear infinite;
+}
 @keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 
 section {padding:2rem; margin-bottom:2rem; border-bottom:1px solid #333;}
 h2 {color:#00ffcc;}
 p {line-height:1.5;}
 
+/* Pills for Skills */
+.pills {display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1rem;}
+.pill {
+  padding:0.5rem 1rem;
+  border:1px solid #00ffcc;
+  border-radius:999px;
+  cursor:pointer;
+  background:#111;
+  transition:0.3s;
+}
+.pill:hover, .pill.active {
+  background:#00ffcc;
+  color:black;
+  box-shadow:0 0 10px #00ffcc66, 0 0 20px #00ffcc33;
+}
+#pill-info {
+  margin-top:1rem;
+  background:#111;
+  border:1px solid #00ffcc;
+  padding:1rem;
+  border-radius:8px;
+  min-height:60px;
+}
+
+/* Projects */
 .gallery {display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem;}
-.project {background:#111; border:1px solid #00ffcc; border-radius:8px; padding:1rem; text-align:center; cursor:pointer; transition:0.3s; position:relative;}
-.project:hover {box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33; transform:translateY(-2px);}
+.project {
+  background:#111; border:1px solid #00ffcc;
+  border-radius:8px; padding:1rem; text-align:center;
+  cursor:pointer; transition:0.3s; position:relative;
+}
+.project:hover {
+  box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33;
+  transform:translateY(-2px);
+}
 .project img {max-width:100%; border-radius:5px;}
 
+/* Modal */
 .modal {display:none; position:fixed; z-index:10000; left:0; top:0; width:100%; height:100%; overflow:auto; background:rgba(0,0,0,0.8);}
-.modal-content {background:#111; margin:10% auto; padding:1rem; border:1px solid #00ffcc; width:90%; max-width:500px; border-radius:8px; color:white; position:relative;}
-.close {color:#00ffcc; position:absolute; top:10px; right:20px; font-size:2rem; font-weight:bold; cursor:pointer;}
+.modal-content {
+  background:#111; margin:10% auto; padding:1rem;
+  border:1px solid #00ffcc; width:90%; max-width:500px;
+  border-radius:8px; color:white; position:relative;
+}
+.close {
+  color:#00ffcc; position:absolute; top:10px; right:20px;
+  font-size:2rem; font-weight:bold; cursor:pointer;
+}
 
-button {padding:0.5rem 1rem; border:none; border-radius:5px; background:#00ffcc; color:black; font-weight:bold; cursor:pointer; transition:0.3s; margin-top:0.5rem;}
+button {
+  padding:0.5rem 1rem;
+  border:none; border-radius:5px;
+  background:#00ffcc; color:black; font-weight:bold;
+  cursor:pointer; transition:0.3s; margin-top:0.5rem;
+}
 button:hover {box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33;}
-input, textarea {width:100%; padding:0.5rem; border-radius:5px; border:1px solid #444; background:#111; color:white; margin-bottom:0.5rem;}
+input, textarea {
+  width:100%; padding:0.5rem;
+  border-radius:5px; border:1px solid #444;
+  background:#111; color:white; margin-bottom:0.5rem;
+}
 </style>
 </head>
 <body>
@@ -44,11 +107,18 @@ input, textarea {width:100%; padding:0.5rem; border-radius:5px; border:1px solid
     <p>I’ve been coding for a few years now, exploring games, academic projects, and AI APIs. Every project teaches me new ways to think about code, design, and technology.</p>
   </section>
 
-  <!-- Skills -->
+  <!-- Skills with Pills -->
   <section>
     <h2>Skills</h2>
-    <p>Web Development: HTML, CSS, JavaScript, React, Node.js</p>
-    <p>UI/UX: Figma, Adobe XD, Tailwind CSS, Responsive Design, Accessibility</p>
+    <p>Click a topic to learn more:</p>
+    <div class="pills">
+      <div class="pill" data-info="HTML, CSS, and JavaScript form the backbone of my web projects, ensuring clean structure and interactive experiences.">Web Development</div>
+      <div class="pill" data-info="UI (User Interface) focuses on visuals—colors, layouts, and elements that users interact with.">UI Design</div>
+      <div class="pill" data-info="UX (User Experience) ensures the product feels natural, intuitive, and enjoyable for users.">UX Design</div>
+      <div class="pill" data-info="Responsive design allows websites to look great on any device, from phones to desktops.">Responsive Design</div>
+      <div class="pill" data-info="Tools like Figma and Adobe XD help me rapidly prototype and collaborate on designs.">Prototyping</div>
+    </div>
+    <div id="pill-info">Click a pill to see details here.</div>
   </section>
 
   <!-- Projects -->
@@ -57,19 +127,19 @@ input, textarea {width:100%; padding:0.5rem; border-radius:5px; border:1px solid
     <div class="gallery">
       <div class="project" data-project="1">
         <img src="assets/project1.png" alt="Project 1">
-        <p>Game Prototype – Click the button to play a small click-counter game.</p>
+        <p>Game Prototype – A click-counter mini game.</p>
       </div>
       <div class="project" data-project="2">
         <img src="assets/project2.png" alt="Project 2">
-        <p>AI API Experiment – Ask a question and get a mock AI response.</p>
+        <p>AI API Experiment – Mock AI Q&A.</p>
       </div>
       <div class="project" data-project="3">
         <img src="assets/project3.png" alt="Project 3">
-        <p>Note-taking Tool – Save your notes in your browser using local storage.</p>
+        <p>Note-taking Tool – Save notes in local storage.</p>
       </div>
       <div class="project" data-project="math">
         <img src="assets/math.png" alt="Math Snippet">
-        <p>Interactive Math – Test calculations directly in a modal.</p>
+        <p>Interactive Math – Try live calculations.</p>
       </div>
     </div>
   </section>
@@ -85,82 +155,93 @@ input, textarea {width:100%; padding:0.5rem; border-radius:5px; border:1px solid
 </main>
 
 <script>
-  // Loading screen
-  const loadingScreen = document.getElementById('loading-screen');
-  const blog = document.getElementById('blog');
-  loadingScreen.addEventListener('click',()=>{
-    loadingScreen.style.opacity='0';
-    loadingScreen.style.pointerEvents='none';
-    blog.style.opacity='1';
-    document.body.style.overflow='auto';
+/* Loading screen */
+const loadingScreen = document.getElementById('loading-screen');
+const blog = document.getElementById('blog');
+loadingScreen.addEventListener('click',()=>{
+  loadingScreen.style.opacity='0';
+  loadingScreen.style.pointerEvents='none';
+  blog.style.opacity='1';
+  document.body.style.overflow='auto';
+});
+
+/* Pills interaction */
+const pills = document.querySelectorAll('.pill');
+const pillInfo = document.getElementById('pill-info');
+pills.forEach(pill=>{
+  pill.addEventListener('click',()=>{
+    pills.forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+    pillInfo.textContent = pill.dataset.info;
   });
+});
 
-  // Projects modal logic
-  const projects = document.querySelectorAll('.project');
-  const modal = document.getElementById('projectModal');
-  const modalBody = document.getElementById('modalBody');
-  const closeBtn = modal.querySelector('.close');
+/* Projects modal logic */
+const projects = document.querySelectorAll('.project');
+const modal = document.getElementById('projectModal');
+const modalBody = document.getElementById('modalBody');
+const closeBtn = modal.querySelector('.close');
 
-  projects.forEach(project=>{
-    project.addEventListener('click', ()=>{
-      const id = project.dataset.project;
-      modal.style.display = 'block';
-      modalBody.innerHTML = ''; // Clear previous content
+projects.forEach(project=>{
+  project.addEventListener('click', ()=>{
+    const id = project.dataset.project;
+    modal.style.display = 'block';
+    modalBody.innerHTML = '';
 
-      if(id==='1'){ // Game Prototype
-        const output = document.createElement('p'); output.id = 'gameOutput';
-        const btn = document.createElement('button'); btn.textContent='Click Me!';
-        let clickCount=0;
-        btn.onclick = ()=>{ clickCount++; output.textContent='Count: '+clickCount; }
-        output.textContent='Click the button to increase count!';
-        modalBody.appendChild(output); modalBody.appendChild(btn);
+    if(id==='1'){ // Game Prototype
+      const output = document.createElement('p'); output.id = 'gameOutput';
+      const btn = document.createElement('button'); btn.textContent='Click Me!';
+      let clickCount=0;
+      btn.onclick = ()=>{ clickCount++; output.textContent='Count: '+clickCount; }
+      output.textContent='Click the button to increase count!';
+      modalBody.appendChild(output); modalBody.appendChild(btn);
 
-      } else if(id==='2'){ // AI API Experiment
-        const input = document.createElement('input'); input.id='aiInput'; input.placeholder='Ask a question...';
-        const btn = document.createElement('button'); btn.textContent='Send';
-        const output = document.createElement('p'); output.id='aiOutput';
-        btn.onclick = ()=>{
-          const question = input.value.trim();
-          if(!question){ output.textContent='Please type a question.'; return; }
-          const responses = ["Interesting question!","Try experimenting.","Let me think...","Several ways to do that.","Here's an idea."];
-          output.textContent='AI Response: '+responses[Math.floor(Math.random()*responses.length)];
-        };
-        modalBody.appendChild(input); modalBody.appendChild(btn); modalBody.appendChild(output);
+    } else if(id==='2'){ // AI API Experiment
+      const input = document.createElement('input'); input.placeholder='Ask a question...';
+      const btn = document.createElement('button'); btn.textContent='Send';
+      const output = document.createElement('p');
+      btn.onclick = ()=>{
+        const question = input.value.trim();
+        if(!question){ output.textContent='Please type a question.'; return; }
+        const responses = ["Interesting question!","Try experimenting.","Let me think...","Several ways to do that.","Here's an idea."];
+        output.textContent='AI Response: '+responses[Math.floor(Math.random()*responses.length)];
+      };
+      modalBody.appendChild(input); modalBody.appendChild(btn); modalBody.appendChild(output);
 
-      } else if(id==='3'){ // Note-taking Tool
-        const textarea = document.createElement('textarea'); textarea.id='noteInput'; textarea.rows=5; textarea.placeholder='Type your notes here...';
-        const btn = document.createElement('button'); btn.textContent='Save Note';
-        const status = document.createElement('p'); status.id='noteStatus';
-        btn.onclick = ()=>{
-          const note = textarea.value;
-          if(!note){ status.textContent='Nothing to save!'; return; }
-          localStorage.setItem('myNote', note);
-          status.textContent='Note saved!';
-        };
-        const saved = localStorage.getItem('myNote'); if(saved) textarea.value = saved;
-        modalBody.appendChild(textarea); modalBody.appendChild(btn); modalBody.appendChild(status);
+    } else if(id==='3'){ // Note-taking Tool
+      const textarea = document.createElement('textarea'); textarea.rows=5; textarea.placeholder='Type your notes here...';
+      const btn = document.createElement('button'); btn.textContent='Save Note';
+      const status = document.createElement('p');
+      btn.onclick = ()=>{
+        const note = textarea.value;
+        if(!note){ status.textContent='Nothing to save!'; return; }
+        localStorage.setItem('myNote', note);
+        status.textContent='Note saved!';
+      };
+      const saved = localStorage.getItem('myNote'); if(saved) textarea.value = saved;
+      modalBody.appendChild(textarea); modalBody.appendChild(btn); modalBody.appendChild(status);
 
-      } else if(id==='math'){ // Interactive Math
-        const input = document.createElement('input'); input.placeholder='Type a math expression, e.g., 5+3*2'; input.id='mathInputModal';
-        const btn = document.createElement('button'); btn.textContent='Calculate';
-        const output = document.createElement('p'); output.id='mathOutputModal';
-        btn.onclick = ()=>{
-          const code = input.value;
-          try{
-            let result = Function('"use strict"; return ('+code+')')();
-            output.textContent = 'Result: '+result;
-          }catch(err){
-            output.textContent = 'Error: '+err;
-          }
-        };
-        modalBody.appendChild(input); modalBody.appendChild(btn); modalBody.appendChild(output);
-      }
-    });
+    } else if(id==='math'){ // Interactive Math
+      const input = document.createElement('input'); input.placeholder='Type a math expression, e.g., 5+3*2';
+      const btn = document.createElement('button'); btn.textContent='Calculate';
+      const output = document.createElement('p');
+      btn.onclick = ()=>{
+        const code = input.value;
+        try{
+          let result = Function('"use strict"; return ('+code+')')();
+          output.textContent = 'Result: '+result;
+        }catch(err){
+          output.textContent = 'Error: '+err;
+        }
+      };
+      modalBody.appendChild(input); modalBody.appendChild(btn); modalBody.appendChild(output);
+    }
   });
+});
 
-  // Close modal
-  closeBtn.onclick = ()=>{ modal.style.display='none'; }
-  window.onclick = e=>{ if(e.target===modal) modal.style.display='none'; }
+/* Close modal */
+closeBtn.onclick = ()=>{ modal.style.display='none'; }
+window.onclick = e=>{ if(e.target===modal) modal.style.display='none'; }
 </script>
 
 </body>
