@@ -77,9 +77,26 @@
   <!-- Obsah blogu -->
 <div id="blog">
   <section>
-    <h1>Hello.</h1>
-    <p>Welcome to my blog.</p>
+    <h1 id="animated-text">Hello</h1>
   </section>
+</div>
+
+<script>
+  const text = document.getElementById('animated-text');
+  let dots = 0;
+  let increasing = true;
+
+  setInterval(() => {
+    if (increasing) {
+      dots++;
+      if (dots >= 3) increasing = false;
+    } else {
+      dots--;
+      if (dots <= 0) increasing = true;
+    }
+    text.textContent = 'Hello' + '.'.repeat(dots);
+  }, 500);
+</script>
 
 <section>
   <h2>About Me</h2>
