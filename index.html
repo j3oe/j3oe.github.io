@@ -56,10 +56,7 @@
     overflow-y:auto;
   }
 
-  section {
-    margin-bottom:2rem;
-  }
-
+  section { margin-bottom:2rem; }
   footer {
     text-align:center;
     padding:1rem;
@@ -104,7 +101,7 @@
     100% { transform: scale(1); opacity: 0.5; }
   }
 
-  /* Tooltip modal with glow */
+  /* Tooltip modal with glow and arrow */
   .tooltip {
     position: absolute;
     background-color: #111;
@@ -137,11 +134,12 @@
     border-bottom: 6px solid #111;
     top: -6px;
     left: 20px;
+    transform: var(--arrow-flip, rotate(0deg));
+    box-shadow: 0 0 6px #00ffcc55;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   .tooltip.visible::after {
-    transform: translateY(0);
-    box-shadow: 0 0 6px #00ffcc55;
+    box-shadow: 0 0 10px #00ffcc88, 0 0 20px #00ffcc44;
   }
 </style>
 </head>
@@ -228,73 +226,89 @@
     document.body.style.overflow='auto';
   });
 
-  // Tooltip with click-to-lock and edge-aware positioning
+  // Tooltip smooth animation
   const pills = document.querySelectorAll('.pill');
   const tooltip = document.getElementById('tooltip');
   let locked = false;
+  let tooltipTarget = { left:0, top:0 };
+  let tooltipCurrent = { left:0, top:0 };
+
+  function animateTooltip(){
+    tooltipCurrent.left += (tooltipTarget.left - tooltipCurrent.left)*0.2;
+    tooltipCurrent.top += (tooltipTarget.top - tooltipCurrent.top)*0.2;
+    tooltip.style.left = tooltipCurrent.left+'px';
+    tooltip.style.top = tooltipCurrent.top+'px';
+    requestAnimationFrame(animateTooltip);
+  }
+  animateTooltip();
 
   pills.forEach(pill => {
-    pill.addEventListener('mouseenter', (e) => {
-      if (!locked) {
+    pill.addEventListener('mouseenter', () => {
+      if(!locked){
         tooltip.textContent = pill.getAttribute('data-info');
         tooltip.style.display = 'block';
         tooltip.classList.add('visible');
       }
     });
 
-    pill.addEventListener('mousemove', (e) => {
-      if (!locked) {
-        const tooltipWidth = tooltip.offsetWidth;
-        const tooltipHeight = tooltip.offsetHeight;
-        let left = e.pageX - tooltipWidth/2;
-        let top = e.pageY - tooltipHeight - 10;
+    pill.addEventListener('mousemove', (e)=>{
+      if(!locked){
+        const tw = tooltip.offsetWidth;
+        const th = tooltip.offsetHeight;
+        let left = e.pageX - tw/2;
+        let top = e.pageY - th -10;
+        let arrowUp = true;
 
-        // Edge detection
-        if(left < 5) left = 5;
-        if(left + tooltipWidth > window.innerWidth - 5) left = window.innerWidth - tooltipWidth - 5;
-        if(top < 5) top = e.pageY + 20;
+        if(left<5) left=5;
+        if(left+tw>window.innerWidth-5) left=window.innerWidth-tw-5;
+        if(top<5){ top=e.pageY+20; arrowUp=false; }
 
-        tooltip.style.left = left + 'px';
-        tooltip.style.top = top + 'px';
+        tooltipTarget.left = left;
+        tooltipTarget.top = top;
+        tooltip.dataset.arrowUp = arrowUp;
+        tooltip.style.setProperty('--arrow-flip', arrowUp?'rotate(0deg)':'rotate(180deg)');
       }
     });
 
-    pill.addEventListener('mouseleave', () => {
-      if (!locked) {
+    pill.addEventListener('mouseleave', ()=>{
+      if(!locked){
         tooltip.classList.remove('visible');
-        setTimeout(() => { tooltip.style.display = 'none'; }, 300);
+        setTimeout(()=>{tooltip.style.display='none';},300);
       }
     });
 
-    pill.addEventListener('click', () => {
+    pill.addEventListener('click', ()=>{
       locked = !locked;
       tooltip.textContent = pill.getAttribute('data-info');
       tooltip.style.display = 'block';
       tooltip.classList.add('visible');
 
       const rect = pill.getBoundingClientRect();
-      let left = rect.left + window.scrollX;
-      let top = rect.top - tooltip.offsetHeight - 10 + window.scrollY;
+      const tw = tooltip.offsetWidth;
+      const th = tooltip.offsetHeight;
+      let left = rect.left + window.scrollX + rect.width/2 - tw/2;
+      let top = rect.top - th - 10 + window.scrollY;
+      let arrowUp = true;
 
-      // Edge detection
-      if(left + tooltip.offsetWidth > window.innerWidth - 5) left = window.innerWidth - tooltip.offsetWidth - 5;
-      if(left < 5) left = 5;
-      if(top < 5) top = rect.bottom + 10 + window.scrollY;
+      if(left<5) left=5;
+      if(left+tw>window.innerWidth-5) left=window.innerWidth-tw-5;
+      if(top<5){ top=rect.bottom+10+window.scrollY; arrowUp=false; }
 
-      tooltip.style.left = left + 'px';
-      tooltip.style.top = top + 'px';
+      tooltipTarget.left = left;
+      tooltipTarget.top = top;
+      tooltip.dataset.arrowUp = arrowUp;
+      tooltip.style.setProperty('--arrow-flip', arrowUp?'rotate(0deg)':'rotate(180deg)');
     });
   });
 
-  // Clicking anywhere outside unlocks tooltip
-  document.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('pill')) {
-      locked = false;
+  // Clicking outside unlocks tooltip
+  document.addEventListener('click',(e)=>{
+    if(!e.target.classList.contains('pill')){
+      locked=false;
       tooltip.classList.remove('visible');
-      setTimeout(() => { tooltip.style.display = 'none'; }, 300);
+      setTimeout(()=>{tooltip.style.display='none';},300);
     }
   });
 </script>
-
 </body>
 </html>
