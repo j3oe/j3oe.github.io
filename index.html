@@ -294,12 +294,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const tooltip = document.getElementById('skillTooltip');
   const tooltipText = document.getElementById('tooltipText');
   const tooltipClose = document.getElementById('tooltipClose');
-  document.querySelectorAll('.skill-pill').forEach(pill=>{
-    pill.addEventListener('click', ()=>{
+
+  document.querySelectorAll('.skill-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      // Hide any open tooltip
+      tooltip.classList.remove('visible');
+
+      // Show new tooltip
       tooltipText.textContent = pill.dataset.info;
       tooltip.classList.add('visible');
     });
   });
+
   tooltipClose.addEventListener('click', ()=>tooltip.classList.remove('visible'));
   window.addEventListener('click', e => { if(e.target===tooltip) tooltip.classList.remove('visible'); });
 
