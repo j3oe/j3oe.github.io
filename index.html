@@ -348,25 +348,14 @@ document.addEventListener("DOMContentLoaded", () => {
   tooltipClose.addEventListener('click', ()=> { tooltip.classList.remove('visible'); tooltip.style.display='none'; if(activeUI===tooltip) activeUI=null; });
   window.addEventListener('click', e => { if(e.target===tooltip){ tooltip.classList.remove('visible'); tooltip.style.display='none'; if(activeUI===tooltip) activeUI=null; } });
 
-  // Projects
+  // Projects Modal
   const projectModal = document.getElementById('projectModal');
   const projectBody = document.getElementById('projectBody');
   const projectClose = document.getElementById('projectClose');
-
   const projectBodies = {
-    1: `<h3>Game Prototype</h3>
-        <p>A simple click counter game.</p>
-        <button class="game-btn" id="gameBtn">Click me</button>
-        <p id="gameScore">Score: 0</p>`,
-    2: `<h3>Calculator</h3>
-        <p>Enter a math expression:</p>
-        <input type="text" id="calcInput" style="width:80%;padding:6px;background:#000;color:#fff;border:1px solid #555;">
-        <button class="calc-btn" id="calcRun">Calculate</button>
-        <p id="calcResult">Result: </p>`,
-    3: `<h3>Note taking Tool</h3>
-        <textarea id="noteInput" placeholder="Write a note..." style="width:90%;height:100px;background:#000;color:#fff;border:1px solid #555;"></textarea>
-        <button class="note-btn" id="saveNote">Save</button>
-        <div id="noteList" style="margin-top:10px;"></div>`
+    1: `<h3>Game Prototype</h3><p>A simple click counter game.</p><button class="game-btn" id="gameBtn">Click me</button><p id="gameScore">Score: 0</p>`,
+    2: `<h3>Calculator</h3><p>Enter a math expression:</p><input type="text" id="calcInput" style="width:80%;padding:6px;background:#000;color:#fff;border:1px solid #555;"><button class="calc-btn" id="calcRun">Calculate</button><p id="calcResult">Result: </p>`,
+    3: `<h3>Note taking Tool</h3><textarea id="noteInput" placeholder="Write a note..." style="width:90%;height:100px;background:#000;color:#fff;border:1px solid #555;"></textarea><button class="note-btn" id="saveNote">Save</button><div id="noteList" style="margin-top:10px;"></div>`
   };
 
   document.querySelectorAll('.project').forEach(p=>{
@@ -459,6 +448,71 @@ document.addEventListener("DOMContentLoaded", () => {
     devOut.innerHTML = text;
     localStorage.setItem('devLog', devIn.value);
   });
+
+  // === Drag-and-Drop for Skill Pills ===
+  const skillsContainer = document.querySelector('#skills .skills-container');
+  let draggedPill = null;
+
+  document.querySelectorAll('#skills .skill-pill:not(.contact-link)').forEach(pill => {
+    pill.setAttribute('draggable','true');
+
+    pill.addEventListener('dragstart', e => { draggedPill = e.target; e.target.style.opacity='0.5'; });
+    pill.addEventListener('dragend', e => { e.target.style.opacity='1'; draggedPill = null; });
+  });
+
+  skillsContainer.addEventListener('dragover', e=>e.preventDefault());
+  skillsContainer.addEventListener('drop', e=>{
+    e.preventDefault();
+    if(!draggedPill) return;
+    let target = e.target.closest('.skill-pill');
+    if(target && target!==draggedPill){
+      const rect = target.getBoundingClientRect();
+      const next = (e.clientY - rect.top)/rect.height > 0.5;
+      skillsContainer.insertBefore(draggedPill, next ? target.nextSibling : target);
+    }
+  });
+
+  // === Drag-and-Drop for Projects ===
+  const projectsGrid = document.querySelector('#projects .projects-grid');
+  let draggedProject = null;
+
+  document.querySelectorAll('#projects .project').forEach(proj=>{
+    proj.setAttribute('draggable','true');
+
+    proj.addEventListener('dragstart', e=>{ draggedProject = e.target; });
+    proj.addEventListener('dragend', e=>{ draggedProject=null; });
+  });
+
+  projectsGrid.addEventListener('dragover', e=>e.preventDefault());
+  projectsGrid.addEventListener('drop', e=>{
+    e.preventDefault();
+    if(!draggedProject) return;
+    let target = e.target.closest('.project');
+    if(target && target!==draggedProject){
+      const rect = target.getBoundingClientRect();
+      const next = (e.clientY - rect.top)/rect.height > 0.5;
+      projectsGrid.insertBefore(draggedProject, next ? target.nextSibling : target);
+    }
+  });
+
+  // === Animated Section Transitions ===
+  const sections = document.querySelectorAll('section');
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.style.opacity=1;
+        entry.target.style.transform='translateY(0)';
+        entry.target.style.transition='all 0.8s ease-out';
+      }
+    });
+  }, {threshold:0.2});
+
+  sections.forEach(sec=>{
+    sec.style.opacity=0;
+    sec.style.transform='translateY(50px)';
+    observer.observe(sec);
+  });
+
 });
 </script>
 </body>
