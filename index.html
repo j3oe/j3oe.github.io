@@ -1,73 +1,860 @@
-// === Typing Trainer ===
-const typingModal = document.getElementById('typingModal');
-const typingClose = document.getElementById('typingClose');
-const typingText = document.getElementById('typingText');
-const typingInput = document.getElementById('typingInput');
-const typingStats = document.getElementById('typingStats');
-const typingKeyboard = document.getElementById('typingKeyboard');
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Josephuv's Portfolio</title>
 
-const czechKeys = "ěščřžýáíéqwertyuiopúasdfghjklůzxcvbnm".split('');
-const words = ["česká","rychlá","liška","programování","káva","praha","zábava","přátelé","škola","řeka","město"];
-let startTime, target, correctCount, typedCount;
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
 
-function buildKeyboard(){
-  typingKeyboard.innerHTML='';
-  czechKeys.forEach(k=>{
-    const key=document.createElement('div');
-    key.className='key';
-    key.textContent=k;
-    typingKeyboard.appendChild(key);
+<style>
+/* === Global === */
+:root{
+  --bg:#000;
+  --panel:#111;
+  --muted:#666;
+  --accent:#0f0;
+  --danger:#f55;
+}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:#eee;
+  font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+section{
+  padding:40px 20px;
+  max-width:1000px;
+  margin:auto;
+}
+h1,h2,h3{color:#fff;text-align:center;margin-bottom:20px;}
+button{cursor:pointer}
+
+/* === Loading Screen === */
+#loadingScreen{
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:2000;
+  transition: opacity 0.8s ease;
+  cursor:pointer;
+}
+#loadingScreen.fade-out { opacity:0; pointer-events:none; }
+#loadingScreen img{
+  width:200px;
+  height:200px;
+  animation: spin 2s linear infinite;
+}
+@keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+
+/* === About Me === */
+.about-box{
+  background:var(--panel);
+  border:1px solid #333;
+  padding:20px;
+  border-radius:12px;
+  line-height:1.6;
+  max-width:800px;
+  margin:auto;
+}
+
+/* === Skills === */
+.skills-container{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+  margin-top:20px;
+}
+.skill-pill{
+  background:#444;
+  color:#fff;
+  padding:10px 18px;
+  border-radius:20px;
+  border:1px solid #666;
+  transition:background 0.3s;
+  text-decoration:none;
+}
+.skill-pill:hover{background:#666;}
+.tooltip{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:var(--panel);
+  border:1px solid #666;
+  padding:20px;
+  border-radius:12px;
+  max-width:300px;
+  text-align:center;
+  display:none;
+  z-index:999;
+}
+.tooltip.visible{display:block;}
+.tooltip .close{
+  position:absolute;
+  top:8px;
+  right:12px;
+  color:#999;
+  font-size:18px;
+  cursor:pointer;
+}
+
+/* === Projects === */
+.projects-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  max-width:900px;
+  margin:30px auto;
+}
+.project{
+  background:var(--panel);
+  padding:20px;
+  border:1px solid #333;
+  border-radius:12px;
+  text-align:center;
+  transition:background 0.3s;
+  cursor:pointer;
+}
+.project:hover{background:#222;}
+#projectModal{
+  display:none;
+  position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.8);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+.modal-content{
+  background:var(--panel);
+  padding:20px;
+  border-radius:12px;
+  border:1px solid #555;
+  min-width:300px;
+  max-width:600px;
+  min-height:200px;
+  position:relative;
+}
+.modal-content .close{
+  position:absolute;
+  top:8px;
+  right:12px;
+  color:#aaa;
+  font-size:22px;
+  cursor:pointer;
+}
+.game-btn, .calc-btn, .note-btn{
+  display:block;
+  margin:10px auto;
+  padding:10px 16px;
+  border-radius:8px;
+  border:1px solid #666;
+  background:#333;
+  color:#fff;
+}
+
+/* === Playground & Dev Log === */
+.play-container{
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
+  max-width:900px;
+  margin:2rem auto;
+  background:var(--panel);
+  padding:1rem;
+  border:1px solid #333;
+  border-radius:12px;
+}
+.play-container textarea{
+  width:100%;
+  min-height:300px;
+  font-family:monospace;
+  font-size:16px;
+  line-height:1.4;
+  background:#000;
+  color:#eee;
+  padding:1rem;
+  border:1px solid #444;
+  resize:vertical;
+  overflow:auto;
+  border-radius:8px;
+}
+.play-container button{
+  align-self:flex-start;
+  padding:0.5rem 1rem;
+  background:#444;
+  border:1px solid #666;
+  color:#fff;
+  border-radius:8px;
+  transition:background 0.3s;
+}
+.play-container button:hover{background:#666;}
+.play-output{
+  width:100%;
+  min-height:250px;
+  background:#000;
+  color:var(--accent);
+  padding:1rem;
+  border:1px solid #444;
+  overflow:auto;
+  font-family:monospace;
+  font-size:15px;
+  border-radius:8px;
+}
+
+/* === Contact / Social Links === */
+#contact .skills-container{
+  margin-top:20px;
+}
+#contact img{width:24px;height:24px;}
+.contact-link {
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.contact-link:hover {
+  transform: scale(1.1);
+  background: #666;
+}
+.contact-link img {
+  transition: transform 0.3s ease;
+}
+.contact-link:hover img {
+  transform: rotate(15deg) scale(1.1);
+}
+.delete-note {
+  color:var(--danger);
+  cursor:pointer;
+  margin-left:5px;
+}
+
+/* === Typing Trainer === */
+#typingModal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.96);
+  z-index:3000;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-items:center;
+  padding:30px 20px;
+  color:#fff;
+}
+#typingModal .close{
+  position:absolute;
+  top:18px;
+  right:26px;
+  font-size:28px;
+  cursor:pointer;
+  color:#888;
+}
+#typingText{
+  font-size:22px;
+  max-width:1000px;
+  margin:30px auto 12px;
+  text-align:center;
+  line-height:1.6;
+  padding:14px;
+  background:#000;
+  border:1px solid #222;
+  border-radius:8px;
+}
+#typingText span{padding:0 1px;}
+#typingText span.correct{color:var(--accent);}
+#typingText span.incorrect{color:var(--danger);}
+#typingText span.next{background:rgba(255,255,255,0.04);border-radius:4px;}
+#typingInput{
+  width:90%;
+  max-width:900px;
+  padding:12px;
+  background:#111;
+  border:1px solid #333;
+  color:#fff;
+  font-size:18px;
+  border-radius:8px;
+  outline:none;
+  margin-top:6px;
+}
+#typingStats{
+  margin-top:14px;
+  font-size:16px;
+  opacity:0.9;
+}
+.keyboard{
+  margin-top:26px;
+  max-width:1000px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  justify-content:center;
+  align-items:center;
+}
+.krow{
+  display:flex;
+  gap:6px;
+  width:100%;
+  justify-content:center;
+}
+.key{
+  padding:10px 8px;
+  min-width:34px;
+  text-align:center;
+  background:#222;
+  border:1px solid #444;
+  border-radius:6px;
+  text-transform:none;
+  color:#ccc;
+  user-select:none;
+  font-size:14px;
+}
+.key.wide{min-width:70px}
+.key.space{min-width:420px}
+.key.active{background:var(--accent); color:#000;}
+.key.error{background:var(--danger); color:#fff;}
+.small{font-size:12px;color:#999}
+@media (max-width:720px){
+  #typingInput{font-size:16px}
+  .key.space{min-width:200px}
+  .key{min-width:28px;padding:8px 6px}
+  #typingText{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<!-- === LOADING SCREEN === -->
+<div id="loadingScreen">
+  <img src="assets/cross.png" alt="Loading" id="loadingImg">
+</div>
+
+<!-- === ABOUT === -->
+<section id="about">
+  <h1>About Me</h1>
+  <div class="about-box">
+    <p>
+      I've been coding for a couple of years now and I've created a variety of things —
+      some for games and some for academic use, such as note takers and utilities that help
+      me, as just a normal human, deeply understand what AI bots look at.
+      Exploring back end APIs and experimenting with AI interactions drives my curiosity every day.
+    </p>
+  </div>
+</section>
+
+<!-- === SKILLS === -->
+<section id="skills">
+  <h2>Skills</h2>
+  <div class="skills-container">
+    <div class="skill-pill" data-info="Building responsive websites with HTML, CSS, JS.">Web Development</div>
+    <div class="skill-pill" data-info="Crafting modern user interfaces.">UI Design</div>
+    <div class="skill-pill" data-info="Designing smooth and intuitive experiences.">UX Design</div>
+    <div class="skill-pill" data-info="Layouts that adapt to any device.">Responsive Design</div>
+    <div class="skill-pill" data-info="Rapidly turning ideas into prototypes.">Prototyping</div>
+    <div class="skill-pill" data-info="Creating reusable components for large apps.">Component Architecture</div>
+    <div class="skill-pill" data-info="Optimizing performance and accessibility.">Web Performance</div>
+  </div>
+  <div class="tooltip" id="skillTooltip"><span class="close" id="tooltipClose">✖</span><p id="tooltipText"></p></div>
+</section>
+
+<!-- === PROJECTS === -->
+<section id="projects">
+  <h2>Projects</h2>
+  <div class="projects-grid">
+    <div class="project" data-project="1"><h3>Project 1</h3><p>Game Prototype</p></div>
+    <div class="project" data-project="2"><h3>Project 2</h3><p>Calculator</p></div>
+    <div class="project" data-project="3"><h3>Project 3</h3><p>Note taking Tool</p></div>
+    <div class="project" data-project="4"><h3>Project 4</h3><p>Typing Trainer (Czech)</p></div>
+  </div>
+</section>
+
+<div id="projectModal">
+  <div class="modal-content">
+    <span class="close" id="projectClose">X</span>
+    <div id="projectBody"></div>
+  </div>
+</div>
+
+<!-- Typing Trainer Modal -->
+<div id="typingModal" aria-hidden="true">
+  <span class="close" id="typingClose">✖</span>
+  <div id="typingText" aria-live="polite"></div>
+  <input id="typingInput" placeholder="Start typing the sentence above..." autocomplete="off" spellcheck="false" />
+  <div id="typingStats">WPM: 0 | Accuracy: 100% | Progress: 0%</div>
+
+  <div class="keyboard" id="typingKeyboard" aria-hidden="true">
+    <!-- keyboard rows will be generated by JS -->
+  </div>
+</div>
+
+<!-- === CODE PLAYGROUND === -->
+<section id="playground">
+  <h2>Code Playground</h2>
+  <div class="play-container">
+    <textarea id="playgroundInput" placeholder="// Type JavaScript here"></textarea>
+    <button id="playgroundRun">Run</button>
+    <pre class="play-output" id="playgroundOutput"></pre>
+  </div>
+</section>
+
+<!-- === DEV LOG === -->
+<section id="devlog">
+  <h2>Dev Log</h2>
+  <div class="play-container">
+    <textarea id="devlogInput" placeholder="Write Markdown here..."></textarea>
+    <button id="devlogRender">Render</button>
+    <div class="play-output" id="devlogOutput"></div>
+  </div>
+</section>
+
+<!-- === CONTACT / SOCIAL LINKS === -->
+<section id="contact">
+  <h2>Contact Me</h2>
+  <div class="skills-container" style="justify-content:center;">
+    <a href="mailto:j0seph@outlook.it" class="skill-pill contact-link" style="display:flex; align-items:center; gap:8px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email">
+      <span>Email</span>
+    </a>
+    <a href="https://github.com/j3oe" target="_blank" class="skill-pill contact-link" style="display:flex; align-items:center; gap:8px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
+      <span>GitHub</span>
+    </a>
+  </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  let activeUI = null;
+  const loadingScreen = document.getElementById('loadingScreen');
+  const aboutSection = document.getElementById('about');
+
+  if(window.location.hash) history.replaceState(null,'',window.location.pathname);
+  window.scrollTo(0,0);
+
+  // Loading Screen
+  loadingScreen.addEventListener('click', ()=>{
+    loadingScreen.classList.add('fade-out');
+    loadingScreen.addEventListener('transitionend', ()=>{
+      loadingScreen.style.display='none';
+      aboutSection.scrollIntoView({behavior:'smooth'});
+    }, {once:true});
   });
-}
 
-function highlightKey(char){
-  document.querySelectorAll('.key').forEach(k=>{
-    k.classList.toggle('active', k.textContent===char.toLowerCase());
+  // Skills Tooltip
+  const tooltip = document.getElementById('skillTooltip');
+  const tooltipText = document.getElementById('tooltipText');
+  const tooltipClose = document.getElementById('tooltipClose');
+
+  document.querySelectorAll('.skill-pill:not(.contact-link)').forEach(pill => {
+    pill.addEventListener('click', () => {
+      if(activeUI && activeUI !== tooltip){ activeUI.style.display='none'; activeUI.classList.remove('visible'); }
+      tooltipText.textContent = pill.dataset.info;
+      tooltip.style.display='block';
+      tooltip.classList.add('visible');
+      activeUI = tooltip;
+    });
   });
-}
 
-function newText(){
-  target = Array.from({length:25},()=>words[Math.floor(Math.random()*words.length)]).join(' ');
-  typingText.innerHTML = target.split('').map(ch=>`<span>${ch}</span>`).join('');
-  typingInput.value='';
-  correctCount = typedCount = 0;
-  startTime = Date.now();
-}
+  tooltipClose.addEventListener('click', ()=> { tooltip.classList.remove('visible'); tooltip.style.display='none'; if(activeUI===tooltip) activeUI=null; });
+  window.addEventListener('click', e => { if(e.target===tooltip){ tooltip.classList.remove('visible'); tooltip.style.display='none'; if(activeUI===tooltip) activeUI=null; } });
 
-function updateStats(){
-  const minutes = (Date.now()-startTime)/60000;
-  const wpm = Math.round((correctCount/5)/minutes) || 0;
-  const acc = typedCount ? Math.round((correctCount/typedCount)*100) : 100;
-  typingStats.textContent = `WPM: ${wpm} | Accuracy: ${acc}%`;
-}
+  // Projects Modal
+  const projectModal = document.getElementById('projectModal');
+  const projectBody = document.getElementById('projectBody');
+  const projectClose = document.getElementById('projectClose');
 
-typingInput.addEventListener('input',()=>{
-  const val = typingInput.value;
-  typedCount = val.length;
-  const spans = typingText.querySelectorAll('span');
-  let correct = 0;
-  spans.forEach((s,i)=>{
-    if(i<val.length){
-      if(val[i]===target[i]){ s.className='correct'; correct++; }
-      else s.className='incorrect';
-    } else s.className='';
+  const projectBodies = {
+    1: `<h3>Game Prototype</h3><p>A simple click counter game.</p><button class="game-btn" id="gameBtn">Click me</button><p id="gameScore">Score: 0</p>`,
+    2: `<h3>Calculator</h3><p>Enter a math expression:</p><input type="text" id="calcInput" style="width:80%;padding:6px;background:#000;color:#fff;border:1px solid #555;"><button class="calc-btn" id="calcRun">Calculate</button><p id="calcResult">Result: </p>`,
+    3: `<h3>Note taking Tool</h3><textarea id="noteInput" placeholder="Write a note..." style="width:90%;height:100px;background:#000;color:#fff;border:1px solid #555;"></textarea><button class="note-btn" id="saveNote">Save</button><div id="noteList" style="margin-top:10px;"></div>`
+  };
+
+  document.querySelectorAll('.project').forEach(p=>{
+    p.addEventListener('click', ()=>{
+      const key = p.dataset.project;
+
+      // If typing trainer (4) -> open typing modal instead of normal project modal
+      if(key === "4"){
+        openTypingTrainer();
+        return;
+      }
+
+      if(activeUI && activeUI !== projectModal){ activeUI.style.display='none'; activeUI.classList.remove('visible'); }
+      projectBody.innerHTML = projectBodies[key] || "<p>No content.</p>";
+      projectModal.style.display = "flex";
+      activeUI = projectModal;
+
+      if(key==="1"){
+        let score=0;
+        const gameBtn = document.getElementById('gameBtn');
+        const gameScore = document.getElementById('gameScore');
+        const newBtn = gameBtn.cloneNode(true);
+        gameBtn.parentNode.replaceChild(newBtn, gameBtn);
+        newBtn.addEventListener('click', ()=>{ score++; gameScore.textContent="Score: "+score; });
+      }
+
+      if(key==="2"){
+        const calcRun = document.getElementById('calcRun');
+        const calcInput = document.getElementById('calcInput');
+        const calcResult = document.getElementById('calcResult');
+        const newBtn = calcRun.cloneNode(true);
+        calcRun.parentNode.replaceChild(newBtn, calcRun);
+        newBtn.addEventListener('click', ()=>{
+          try{ const res = math.evaluate(calcInput.value); calcResult.textContent="Result: "+res; }
+          catch(err){ calcResult.textContent="Error: "+err; }
+        });
+      }
+
+      if(key==="3"){
+        const saveNote = document.getElementById('saveNote');
+        const noteInput = document.getElementById('noteInput');
+        const noteList = document.getElementById('noteList');
+        let notes = JSON.parse(localStorage.getItem('notes') || '[]');
+
+        const renderNotes = () => {
+          noteList.innerHTML = notes.map((n,i) =>
+            `<p>- ${escapeHtml(n)} <span class="delete-note" data-index="${i}">✖</span></p>`).join('');
+
+          document.querySelectorAll('.delete-note').forEach(del => {
+            del.addEventListener('click', (e)=>{
+              const index = e.target.dataset.index;
+              notes.splice(index,1);
+              localStorage.setItem('notes', JSON.stringify(notes));
+              renderNotes();
+            });
+          });
+        };
+
+        renderNotes();
+
+        const newBtn = saveNote.cloneNode(true);
+        saveNote.parentNode.replaceChild(newBtn, saveNote);
+        newBtn.addEventListener('click', ()=>{
+          if(noteInput.value.trim()){
+            notes.push(noteInput.value.trim());
+            noteInput.value='';
+            localStorage.setItem('notes', JSON.stringify(notes));
+            renderNotes();
+          }
+        });
+      }
+    });
   });
-  correctCount = correct;
-  updateStats();
-  highlightKey(val.slice(-1));
-  if(val===target) newText();
-});
 
-typingClose.addEventListener('click',()=>typingModal.style.display='none');
+  projectClose.addEventListener('click', ()=>{ projectModal.style.display="none"; if(activeUI===projectModal) activeUI=null; });
+  window.addEventListener('click', e => { if(e.target===projectModal){ projectModal.style.display="none"; if(activeUI===projectModal) activeUI=null; } });
 
-document.querySelectorAll('.project').forEach(p=>{
-  p.addEventListener('click',()=>{
-    if(p.dataset.project==="4"){
-      projectModal.style.display="none";
-      buildKeyboard();
-      newText();
-      typingModal.style.display="flex";
-      typingInput.focus();
+  // Code Playground
+  const runBtn = document.getElementById('playgroundRun');
+  const input = document.getElementById('playgroundInput');
+  const output = document.getElementById('playgroundOutput');
+  runBtn.addEventListener('click', ()=>{
+    try{ output.textContent = math.evaluate(input.value); }
+    catch(err){ output.textContent = "Error: "+err; }
+  });
+
+  // Dev Log
+  const devBtn = document.getElementById('devlogRender');
+  const devIn = document.getElementById('devlogInput');
+  const devOut = document.getElementById('devlogOutput');
+
+  // Load dev log from localStorage
+  devIn.value = localStorage.getItem('devLog') || '';
+
+  devBtn.addEventListener('click', ()=>{
+    let text = devIn.value.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>").replace(/\*(.*?)\*/g,"<i>$1</i>").replace(/\n/g,"<br>");
+    devOut.innerHTML = text;
+    localStorage.setItem('devLog', devIn.value);
+  });
+
+  // === Drag-and-Drop for Skill Pills ===
+  const skillsContainer = document.querySelector('#skills .skills-container');
+  let draggedPill = null;
+
+  document.querySelectorAll('#skills .skill-pill:not(.contact-link)').forEach(pill => {
+    pill.setAttribute('draggable','true');
+
+    pill.addEventListener('dragstart', e => { draggedPill = e.target; e.target.style.opacity='0.5'; });
+    pill.addEventListener('dragend', e => { e.target.style.opacity='1'; draggedPill = null; });
+  });
+
+  skillsContainer.addEventListener('dragover', e=>e.preventDefault());
+  skillsContainer.addEventListener('drop', e=>{
+    e.preventDefault();
+    if(!draggedPill) return;
+    let target = e.target.closest('.skill-pill');
+    if(target && target!==draggedPill){
+      const rect = target.getBoundingClientRect();
+      const next = (e.clientY - rect.top)/rect.height > 0.5;
+      skillsContainer.insertBefore(draggedPill, next ? target.nextSibling : target);
     }
   });
+
+  // === Drag-and-Drop for Projects ===
+  const projectsGrid = document.querySelector('#projects .projects-grid');
+  let draggedProject = null;
+
+  document.querySelectorAll('#projects .project').forEach(proj=>{
+    proj.setAttribute('draggable','true');
+
+    proj.addEventListener('dragstart', e=>{ draggedProject = e.target; });
+    proj.addEventListener('dragend', e=>{ draggedProject=null; });
+  });
+
+  projectsGrid.addEventListener('dragover', e=>e.preventDefault());
+  projectsGrid.addEventListener('drop', e=>{
+    e.preventDefault();
+    if(!draggedProject) return;
+    let target = e.target.closest('.project');
+    if(target && target!==draggedProject){
+      const rect = target.getBoundingClientRect();
+      const next = (e.clientY - rect.top)/rect.height > 0.5;
+      projectsGrid.insertBefore(draggedProject, next ? target.nextSibling : target);
+    }
+  });
+
+  // === Animated Section Transitions ===
+  const sections = document.querySelectorAll('section');
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.style.opacity=1;
+        entry.target.style.transform='translateY(0)';
+        entry.target.style.transition='all 0.8s ease-out';
+      }
+    });
+  }, {threshold:0.2});
+
+  sections.forEach(sec=>{
+    sec.style.opacity=0;
+    sec.style.transform='translateY(50px)';
+    observer.observe(sec);
+  });
+
+  /* ---------- Helpers ---------- */
+  function escapeHtml(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  /* ========== Typing Trainer ========== */
+  const typingModal = document.getElementById('typingModal');
+  const typingClose = document.getElementById('typingClose');
+  const typingText = document.getElementById('typingText');
+  const typingInput = document.getElementById('typingInput');
+  const typingStats = document.getElementById('typingStats');
+  const typingKeyboard = document.getElementById('typingKeyboard');
+
+  // Czech keyboard rows (visual only)
+  const keyboardRows = [
+    ["´","1","2","3","4","5","6","7","8","9","0","-","="],
+    ["q","w","e","r","t","z","u","i","o","p","ú","ě","š","č","ř"],
+    ["a","s","d","f","g","h","j","k","l","ů","ý","á"],
+    ["Shift","<","y","x","c","v","b","n","m",",",".","-","Shift"],
+    ["Space"]
+  ];
+
+  // sample Czech sentences and words (expand as needed)
+  const czechSentences = [
+    "Dobrý den, jak se máte?",
+    "Rychlá liška přeskočila líného psa.",
+    "Česká republika je krásná země.",
+    "Miluji programování a kávu.",
+    "V Praze prší skoro každý podzim.",
+    "Pojďme si zahrát a zlepšit psaní.",
+    "Mnoho lidí studuje na univerzitách v Česku.",
+    "Prosím, napište větu přesně podle vzoru."
+  ];
+
+  // persistent per-letter stats (optionally used for adaptive sampling later)
+  let letterStats = JSON.parse(localStorage.getItem('tp_letterStats') || '{}');
+
+  function initLetterStat(ch){
+    if(!letterStats[ch]) letterStats[ch] = { attempts:0, errors:0, time:0, correct:0 };
+  }
+
+  function buildKeyboard(){
+    typingKeyboard.innerHTML = '';
+    keyboardRows.forEach(row=>{
+      const r = document.createElement('div');
+      r.className = 'krow';
+      row.forEach(k=>{
+        const key = document.createElement('div');
+        key.className = 'key';
+        if(k === "Shift" || k === "Space") key.classList.add('wide');
+        if(k === "Space") key.classList.add('space');
+        key.textContent = k;
+        r.appendChild(key);
+      });
+      typingKeyboard.appendChild(r);
+    });
+  }
+
+  let targetText = '';
+  let charIndex = 0;
+  let mistakes = 0;
+  let startTime = null;
+  let finished = false;
+
+  function pickSentence(){
+    // basic random; could be made adaptive by letterStats
+    return czechSentences[Math.floor(Math.random()*czechSentences.length)];
+  }
+
+  function renderTarget(text){
+    typingText.innerHTML = '';
+    for(let i=0;i<text.length;i++){
+      const sp = document.createElement('span');
+      sp.textContent = text[i];
+      if(i === 0) sp.classList.add('next');
+      typingText.appendChild(sp);
+    }
+  }
+
+  function highlightVirtualKey(char, state){
+    // clear previous active/error
+    document.querySelectorAll('.key').forEach(k=>{
+      k.classList.remove('active','error');
+    });
+    if(!char) return;
+    char = char.toLowerCase();
+    const allKeys = Array.from(document.querySelectorAll('.key'));
+    // Try to find a matching key by text content (normalize some characters)
+    const match = allKeys.find(k=>{
+      const t = k.textContent.toLowerCase();
+      return t === char;
+    });
+    if(match){
+      if(state === 'error') match.classList.add('error');
+      else match.classList.add('active');
+    }
+  }
+
+  function updateStats(){
+    const elapsed = Math.max(1, Date.now() - startTime);
+    const minutes = elapsed / 60000;
+    const correctChars = Math.max(0, charIndex - mistakes);
+    const wpm = Math.round((correctChars / 5) / minutes) || 0;
+    const acc = charIndex ? Math.round((correctChars / charIndex) * 100) : 100;
+    const progress = Math.round((charIndex / targetText.length) * 100) || 0;
+    typingStats.textContent = `WPM: ${wpm} | Accuracy: ${acc}% | Progress: ${progress}%`;
+  }
+
+  function startTrainer(){
+    buildKeyboard();
+    targetText = pickSentence();
+    renderTarget(targetText);
+    typingInput.value = '';
+    typingInput.disabled = false;
+    typingInput.focus();
+    charIndex = 0;
+    mistakes = 0;
+    startTime = Date.now();
+    finished = false;
+    highlightVirtualKey(targetText[0]);
+    updateStats();
+    typingModal.setAttribute('aria-hidden','false');
+  }
+
+  function endTrainer(){
+    finished = true;
+    typingInput.disabled = true;
+    highlightVirtualKey(null);
+    // save stats
+    localStorage.setItem('tp_letterStats', JSON.stringify(letterStats));
+    // small visual confirmation (could be upgraded)
+    setTimeout(()=> {
+      // auto-start next after a short pause
+      startTrainer();
+    }, 700);
+  }
+
+  typingInput.addEventListener('input', (e)=>{
+    if(finished) return;
+    const val = typingInput.value;
+    // user types sequentially; compare last character typed
+    const expected = targetText[charIndex] || '';
+    const typed = val.slice(-1) || '';
+    // If they pasted or removed chars, recompute simple diff:
+    // but for simplicity we'll only allow sequential typing: reset input to '' after each char
+    if(typed.length === 0) return; // nothing new
+    // Update letter stats init
+    initLetterStat(expected.toLowerCase());
+    letterStats[expected.toLowerCase()].attempts++;
+
+    if(typed === expected){
+      // correct input
+      const span = typingText.querySelectorAll('span')[charIndex];
+      if(span){ span.classList.remove('next'); span.classList.add('correct'); }
+      charIndex++;
+      letterStats[expected.toLowerCase()].correct++;
+      // move 'next' marker
+      const nextSpan = typingText.querySelectorAll('span')[charIndex];
+      if(nextSpan) nextSpan.classList.add('next');
+      // clear input box (so each keystroke is single)
+      typingInput.value = '';
+      highlightVirtualKey(targetText[charIndex]);
+    } else {
+      // mistake
+      const span = typingText.querySelectorAll('span')[charIndex];
+      if(span) span.classList.add('incorrect');
+      mistakes++;
+      letterStats[expected.toLowerCase()].errors++;
+      highlightVirtualKey(typed, 'error');
+      // also clear input to let the user try again for the same char
+      typingInput.value = '';
+    }
+
+    // update per-char time (simple)
+    const now = Date.now();
+    const elapsed = now - startTime;
+    letterStats[expected.toLowerCase()].time += 0; // placeholder (could measure per-char time)
+
+    updateStats();
+
+    // finished
+    if(charIndex >= targetText.length){
+      endTrainer();
+    }
+  });
+
+  typingClose.addEventListener('click', ()=>{
+    typingModal.style.display = 'none';
+    typingModal.setAttribute('aria-hidden','true');
+    typingInput.value = '';
+    highlightVirtualKey(null);
+  });
+
+  // open typing trainer (used by Projects click)
+  function openTypingTrainer(){
+    // hide other modals
+    projectModal.style.display = 'none';
+    buildKeyboard();
+    startTrainer();
+    typingModal.style.display = 'flex';
+  }
+
+  // allow ESC to close typing modal
+  window.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && typingModal.style.display === 'flex'){
+      typingModal.style.display = 'none';
+      typingModal.setAttribute('aria-hidden','true');
+    }
+  });
+
+  /* ---------- Utility: start on load if hash instructs ---------- */
+  // nothing else to do here; typing opens via project click
+
+  /* Save letterStats on unload */
+  window.addEventListener('beforeunload', ()=>{
+    localStorage.setItem('tp_letterStats', JSON.stringify(letterStats));
+  });
+
 });
+</script>
+</body>
+</html>
