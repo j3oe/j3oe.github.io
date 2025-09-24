@@ -36,11 +36,23 @@ button{cursor:pointer}
   justify-content:center;
   align-items:center;
   z-index:2000;
+  transition: opacity 0.8s ease;
+}
+#loadingScreen.fade-out {
+  opacity:0;
 }
 #loadingScreen img{
   display:block;
-  max-width:150px;
-  max-height:150px;
+  width:180px;
+  height:180px;
+  animation: spin 2s linear infinite;
+  cursor:pointer;
+}
+
+/* Spin animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* === About Me === */
@@ -163,7 +175,7 @@ button{cursor:pointer}
 }
 .play-container textarea{
   width:100%;
-  min-height:300px;       /* ⬅️ Bigger editing area */
+  min-height:300px;
   font-family:monospace;
   font-size:16px;
   line-height:1.4;
@@ -187,7 +199,7 @@ button{cursor:pointer}
 .play-container button:hover{background:#666;}
 .play-output{
   width:100%;
-  min-height:250px;       /* ⬅️ Larger output */
+  min-height:250px;
   background:#000;
   color:#0f0;
   padding:1rem;
@@ -203,7 +215,7 @@ button{cursor:pointer}
 
 <!-- === LOADING SCREEN === -->
 <div id="loadingScreen">
-  <img src="assets/cross.png" alt="Loading">
+  <img src="assets/cross.png" alt="Loading" id="loadingImg">
 </div>
 
 <!-- === ABOUT === -->
@@ -276,8 +288,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ===== Loading Screen ===== */
   const loadingScreen = document.getElementById('loadingScreen');
-  const hideLoading = () => { loadingScreen.style.display='none'; };
-  window.addEventListener('click', hideLoading, { once:true });
+  const loadingImg = document.getElementById('loadingImg');
+
+  loadingImg.addEventListener('click', () => {
+    loadingScreen.classList.add('fade-out');
+    loadingScreen.addEventListener('transitionend', () => {
+      loadingScreen.style.display='none';
+    }, { once:true });
+  });
 
   /* ===== Skills Tooltip ===== */
   const tooltip = document.getElementById('skillTooltip');
