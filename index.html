@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Josephuv Portfolio</title>
 <style>
+  /* Basic Reset */
   body, html {
     margin: 0;
     padding: 0;
-    background-color: black;
     font-family: 'Segoe UI', sans-serif;
+    background-color: black;
     color: white;
     overflow: hidden;
+    scroll-behavior: smooth; /* Smooth scrolling */
   }
 
   /* Loading Screen */
@@ -19,28 +21,23 @@
     position: fixed;
     top:0; left:0;
     width:100%; height:100%;
-    background:black;
     display:flex;
     justify-content:center;
     align-items:center;
+    background:black;
     cursor:pointer;
     z-index:9999;
     transition: opacity 1s ease;
   }
-
   #loading-screen img {
-    width:120px;
-    height:120px;
-    animation:spin 2s linear infinite;
+    width: max(60px, 10vw);
+    height: auto;
+    animation: spin 2s linear infinite;
   }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+  @keyframes spin {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}
 
   /* Blog container */
-  #blog {
+  main#blog {
     opacity:0;
     transform:translateY(30px);
     transition: opacity 1s ease, transform 1s ease;
@@ -49,14 +46,17 @@
     overflow-y:auto;
     background:black;
   }
-
-  #blog.visible {
+  main#blog.visible { opacity:1; transform:translateY(0); overflow-y:auto; }
+  section { 
+    margin-bottom:2rem; 
+    opacity:0;
+    transform:translateY(20px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  section.visible {
     opacity:1;
     transform:translateY(0);
-    overflow-y:auto;
   }
-
-  section { margin-bottom:2rem; }
   footer {
     text-align:center;
     padding:1rem;
@@ -72,8 +72,7 @@
   .skill-group h3 { color:#ccc; margin-bottom:0.5rem; }
   .pills { display:flex; flex-wrap:wrap; gap:0.5rem; }
   .pill {
-    background:#222;
-    color:#fff;
+    background:#222; color:#fff;
     padding:0.5rem 1rem;
     border-radius:999px;
     cursor:pointer;
@@ -81,13 +80,14 @@
     position: relative;
     border: 1px solid #444;
   }
-  .pill:hover {
+  .pill:hover, .pill:focus {
+    outline:none;
     background:#111;
     transform:translateY(-2px);
     box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc33;
     border-color: #00ffcc;
   }
-  .pill:hover::after {
+  .pill:hover::after, .pill:focus::after {
     content: '';
     position: absolute;
     top: -4px; left: -4px; right: -4px; bottom: -4px;
@@ -101,7 +101,7 @@
     100% { transform: scale(1); opacity: 0.5; }
   }
 
-  /* Tooltip modal with glow and arrow */
+  /* Tooltip */
   .tooltip {
     position: absolute;
     background-color: #111;
@@ -120,9 +120,9 @@
     transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   }
   .tooltip.visible {
-    opacity: 1;
-    pointer-events: auto;
-    transform: scale(1);
+    opacity:1;
+    pointer-events:auto;
+    transform:scale(1);
     box-shadow: 0 0 15px #00ffcc99, 0 0 30px #00ffcc44;
   }
   .tooltip::after {
@@ -138,8 +138,12 @@
     box-shadow: 0 0 6px #00ffcc55;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
-  .tooltip.visible::after {
-    box-shadow: 0 0 10px #00ffcc88, 0 0 20px #00ffcc44;
+  .tooltip.visible::after { box-shadow: 0 0 10px #00ffcc88, 0 0 20px #00ffcc44; }
+
+  /* Responsive adjustments */
+  @media(max-width:600px){
+    .pills { gap:0.3rem; }
+    .pill { padding:0.4rem 0.8rem; font-size:0.85rem; }
   }
 </style>
 </head>
@@ -147,73 +151,64 @@
 
 <!-- Loading Screen -->
 <div id="loading-screen">
-  <img src="assets/cross.png" alt="Nacitani...">
+  <img src="assets/cross.png" alt="Loading animation">
 </div>
 
 <!-- Blog content -->
-<div id="blog">
-  <section>
-    <h1>Hello<span id="dots"></span></h1>
-  </section>
+<main id="blog">
+  <section><h1>Hello<span id="dots"></span></h1></section>
 
   <section>
     <h2>About Me</h2>
-    <p>I’ve been coding for a few years now, and during that time I’ve explored a wide variety of projects that span different areas of technology. Some of my work focuses on games, where I enjoy building interactive experiences and experimenting with mechanics and design to see how small changes can completely transform user experience. Other projects are more academic or utility focused, such as note taking tools, which I build to help myself and others organize information more efficiently and think more clearly about complex ideas. One of my biggest passions lies in understanding AI how it processes information, what it "sees" and how it makes decisions. I spend a lot of time experimenting with APIs, exploring the internal logic of AI systems, and learning what goes on behind the scenes, all with the goal of gaining a deeper, hands on understanding of these technologies. For me, coding isn’t just about making things work; It's another world where I can push the boundaries of what I can create and comprehend. Every project teaches me something new, whether it’s about logic, design, human computer interaction, or the hidden patterns in AI behavior, and I love the process of taking an idea from concept to fully functioning reality.</p>
+    <p>I’ve been coding for a few years now, exploring games, academic projects, and AI APIs. Every project teaches me new ways to think about code, design, and technology.</p>
   </section>
 
   <section>
     <h2>Skills & Portfolio</h2>
-
     <div class="skill-group">
       <h3>Web Development</h3>
       <div class="pills">
-        <span class="pill" data-info="HTML structures the content of webpages.">HTML</span>
-        <span class="pill" data-info="CSS styles websites and layouts for visual appeal.">CSS</span>
-        <span class="pill" data-info="JavaScript adds interactivity and dynamic behavior.">JavaScript</span>
-        <span class="pill" data-info="React is a JavaScript library for building responsive UI components.">React</span>
-        <span class="pill" data-info="Node.js enables server-side JavaScript development.">Node.js</span>
+        <span class="pill" data-info="HTML structures the content of webpages." tabindex="0">HTML</span>
+        <span class="pill" data-info="CSS styles websites and layouts." tabindex="0">CSS</span>
+        <span class="pill" data-info="JavaScript adds interactivity." tabindex="0">JavaScript</span>
+        <span class="pill" data-info="React library for UI components." tabindex="0">React</span>
+        <span class="pill" data-info="Node.js enables server-side JS." tabindex="0">Node.js</span>
       </div>
     </div>
-
     <div class="skill-group">
-      <h3>UI / UX Development</h3>
+      <h3>UI / UX</h3>
       <div class="pills">
-        <span class="pill" data-info="Figma is used to design UI prototypes and mockups.">Figma</span>
-        <span class="pill" data-info="Adobe XD is a tool for creating interactive UI/UX designs.">Adobe XD</span>
-        <span class="pill" data-info="Tailwind CSS allows rapid styling using utility classes.">Tailwind CSS</span>
-        <span class="pill" data-info="Responsive Design ensures the site adapts to all devices.">Responsive Design</span>
-        <span class="pill" data-info="Accessibility ensures websites are usable for everyone.">Accessibility</span>
+        <span class="pill" data-info="Figma for UI mockups." tabindex="0">Figma</span>
+        <span class="pill" data-info="Adobe XD for interactive design." tabindex="0">Adobe XD</span>
+        <span class="pill" data-info="Tailwind CSS rapid styling." tabindex="0">Tailwind CSS</span>
+        <span class="pill" data-info="Responsive design for devices." tabindex="0">Responsive Design</span>
+        <span class="pill" data-info="Accessibility ensures usability." tabindex="0">Accessibility</span>
       </div>
     </div>
-
-    <!-- Tooltip container -->
     <div class="tooltip" id="tooltip"></div>
-
   </section>
 
   <section>
     <h2>Kontakt</h2>
-    <p>Mate li jakekoli dotazy nebo zajem o spolupraci, nevahejte me kontaktovat.</p>
+    <p>Máte-li dotazy nebo zájem o spolupráci, neváhejte mě kontaktovat.</p>
     <ul>
       <li><strong>Email:</strong> <a href="mailto:j0seph@outlook.it">j0seph@outlook.it</a></li>
       <li><strong>GitHub:</strong> <a href="https://github.com/j3oe" target="_blank">github.com/j3oe</a></li>
     </ul>
   </section>
 
-  <footer>
-    &copy; 2025 Josephuv Blog. Dekuji za navstevu!
-  </footer>
-</div>
+  <footer>&copy; 2025 Josephuv Blog. Děkuji za návštěvu!</footer>
+</main>
 
-<!-- Scripts -->
 <script>
   // Animated dots
   const dots = document.getElementById('dots');
-  let dotCount=0; let increasing=true;
+  let dotCount = 0, increasing = true;
   setInterval(()=>{
-    if(increasing){ dotCount++; if(dotCount>=3) increasing=false; } 
-    else{ dotCount--; if(dotCount<=0) increasing=true; }
-    dots.textContent='.'.repeat(dotCount);
+    dotCount = increasing ? dotCount+1 : dotCount-1;
+    if(dotCount >=3) increasing=false;
+    if(dotCount <=0) increasing=true;
+    dots.textContent = '.'.repeat(dotCount);
   },500);
 
   // Loading screen
@@ -224,84 +219,72 @@
     loadingScreen.style.pointerEvents='none';
     blog.classList.add('visible');
     document.body.style.overflow='auto';
+    revealSections(); // Trigger section animations
   });
 
-  // Tooltip smooth animation
+  // Tooltip logic
   const pills = document.querySelectorAll('.pill');
   const tooltip = document.getElementById('tooltip');
   let locked = false;
-  let tooltipTarget = { left:0, top:0 };
-  let tooltipCurrent = { left:0, top:0 };
+  const tooltipPos = {left:0, top:0}, currentPos={left:0, top:0};
 
   function animateTooltip(){
-    tooltipCurrent.left += (tooltipTarget.left - tooltipCurrent.left)*0.2;
-    tooltipCurrent.top += (tooltipTarget.top - tooltipCurrent.top)*0.2;
-    tooltip.style.left = tooltipCurrent.left+'px';
-    tooltip.style.top = tooltipCurrent.top+'px';
+    currentPos.left += (tooltipPos.left - currentPos.left)*0.2;
+    currentPos.top += (tooltipPos.top - currentPos.top)*0.2;
+    tooltip.style.left = currentPos.left+'px';
+    tooltip.style.top = currentPos.top+'px';
     requestAnimationFrame(animateTooltip);
   }
   animateTooltip();
 
-  pills.forEach(pill => {
-    pill.addEventListener('mouseenter', () => {
-      if(!locked){
-        tooltip.textContent = pill.getAttribute('data-info');
-        tooltip.style.display = 'block';
-        tooltip.classList.add('visible');
-      }
-    });
+  function showTooltip(target, lock=false){
+    tooltip.textContent = target.getAttribute('data-info');
+    tooltip.style.display = 'block';
+    tooltip.classList.add('visible');
+    locked = lock;
 
-    pill.addEventListener('mousemove', (e)=>{
-      if(!locked){
-        const tw = tooltip.offsetWidth;
-        const th = tooltip.offsetHeight;
-        let left = e.pageX - tw/2;
-        let top = e.pageY - th -10;
-        let arrowUp = true;
+    const rect = target.getBoundingClientRect();
+    const tw = tooltip.offsetWidth;
+    const th = tooltip.offsetHeight;
+    let left = rect.left + window.scrollX + rect.width/2 - tw/2;
+    let top = rect.top - th -10 + window.scrollY;
+    let arrowUp = true;
 
-        if(left<5) left=5;
-        if(left+tw>window.innerWidth-5) left=window.innerWidth-tw-5;
-        if(top<5){ top=e.pageY+20; arrowUp=false; }
+    if(left<5) left=5;
+    if(left+tw>window.innerWidth-5) left = window.innerWidth - tw -5;
+    if(top<5){ top=rect.bottom + 10 + window.scrollY; arrowUp=false; }
 
-        tooltipTarget.left = left;
-        tooltipTarget.top = top;
-        tooltip.dataset.arrowUp = arrowUp;
-        tooltip.style.setProperty('--arrow-flip', arrowUp?'rotate(0deg)':'rotate(180deg)');
-      }
-    });
+    tooltipPos.left = left;
+    tooltipPos.top = top;
+    tooltip.style.setProperty('--arrow-flip', arrowUp?'rotate(0deg)':'rotate(180deg)');
+  }
 
-    pill.addEventListener('mouseleave', ()=>{
-      if(!locked){
-        tooltip.classList.remove('visible');
-        setTimeout(()=>{tooltip.style.display='none';},300);
-      }
-    });
-
-    pill.addEventListener('click', ()=>{
-      locked = !locked;
-      tooltip.textContent = pill.getAttribute('data-info');
-      tooltip.style.display = 'block';
-      tooltip.classList.add('visible');
-
-      const rect = pill.getBoundingClientRect();
+  pills.forEach(pill=>{
+    pill.addEventListener('mouseenter', ()=>{if(!locked) showTooltip(pill);});
+    pill.addEventListener('focus', ()=>{if(!locked) showTooltip(pill);});
+    pill.addEventListener('mousemove', e=>{
+      if(locked) return;
       const tw = tooltip.offsetWidth;
       const th = tooltip.offsetHeight;
-      let left = rect.left + window.scrollX + rect.width/2 - tw/2;
-      let top = rect.top - th - 10 + window.scrollY;
+      let left = e.pageX - tw/2;
+      let top = e.pageY - th -10;
       let arrowUp = true;
 
       if(left<5) left=5;
       if(left+tw>window.innerWidth-5) left=window.innerWidth-tw-5;
-      if(top<5){ top=rect.bottom+10+window.scrollY; arrowUp=false; }
+      if(top<5){ top=e.pageY + 20; arrowUp=false; }
 
-      tooltipTarget.left = left;
-      tooltipTarget.top = top;
-      tooltip.dataset.arrowUp = arrowUp;
+      tooltipPos.left = left;
+      tooltipPos.top = top;
       tooltip.style.setProperty('--arrow-flip', arrowUp?'rotate(0deg)':'rotate(180deg)');
     });
+
+    pill.addEventListener('mouseleave', ()=>{if(!locked){tooltip.classList.remove('visible'); setTimeout(()=>{tooltip.style.display='none';},300);}});
+    pill.addEventListener('blur', ()=>{if(!locked){tooltip.classList.remove('visible'); setTimeout(()=>{tooltip.style.display='none';},300);}});
+
+    pill.addEventListener('click', ()=>{showTooltip(pill,true);});
   });
 
-  // Clicking outside unlocks tooltip
   document.addEventListener('click',(e)=>{
     if(!e.target.classList.contains('pill')){
       locked=false;
@@ -309,6 +292,14 @@
       setTimeout(()=>{tooltip.style.display='none';},300);
     }
   });
+
+  // Section reveal on load
+  const sections = document.querySelectorAll('main#blog section');
+  function revealSections(){
+    sections.forEach((section,i)=>{
+      setTimeout(()=>{section.classList.add('visible');}, i*200); // stagger animation
+    });
+  }
 </script>
 </body>
 </html>
