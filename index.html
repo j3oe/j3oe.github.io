@@ -15,6 +15,14 @@ body{
   background:#000;
   color:#eee;
   font-family:Segoe UI, sans-serif;
+  overflow-x:hidden;
+  opacity:0;               /* Start hidden for fade-in */
+  transform: translateY(20px); /* Slight slide up */
+  transition: opacity 1s ease, transform 1s ease;
+}
+body.visible{
+  opacity:1;
+  transform: translateY(0);
 }
 section{
   padding:40px 20px;
@@ -286,14 +294,16 @@ button{cursor:pointer}
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ===== Loading Screen ===== */
   const loadingScreen = document.getElementById('loadingScreen');
   const loadingImg = document.getElementById('loadingImg');
+  const body = document.body;
 
+  // Cross click triggers fade out + main page fade-in
   loadingImg.addEventListener('click', () => {
     loadingScreen.classList.add('fade-out');
     loadingScreen.addEventListener('transitionend', () => {
       loadingScreen.style.display='none';
+      body.classList.add('visible'); // fade in main content
     }, { once:true });
   });
 
@@ -337,38 +347,29 @@ document.addEventListener("DOMContentLoaded", () => {
       projectBody.innerHTML = projectBodies[key] || "<p>No content.</p>";
       projectModal.style.display = "flex";
 
-      if(key==="1"){ // Game
-        let score=0;
+      if(key==="1"){ let score=0;
         const gameBtn=document.getElementById('gameBtn');
         const gameScore=document.getElementById('gameScore');
         gameBtn.addEventListener('click',()=>{score++;gameScore.textContent="Score: "+score;});
       }
 
-      if(key==="2"){ // Calculator using math.js
+      if(key==="2"){
         const calcRun=document.getElementById('calcRun');
         const calcInput=document.getElementById('calcInput');
         const calcResult=document.getElementById('calcResult');
         calcRun.addEventListener('click',()=>{
-          try{
-            const res = math.evaluate(calcInput.value);
-            calcResult.textContent="Result: "+res;
-          }catch(err){
-            calcResult.textContent="Error: "+err;
-          }
+          try{ const res = math.evaluate(calcInput.value); calcResult.textContent="Result: "+res; }
+          catch(err){ calcResult.textContent="Error: "+err; }
         });
       }
 
-      if(key==="3"){ // Notes
+      if(key==="3"){
         const saveNote=document.getElementById('saveNote');
         const noteInput=document.getElementById('noteInput');
         const noteList=document.getElementById('noteList');
         let notes=[];
         saveNote.addEventListener('click',()=>{
-          if(noteInput.value.trim()){
-            notes.push(noteInput.value.trim());
-            noteInput.value='';
-            noteList.innerHTML=notes.map(n=>`<p>- ${n}</p>`).join('');
-          }
+          if(noteInput.value.trim()){ notes.push(noteInput.value.trim()); noteInput.value=''; noteList.innerHTML=notes.map(n=>`<p>- ${n}</p>`).join(''); }
         });
       }
     });
@@ -382,12 +383,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const input  = document.getElementById('playgroundInput');
   const output = document.getElementById('playgroundOutput');
   runBtn.addEventListener('click',()=>{
-    try{
-      const res = math.evaluate(input.value);
-      output.textContent = res;
-    }catch(err){
-      output.textContent = "Error: " + err;
-    }
+    try{ output.textContent = math.evaluate(input.value); }
+    catch(err){ output.textContent = "Error: "+err; }
   });
 
   /* ===== Dev Log ===== */
@@ -395,10 +392,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const devIn  = document.getElementById('devlogInput');
   const devOut = document.getElementById('devlogOutput');
   devBtn.addEventListener('click',()=>{
-    let text = devIn.value
-      .replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
-      .replace(/\*(.*?)\*/g,"<i>$1</i>")
-      .replace(/\n/g,"<br>");
+    let text = devIn.value.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>").replace(/\*(.*?)\*/g,"<i>$1</i>").replace(/\n/g,"<br>");
     devOut.innerHTML = text;
   });
 
