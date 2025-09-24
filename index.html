@@ -24,6 +24,25 @@ section{
 h1,h2,h3{color:#fff;text-align:center;margin-bottom:20px;}
 button{cursor:pointer}
 
+/* === Loading Screen === */
+#loadingScreen{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:2000;
+}
+#loadingScreen img{
+  display:block;
+  max-width:150px;
+  max-height:150px;
+}
+
 /* === About Me === */
 .about-box{
   background:#111;
@@ -144,7 +163,7 @@ button{cursor:pointer}
 }
 .play-container textarea{
   width:100%;
-  min-height:300px;
+  min-height:300px;       /* ⬅️ Bigger editing area */
   font-family:monospace;
   font-size:16px;
   line-height:1.4;
@@ -168,7 +187,7 @@ button{cursor:pointer}
 .play-container button:hover{background:#666;}
 .play-output{
   width:100%;
-  min-height:250px;
+  min-height:250px;       /* ⬅️ Larger output */
   background:#000;
   color:#0f0;
   padding:1rem;
@@ -182,6 +201,11 @@ button{cursor:pointer}
 </head>
 <body>
 
+<!-- === LOADING SCREEN === -->
+<div id="loadingScreen">
+  <img src="assets/cross.png" alt="Loading">
+</div>
+
 <!-- === ABOUT === -->
 <section id="about">
   <h1>About Me</h1>
@@ -190,7 +214,7 @@ button{cursor:pointer}
       I've been coding for a couple of years now and I've created a variety of things
       some for games and some for academic use, such as note takers and utilities that help
       me, as just a normal human, deeply understand what AI bots look at.
-      Exploring back-end APIs and experimenting with AI interactions drives my curiosity every day.
+      Exploring back end APIs and experimenting with AI interactions drives my curiosity every day.
     </p>
   </div>
 </section>
@@ -250,6 +274,11 @@ button{cursor:pointer}
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
+  /* ===== Loading Screen ===== */
+  const loadingScreen = document.getElementById('loadingScreen');
+  const hideLoading = () => { loadingScreen.style.display='none'; };
+  window.addEventListener('click', hideLoading, { once:true });
+
   /* ===== Skills Tooltip ===== */
   const tooltip = document.getElementById('skillTooltip');
   const tooltipText = document.getElementById('tooltipText');
@@ -274,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <button class="game-btn" id="gameBtn">Click me</button>
         <p id="gameScore">Score: 0</p>`,
     2: `<h3>Calculator</h3>
-        <p>Enter a math expression (supports ^, sqrt(), sin(), etc.):</p>
+        <p>Enter a math expression:</p>
         <input type="text" id="calcInput" style="width:80%;padding:6px;background:#000;color:#fff;border:1px solid #555;">
         <button class="calc-btn" id="calcRun">Calculate</button>
         <p id="calcResult">Result: </p>`,
@@ -297,7 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
         gameBtn.addEventListener('click',()=>{score++;gameScore.textContent="Score: "+score;});
       }
 
-      if(key==="2"){ // Calculator (math.js)
+      if(key==="2"){ // Calculator using math.js
         const calcRun=document.getElementById('calcRun');
         const calcInput=document.getElementById('calcInput');
         const calcResult=document.getElementById('calcResult');
@@ -336,9 +365,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const output = document.getElementById('playgroundOutput');
   runBtn.addEventListener('click',()=>{
     try{
-      // use math.js to allow both numbers and functions
       const res = math.evaluate(input.value);
-      output.textContent = String(res);
+      output.textContent = res;
     }catch(err){
       output.textContent = "Error: " + err;
     }
@@ -355,6 +383,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/\n/g,"<br>");
     devOut.innerHTML = text;
   });
+
 });
 </script>
 </body>
