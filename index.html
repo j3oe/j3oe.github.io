@@ -15,8 +15,8 @@ body{
   background:#000;
   color:#eee;
   font-family:Segoe UI, sans-serif;
-  opacity:0;                 /* start hidden for fade-in */
-  transform: translateY(20px); /* slight slide up */
+  opacity:0;                 
+  transform: translateY(20px); 
   transition: opacity 1s ease, transform 1s ease;
 }
 body.visible{
@@ -283,17 +283,21 @@ button{cursor:pointer}
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
+  // Remove any hash and scroll to top
+  if (window.location.hash) history.replaceState(null, '', window.location.pathname);
+  window.scrollTo(0,0);
+
   const loadingScreen = document.getElementById('loadingScreen');
   const loadingImg = document.getElementById('loadingImg');
   const body = document.body;
 
-  // Cross click triggers fade-out and reveal main content (no navigation)
+  // Cross click triggers fade-out and reveal main content
   loadingImg.addEventListener('click', e => {
-    e.preventDefault(); // safety
+    e.preventDefault();
     loadingScreen.classList.add('fade-out');
     loadingScreen.addEventListener('transitionend', () => {
       loadingScreen.style.display='none';
-      body.classList.add('visible'); // show content
+      body.classList.add('visible'); 
     }, { once:true });
   });
 
