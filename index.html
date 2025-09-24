@@ -35,13 +35,13 @@ button{cursor:pointer}
   align-items:center;
   z-index:2000;
   transition: opacity 0.8s ease;
+  cursor:pointer;  /* click anywhere */
 }
 #loadingScreen.fade-out { opacity:0; pointer-events:none; }
 #loadingScreen img{
-  width:180px;
-  height:180px;
+  width:250px;  /* bigger cross */
+  height:250px;
   animation: spin 2s linear infinite;
-  cursor:pointer;
 }
 @keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
 
@@ -281,14 +281,14 @@ document.addEventListener("DOMContentLoaded", () => {
   window.scrollTo(0,0);
 
   const loadingScreen = document.getElementById('loadingScreen');
-  const loadingImg = document.getElementById('loadingImg');
+  const aboutSection = document.getElementById('about');
 
-  // Clicking cross fades out loading screen
-  loadingImg.addEventListener('click', e => {
-    e.preventDefault();
+  // Clicking anywhere on loading screen hides it and scrolls to About Me
+  loadingScreen.addEventListener('click', () => {
     loadingScreen.classList.add('fade-out');
     loadingScreen.addEventListener('transitionend', () => {
       loadingScreen.style.display='none';
+      aboutSection.scrollIntoView({behavior:'smooth'});
     }, { once:true });
   });
 
@@ -330,6 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
     p.addEventListener('click', ()=>{
       const key = p.dataset.project;
       projectBody.innerHTML = projectBodies[key] || "<p>No content.</p>";
+
       projectModal.style.display = "flex";
 
       if(key==="1"){ let score=0;
