@@ -274,8 +274,9 @@ button{cursor:pointer}
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  let activeUI = null; // Tracks the currently open UI (tooltip or modal)
 
-  // Scroll to top and remove hash
+  // Scroll to top
   if(window.location.hash) history.replaceState(null,'',window.location.pathname);
   window.scrollTo(0,0);
 
@@ -297,17 +298,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll('.skill-pill').forEach(pill => {
     pill.addEventListener('click', () => {
-      // Hide any open tooltip
-      tooltip.classList.remove('visible');
+      // Close any active UI
+      if(activeUI && activeUI !== tooltip){ activeUI.style.display='none'; activeUI.classList.remove('visible'); }
 
-      // Show new tooltip
       tooltipText.textContent = pill.dataset.info;
+      tooltip.style.display='block';
       tooltip.classList.add('visible');
+      activeUI = tooltip;
     });
   });
 
-  tooltipClose.addEventListener('click', ()=>tooltip.classList.remove('visible'));
-  window.addEventListener('click', e => { if(e.target===tooltip) tooltip.classList.remove('visible'); });
+  tooltipClose.addEventListener('click', ()=> { tooltip.classList.remove('visible'); tooltip.style.display='none'; if(activeUI===tooltip) activeUI=null; });
+  window.addEventListener('click', e => { if(e.target===tooltip){ tooltip.classList.remove('visible'); tooltip.style.display='none'; if(activeUI===tooltip) activeUI=null; } });
 
   // ===== Projects =====
   const projectModal = document.getElementById('projectModal');
@@ -332,14 +334,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll('.project').forEach(p=>{
     p.addEventListener('click', ()=>{
-      // Always close modal first
-      projectModal.style.display = "none";
+      // Close any active UI
+      if(activeUI && activeUI !== projectModal){ activeUI.style.display='none'; activeUI.classList.remove('visible'); }
 
       const key = p.dataset.project;
       projectBody.innerHTML = projectBodies[key] || "<p>No content.</p>";
       projectModal.style.display = "flex";
+      activeUI = projectModal;
 
-      // Only attach relevant listener
+      // Setup project-specific buttons
       if(key==="1"){
         let score=0;
         const gameBtn = document.getElementById('gameBtn');
@@ -348,7 +351,6 @@ document.addEventListener("DOMContentLoaded", () => {
         gameBtn.parentNode.replaceChild(newBtn, gameBtn);
         newBtn.addEventListener('click', ()=>{ score++; gameScore.textContent="Score: "+score; });
       }
-
       if(key==="2"){
         const calcRun = document.getElementById('calcRun');
         const calcInput = document.getElementById('calcInput');
@@ -356,11 +358,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const newBtn = calcRun.cloneNode(true);
         calcRun.parentNode.replaceChild(newBtn, calcRun);
         newBtn.addEventListener('click', ()=>{
-          try { const res = math.evaluate(calcInput.value); calcResult.textContent="Result: "+res; }
-          catch(err) { calcResult.textContent="Error: "+err; }
+          try{ const res = math.evaluate(calcInput.value); calcResult.textContent="Result: "+res; }
+          catch(err){ calcResult.textContent="Error: "+err; }
         });
       }
-
       if(key==="3"){
         const saveNote = document.getElementById('saveNote');
         const noteInput = document.getElementById('noteInput');
@@ -375,8 +376,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  projectClose.addEventListener('click', ()=>projectModal.style.display="none");
-  window.addEventListener('click', e => { if(e.target===projectModal) projectModal.style.display="none"; });
+  projectClose.addEventListener('click', ()=>{ projectModal.style.display="none"; if(activeUI===projectModal) activeUI=null; });
+  window.addEventListener('click', e => { if(e.target===projectModal){ projectModal.style.display="none"; if(activeUI===projectModal) activeUI=null; } });
 
   // ===== Code Playground =====
   const runBtn = document.getElementById('playgroundRun');
