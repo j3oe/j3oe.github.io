@@ -212,6 +212,12 @@ button{cursor:pointer}
   transform: scale(1.1);
   background: #666;
 }
+.contact-link img {
+  transition: transform 0.3s ease;
+}
+.contact-link:hover img {
+  transform: rotate(15deg) scale(1.1);
+}
 </style>
 </head>
 <body>
@@ -375,6 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
         gameBtn.parentNode.replaceChild(newBtn, gameBtn);
         newBtn.addEventListener('click', ()=>{ score++; gameScore.textContent="Score: "+score; });
       }
+
       if(key==="2"){
         const calcRun = document.getElementById('calcRun');
         const calcInput = document.getElementById('calcInput');
@@ -386,15 +393,22 @@ document.addEventListener("DOMContentLoaded", () => {
           catch(err){ calcResult.textContent="Error: "+err; }
         });
       }
+
       if(key==="3"){
         const saveNote = document.getElementById('saveNote');
         const noteInput = document.getElementById('noteInput');
         const noteList = document.getElementById('noteList');
-        let notes=[];
+        let notes = JSON.parse(localStorage.getItem('notes') || '[]');
+        noteList.innerHTML = notes.map(n=>`<p>- ${n}</p>`).join('');
         const newBtn = saveNote.cloneNode(true);
         saveNote.parentNode.replaceChild(newBtn, saveNote);
         newBtn.addEventListener('click', ()=>{
-          if(noteInput.value.trim()){ notes.push(noteInput.value.trim()); noteInput.value=''; noteList.innerHTML = notes.map(n=>`<p>- ${n}</p>`).join(''); }
+          if(noteInput.value.trim()){
+            notes.push(noteInput.value.trim());
+            noteInput.value='';
+            noteList.innerHTML = notes.map(n=>`<p>- ${n}</p>`).join('');
+            localStorage.setItem('notes', JSON.stringify(notes));
+          }
         });
       }
     });
@@ -416,9 +430,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const devBtn = document.getElementById('devlogRender');
   const devIn = document.getElementById('devlogInput');
   const devOut = document.getElementById('devlogOutput');
+
+  // Load saved dev log
+  if(localStorage.getItem('devlog')) devIn.value = localStorage.getItem('devlog');
+
   devBtn.addEventListener('click', ()=>{
     let text = devIn.value.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>").replace(/\*(.*?)\*/g,"<i>$1</i>").replace(/\n/g,"<br>");
     devOut.innerHTML = text;
+    localStorage.setItem('devlog', devIn.value); // Save to localStorage
   });
 
 });
