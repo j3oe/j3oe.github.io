@@ -3,17 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio with Playground & Dev Log</title>
+<title>My Interactive Portfolio</title>
 <style>
   body {
     background:#111;
     color:#ddd;
-    font-family: 'Segoe UI', sans-serif;
+    font-family:'Segoe UI',sans-serif;
     margin:0;
     padding:0;
   }
   h2 { color:#f0f0f0; margin-top:40px; text-align:center; }
   section { padding:40px 20px; max-width:1000px; margin:auto; }
+
+  /* Pills */
+  .pill-container {
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+    margin-top:20px;
+  }
+  .pill {
+    background:#333;
+    color:#ddd;
+    padding:10px 20px;
+    border-radius:50px;
+    cursor:pointer;
+    transition:background 0.3s;
+  }
+  .pill:hover { background:#555; }
+
+  /* Skill Modal */
+  .modal {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.7);
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+  }
+  .modal-content {
+    background:#1a1a1a;
+    padding:20px;
+    border-radius:10px;
+    max-width:500px;
+    width:90%;
+    position:relative;
+  }
+  .close {
+    position:absolute;
+    top:10px;
+    right:15px;
+    cursor:pointer;
+    font-size:20px;
+    color:#aaa;
+  }
+
+  /* Projects */
+  .gallery {
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+    margin-top:20px;
+  }
+  .project {
+    background:#222;
+    padding:20px;
+    border-radius:10px;
+    width:250px;
+    cursor:pointer;
+    text-align:center;
+    transition:background 0.3s;
+  }
+  .project:hover { background:#333; }
+
   /* Playground */
   #playground-container {
     display:flex;
@@ -82,23 +148,71 @@
     border-radius:10px;
     margin-top:20px;
   }
-  a { color:#9dc3ff; }
+
 </style>
 </head>
 <body>
 
-<!-- ========================= -->
-<!-- CODE PLAYGROUND SECTION -->
-<!-- ========================= -->
+<!-- ===== ABOUT ===== -->
+<section id="about">
+  <h2>About Me</h2>
+  <p style="text-align:center;max-width:700px;margin:auto;">
+    I’ve been coding for a few years, creating web tools, academic note-takers, and experiments
+    with AI APIs. I love crafting interactive, visually appealing apps that blend UI and UX
+    principles with efficient code.
+  </p>
+</section>
+
+<!-- ===== SKILLS PILLS ===== -->
+<section id="skills">
+  <h2>Skills</h2>
+  <div class="pill-container">
+    <div class="pill" data-skill="Web Development">Web Development</div>
+    <div class="pill" data-skill="UI Design">UI Design</div>
+    <div class="pill" data-skill="UX Design">UX Design</div>
+    <div class="pill" data-skill="Responsive Design">Responsive Design</div>
+    <div class="pill" data-skill="Prototyping">Prototyping</div>
+    <div class="pill" data-skill="JavaScript">JavaScript</div>
+    <div class="pill" data-skill="CSS Animations">CSS Animations</div>
+  </div>
+</section>
+
+<!-- Skill Modal -->
+<div class="modal" id="skillModal">
+  <div class="modal-content">
+    <span class="close" id="skillClose">&times;</span>
+    <div id="skillInfo"></div>
+  </div>
+</div>
+
+<!-- ===== PROJECTS ===== -->
+<section id="projects">
+  <h2>Projects</h2>
+  <div class="gallery">
+    <div class="project" data-project="1">Project 1<br><small>Game Prototype</small></div>
+    <div class="project" data-project="2">Project 2<br><small>AI API Experiment</small></div>
+    <div class="project" data-project="3">Project 3<br><small>Note-taking Tool</small></div>
+  </div>
+</section>
+
+<!-- Project Modal -->
+<div class="modal" id="projectModal">
+  <div class="modal-content">
+    <span class="close" id="projectClose">&times;</span>
+    <div id="projectBody"></div>
+  </div>
+</div>
+
+<!-- ===== CODE PLAYGROUND ===== -->
 <section id="code-playground">
   <h2>Code Playground</h2>
   <div id="playground-container">
-    <p>Write HTML/CSS/JavaScript below and click <strong>Run</strong> to see it in action:</p>
+    <p>Write HTML/CSS/JavaScript below and click <strong>Run</strong>:</p>
     <textarea id="codeInput">
-<!-- Example: -->
+<!-- Example -->
 <h1 style="color:gray;">Hello World!</h1>
 <script>
-  console.log("Hello from inside the iframe!");
+  console.log("Hello from the playground!");
 </script>
     </textarea>
     <button id="runBtn">Run Code</button>
@@ -106,44 +220,76 @@
   </div>
 </section>
 
-<!-- ========================= -->
-<!-- DEV LOG SECTION -->
-<!-- ========================= -->
+<!-- ===== DEV LOG ===== -->
 <section id="dev-log">
   <h2>Developer Log</h2>
   <p>Write Markdown to create quick dev notes. Click <strong>Render</strong> to convert to HTML.</p>
-  <textarea id="markdownInput"># My First Dev Log  
-Today I added a **Code Playground** to my portfolio.  
-- Learned about `iframe` sandboxing.  
-- Practiced Markdown parsing with [marked.js](https://github.com/markedjs/marked).  
+  <textarea id="markdownInput"># First Entry
+Added **Code Playground** and **Dev Log** to my portfolio.
+- Practiced iframe sandboxing
+- Used [marked.js](https://github.com/markedjs/marked)
   </textarea>
   <button id="renderBtn">Render Markdown</button>
   <div id="devLogPreview"></div>
 </section>
 
-<!-- marked.js for Markdown rendering -->
+<!-- ===== SCRIPTS ===== -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
-  // Code Playground
+  /* ---- Skill Pills ---- */
+  const skillInfoMap = {
+    "Web Development":"Building responsive and dynamic websites using HTML, CSS, JS.",
+    "UI Design":"Creating clean and appealing interfaces with attention to detail.",
+    "UX Design":"Designing intuitive user flows and interactions.",
+    "Responsive Design":"Making layouts adapt seamlessly to all screen sizes.",
+    "Prototyping":"Rapidly testing ideas using wireframes and interactive demos.",
+    "JavaScript":"Adding interactivity, logic, and dynamic data handling.",
+    "CSS Animations":"Smooth transitions and keyframe effects for engaging visuals."
+  };
+  const skillModal = document.getElementById('skillModal');
+  const skillInfo = document.getElementById('skillInfo');
+  document.querySelectorAll('.pill').forEach(pill=>{
+    pill.addEventListener('click',()=>{
+      skillInfo.textContent = skillInfoMap[pill.dataset.skill] || "Details coming soon.";
+      skillModal.style.display='flex';
+    });
+  });
+  document.getElementById('skillClose').onclick = ()=>skillModal.style.display='none';
+  window.addEventListener('click',e=>{ if(e.target===skillModal) skillModal.style.display='none'; });
+
+  /* ---- Projects ---- */
+  const projectBodies = {
+    1:"<h3>Game Prototype</h3><p>A simple click-counter game with score tracking.</p>",
+    2:"<h3>AI API Experiment</h3><p>Tested API calls and mock AI responses for fun interactions.</p>",
+    3:"<h3>Note-taking Tool</h3><p>A browser-based note saver using localStorage.</p>"
+  };
+  const projectModal = document.getElementById('projectModal');
+  const projectBody = document.getElementById('projectBody');
+  document.querySelectorAll('.project').forEach(p=>{
+    p.addEventListener('click',()=>{
+      projectBody.innerHTML = projectBodies[p.dataset.project] || "";
+      projectModal.style.display='flex';
+    });
+  });
+  document.getElementById('projectClose').onclick = ()=>projectModal.style.display='none';
+  window.addEventListener('click',e=>{ if(e.target===projectModal) projectModal.style.display='none'; });
+
+  /* ---- Code Playground ---- */
   const runBtn = document.getElementById('runBtn');
   const codeInput = document.getElementById('codeInput');
   const preview = document.getElementById('preview');
-  runBtn.addEventListener('click', () => {
-    const code = codeInput.value;
-    const blob = new Blob([code], { type: 'text/html' });
+  runBtn.addEventListener('click',()=>{
+    const blob = new Blob([codeInput.value], {type:'text/html'});
     preview.src = URL.createObjectURL(blob);
   });
 
-  // Dev Log
+  /* ---- Dev Log ---- */
   const renderBtn = document.getElementById('renderBtn');
   const markdownInput = document.getElementById('markdownInput');
   const devLogPreview = document.getElementById('devLogPreview');
-  renderBtn.addEventListener('click', () => {
-    const raw = markdownInput.value;
-    devLogPreview.innerHTML = marked.parse(raw);
+  renderBtn.addEventListener('click',()=>{
+    devLogPreview.innerHTML = marked.parse(markdownInput.value);
   });
-
-  // Render initial markdown on load
   devLogPreview.innerHTML = marked.parse(markdownInput.value);
 </script>
 </body>
