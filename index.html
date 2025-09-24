@@ -5,72 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Josephuv Portfolio</title>
 <style>
-  body, html {
-    margin:0; padding:0;
-    font-family:'Segoe UI', sans-serif;
-    background:black; color:white;
-    overflow:hidden; scroll-behavior:smooth;
-  }
-
+  body, html { margin:0; padding:0; font-family:'Segoe UI', sans-serif; background:black; color:white; overflow:hidden; scroll-behavior:smooth;}
+  
   /* Loading Screen */
-  #loading-screen {
-    position:fixed; top:0; left:0; width:100%; height:100%;
-    display:flex; justify-content:center; align-items:center;
-    background:black; cursor:pointer; z-index:9999;
-    transition: opacity 1s ease;
-  }
-  #loading-screen img { width:max(60px,10vw); height:auto; animation:spin 2s linear infinite; }
+  #loading-screen {position:fixed; top:0; left:0; width:100%; height:100%; display:flex; justify-content:center; align-items:center; background:black; cursor:pointer; z-index:9999; transition:opacity 1s ease;}
+  #loading-screen img {width:max(60px,10vw); height:auto; animation:spin 2s linear infinite;}
   @keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 
-  /* Blog container */
-  main#blog {
-    opacity:0; transform:translateY(30px);
-    transition:opacity 1s ease, transform 1s ease;
-    padding:2rem; max-height:100vh; overflow-y:auto; background:black;
-  }
-  main#blog.visible { opacity:1; transform:translateY(0); overflow-y:auto; }
-  section { margin-bottom:2rem; opacity:0; transform:translateY(20px); transition:opacity 1s ease, transform 1s ease; }
-  section.visible { opacity:1; transform:translateY(0); }
-  footer { text-align:center; padding:1rem; font-size:0.9rem; color:#aaa; border-top:1px solid #333; }
+  /* Main blog */
+  main#blog {opacity:0; transform:translateY(30px); transition:opacity 1s ease, transform 1s ease; padding:2rem; max-height:100vh; overflow-y:auto;}
+  main#blog.visible {opacity:1; transform:translateY(0);}
+  section {margin-bottom:2rem; opacity:0; transform:translateY(20px); transition:opacity 1s ease, transform 1s ease;}
+  section.visible {opacity:1; transform:translateY(0);}
+  footer {text-align:center; padding:1rem; font-size:0.9rem; color:#aaa; border-top:1px solid #333;}
+
+  /* Navigation */
+  nav {position:fixed; top:0; right:0; padding:1rem; display:flex; flex-direction:column; gap:0.5rem; z-index:1000;}
+  nav a {color:#00ffcc; text-decoration:none; font-weight:bold; transition:0.3s;}
+  nav a:hover {text-shadow:0 0 10px #00ffcc;}
 
   /* Animated dots */
-  #dots { color:white; }
+  #dots {color:white;}
 
   /* Pills */
-  .skill-group h3 { color:#ccc; margin-bottom:0.5rem; }
-  .pills { display:flex; flex-wrap:wrap; gap:0.5rem; }
-  .pill {
-    background:#222; color:#fff; padding:0.5rem 1rem; border-radius:999px;
-    cursor:pointer; transition:0.3s, box-shadow 0.3s; position:relative; border:1px solid #444;
-  }
-  .pill:hover, .pill:focus {
-    outline:none; background:#111; transform:translateY(-2px);
-    box-shadow:0 0 10px #00ffcc,0 0 20px #00ffcc33; border-color:#00ffcc;
-  }
-  .pill:hover::after, .pill:focus::after {
-    content:''; position:absolute; top:-4px; left:-4px; right:-4px; bottom:-4px;
-    border-radius:999px; box-shadow:0 0 20px #00ffcc33; animation:pulse 1.2s infinite;
-  }
+  .skill-group h3 {color:#ccc; margin-bottom:0.5rem;}
+  .pills {display:flex; flex-wrap:wrap; gap:0.5rem;}
+  .pill {background:#222; color:#fff; padding:0.5rem 1rem; border-radius:999px; cursor:pointer; transition:0.3s, box-shadow 0.3s; position:relative; border:1px solid #444;}
+  .pill:hover, .pill:focus {outline:none; background:#111; transform:translateY(-2px); box-shadow:0 0 10px #00ffcc,0 0 20px #00ffcc33; border-color:#00ffcc;}
+  .pill:hover::after, .pill:focus::after {content:''; position:absolute; top:-4px; left:-4px; right:-4px; bottom:-4px; border-radius:999px; box-shadow:0 0 20px #00ffcc33; animation:pulse 1.2s infinite;}
   @keyframes pulse {0%{transform:scale(1);opacity:0.5;}50%{transform:scale(1.1);opacity:0.7;}100%{transform:scale(1);opacity:0.5;}}
 
-  /* Centered Tooltip */
-  .tooltip {
-    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0.8);
-    opacity:0; pointer-events:none; background-color:#111; padding:1rem 1.5rem;
-    border-radius:8px; color:#fff; border:1px solid #00ffcc;
-    box-shadow:0 0 15px #00ffcc66,0 0 30px #00ffcc33;
-    transition:opacity 0.3s ease, transform 0.3s ease;
-    max-width:80%; text-align:center; font-size:1rem; z-index:1000;
-  }
-  .tooltip.visible { opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
+  /* Tooltip */
+  .tooltip {position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0.8); opacity:0; pointer-events:none; background-color:#111; padding:1rem 1.5rem; border-radius:8px; color:#fff; border:1px solid #00ffcc; box-shadow:0 0 15px #00ffcc66,0 0 30px #00ffcc33; transition:opacity 0.3s ease, transform 0.3s ease; max-width:80%; text-align:center; font-size:1rem; z-index:1000;}
+  .tooltip.visible {opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1);}
 
-  /* Math Snippets */
-  .snippet { margin-bottom:2rem; background:#111; border:1px solid #00ffcc; border-radius:8px; padding:1rem; }
-  .snippet label { display:block; margin-bottom:0.5rem; color:#ccc; }
-  .snippet input { width:100%; padding:0.5rem; border-radius:5px; border:1px solid #444; background:#111; color:white; margin-bottom:0.5rem; }
-  .snippet button { padding:0.5rem 1rem; border:none; border-radius:5px; background:#00ffcc; color:black; font-weight:bold; cursor:pointer; transition:0.3s; }
-  .snippet button:hover { box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33; }
-  .snippet .output { background:#111; color:#0f0; padding:0.5rem; border-radius:5px; min-height:1.5em; font-family:monospace; }
+  /* Math Snippet */
+  .snippet {margin-bottom:2rem; background:#111; border:1px solid #00ffcc; border-radius:8px; padding:1rem;}
+  .snippet label {display:block; margin-bottom:0.5rem; color:#ccc;}
+  .snippet input {width:100%; padding:0.5rem; border-radius:5px; border:1px solid #444; background:#111; color:white; margin-bottom:0.5rem;}
+  .snippet button {padding:0.5rem 1rem; border:none; border-radius:5px; background:#00ffcc; color:black; font-weight:bold; cursor:pointer; transition:0.3s;}
+  .snippet button:hover {box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33;}
+  .snippet .output {background:#111; color:#0f0; padding:0.5rem; border-radius:5px; min-height:1.5em; font-family:monospace;}
+
+  /* Project Gallery */
+  .gallery {display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem;}
+  .project {background:#111; border:1px solid #00ffcc; border-radius:8px; padding:1rem; text-align:center; transition:0.3s;}
+  .project:hover {box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33; transform:translateY(-2px);}
+  .project img {max-width:100%; border-radius:5px;}
 </style>
 </head>
 <body>
@@ -78,15 +59,23 @@
 <!-- Loading Screen -->
 <div id="loading-screen"><img src="assets/cross.png" alt="Loading animation"></div>
 
+<!-- Navigation -->
+<nav>
+  <a href="#about">About Me</a>
+  <a href="#skills">Skills</a>
+  <a href="#math">Math</a>
+  <a href="#projects">Projects</a>
+</nav>
+
 <main id="blog">
   <section><h1>Hello<span id="dots"></span></h1></section>
 
-  <section>
+  <section id="about">
     <h2>About Me</h2>
     <p>I’ve been coding for a few years, exploring games, academic projects, and AI APIs. Every project teaches me new ways to think about code, design, and technology.</p>
   </section>
 
-  <section>
+  <section id="skills">
     <h2>Skills & Portfolio</h2>
     <div class="skill-group">
       <h3>Web Development</h3>
@@ -111,23 +100,32 @@
     <div class="tooltip" id="tooltip"></div>
   </section>
 
-  <section>
-    <h2>Interactive Math Snippets</h2>
-
+  <section id="math">
+    <h2>Interactive Math Snippet</h2>
     <div class="snippet">
-      <label for="math1">Enter a math expression:</label>
-      <input type="text" id="math1" placeholder="e.g., 5*7+2">
-      <button onclick="runMath('math1','output1')">Run</button>
-      <pre class="output" id="output1"></pre>
+      <label for="mathInput">Enter a math expression:</label>
+      <input type="text" id="mathInput" placeholder="e.g., 5*7+2">
+      <button onclick="runMath()">Run</button>
+      <pre class="output" id="mathOutput"></pre>
     </div>
+  </section>
 
-    <div class="snippet">
-      <label for="math2">Try another calculation:</label>
-      <input type="text" id="math2" placeholder="e.g., Math.sqrt(81)">
-      <button onclick="runMath('math2','output2')">Run</button>
-      <pre class="output" id="output2"></pre>
+  <section id="projects">
+    <h2>Project Gallery</h2>
+    <div class="gallery">
+      <div class="project">
+        <img src="assets/project1.png" alt="Project 1">
+        <p>Game Prototype</p>
+      </div>
+      <div class="project">
+        <img src="assets/project2.png" alt="Project 2">
+        <p>AI API Experiment</p>
+      </div>
+      <div class="project">
+        <img src="assets/project3.png" alt="Project 3">
+        <p>Note-taking Tool</p>
+      </div>
     </div>
-
   </section>
 
   <footer>&copy; 2025 Josephuv Blog. Děkuji za návštěvu!</footer>
@@ -161,7 +159,7 @@
     sections.forEach((section,i)=>{ setTimeout(()=>{section.classList.add('visible'); }, i*200); });
   }
 
-  // Click-only centered tooltip
+  // Click-only tooltip
   const tooltip = document.getElementById('tooltip');
   const pills = document.querySelectorAll('.pill');
   let tooltipVisible=false;
@@ -174,18 +172,14 @@
     });
   });
   document.addEventListener('click', ()=>{
-    if(tooltipVisible){
-      tooltip.classList.remove('visible');
-      tooltipVisible=false;
-    }
+    if(tooltipVisible){ tooltip.classList.remove('visible'); tooltipVisible=false; }
   });
 
-  // Function to run math snippets safely
-  function runMath(inputId, outputId){
-    const code = document.getElementById(inputId).value;
-    const output = document.getElementById(outputId);
+  // Math snippet
+  function runMath(){
+    const code = document.getElementById('mathInput').value;
+    const output = document.getElementById('mathOutput');
     try{
-      // Only allow math operations
       let result = Function('"use strict"; return ('+code+')')();
       output.textContent = result;
     }catch(err){
