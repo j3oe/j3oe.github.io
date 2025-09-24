@@ -1,270 +1,150 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Josephuv Portfolio</title>
+<title>Portfolio with Playground & Dev Log</title>
 <style>
-body, html {
-  margin:0; padding:0;
-  font-family:'Segoe UI',sans-serif;
-  background:black; color:white;
-  scroll-behavior:smooth;
-  overflow:hidden;
-}
+  body {
+    background:#111;
+    color:#ddd;
+    font-family: 'Segoe UI', sans-serif;
+    margin:0;
+    padding:0;
+  }
+  h2 { color:#f0f0f0; margin-top:40px; text-align:center; }
+  section { padding:40px 20px; max-width:1000px; margin:auto; }
+  /* Playground */
+  #playground-container {
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    background:#1a1a1a;
+    padding:20px;
+    border-radius:10px;
+  }
+  #codeInput {
+    width:100%;
+    height:200px;
+    background:#222;
+    color:#eee;
+    border:none;
+    padding:10px;
+    border-radius:6px;
+    font-family:monospace;
+    resize:vertical;
+  }
+  #runBtn {
+    background:#444;
+    color:#fff;
+    padding:10px 20px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    transition:background 0.3s;
+    align-self:flex-start;
+  }
+  #runBtn:hover { background:#666; }
+  #preview {
+    width:100%;
+    height:250px;
+    background:#fff;
+    border-radius:6px;
+    border:none;
+  }
 
-#loading-screen {
-  position:fixed; top:0; left:0; width:100%; height:100%;
-  display:flex; justify-content:center; align-items:center;
-  background:black; cursor:pointer; z-index:9999;
-  transition:opacity 1s ease;
-}
-#loading-screen img {
-  width:max(60px,10vw); height:auto;
-  animation:spin 2s linear infinite;
-}
-@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
-
-section {padding:2rem; margin-bottom:2rem; border-bottom:1px solid #333;}
-h2 {color:#ccc;}
-p {line-height:1.5;}
-
-/* Pills for Skills */
-.pills {display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1rem;}
-.pill {
-  padding:0.5rem 1rem;
-  border:1px solid #888;
-  border-radius:999px;
-  cursor:pointer;
-  background:#111;
-  color:#bbb;
-  transition:0.3s;
-}
-.pill:hover, .pill.active {
-  background:#ccc;
-  color:black;
-  box-shadow:0 0 10px #aaa6, 0 0 20px #aaa3;
-}
-#pill-info {
-  margin-top:1rem;
-  background:#111;
-  border:1px solid #888;
-  padding:1rem;
-  border-radius:8px;
-  min-height:60px;
-  color:#ccc;
-}
-
-/* Projects */
-.gallery {display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem;}
-.project {
-  background:#111; border:1px solid #888;
-  border-radius:8px; padding:1rem; text-align:center;
-  cursor:pointer; transition:0.3s; position:relative;
-}
-.project:hover {
-  box-shadow:0 0 10px #aaa6,0 0 20px #aaa3;
-  transform:translateY(-2px);
-}
-.project img {max-width:100%; border-radius:5px;}
-
-/* Modal */
-.modal {
-  display:none; position:fixed; z-index:10000;
-  left:0; top:0; width:100%; height:100%;
-  background:rgba(0,0,0,0.8);
-}
-.modal-content {
-  background:#111;
-  border:1px solid #888;
-  width:90%; max-width:500px;
-  border-radius:8px;
-  color:white;
-  position:relative;
-  margin:8% auto;
-  padding:1rem;
-  display:flex;
-  flex-direction:column;
-}
-.close {
-  color:#ccc;
-  position:absolute;
-  top:10px;
-  right:15px;
-  font-size:2rem;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-button {
-  padding:0.5rem 1rem;
-  border:none; border-radius:5px;
-  background:#ccc; color:black; font-weight:bold;
-  cursor:pointer; transition:0.3s; margin-top:0.5rem;
-}
-button:hover {box-shadow:0 0 10px #aaa6,0 0 20px #aaa3;}
-input, textarea {
-  width:100%; padding:0.5rem;
-  border-radius:5px; border:1px solid #444;
-  background:#111; color:white; margin-bottom:0.5rem;
-}
+  /* Dev Log */
+  #markdownInput {
+    width:100%;
+    height:200px;
+    background:#222;
+    color:#eee;
+    border:none;
+    padding:10px;
+    border-radius:6px;
+    font-family:monospace;
+    resize:vertical;
+  }
+  #renderBtn {
+    background:#444;
+    color:#fff;
+    padding:10px 20px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    transition:background 0.3s;
+    margin-top:10px;
+  }
+  #renderBtn:hover { background:#666; }
+  #devLogPreview {
+    background:#1a1a1a;
+    padding:20px;
+    border-radius:10px;
+    margin-top:20px;
+  }
+  a { color:#9dc3ff; }
 </style>
 </head>
 <body>
 
-<!-- Loading Screen -->
-<div id="loading-screen">
-  <img src="assets/cross.png" alt="Loading animation">
-</div>
-
-<main id="blog">
-
-  <!-- About Me -->
-  <section>
-    <h2>About Me</h2>
-    <p>I’ve been coding for a few years now, exploring games, academic projects, and AI APIs. Every project teaches me new ways to think about code, design, and technology.</p>
-  </section>
-
-  <!-- Skills with Pills -->
-  <section>
-    <h2>Skills</h2>
-    <p>Click a topic to learn more:</p>
-    <div class="pills">
-      <div class="pill" data-info="HTML, CSS, and JavaScript form the backbone of my web projects, ensuring clean structure and interactivity.">Web Development</div>
-      <div class="pill" data-info="UI (User Interface) focuses on visuals—colors, layouts, and elements that users interact with.">UI Design</div>
-      <div class="pill" data-info="UX (User Experience) ensures the product feels natural, intuitive, and enjoyable.">UX Design</div>
-      <div class="pill" data-info="Responsive design allows websites to look great on any device, from phones to desktops.">Responsive Design</div>
-      <div class="pill" data-info="Tools like Figma and Adobe XD help me rapidly prototype and collaborate on designs.">Prototyping</div>
-      <div class="pill" data-info="Experience with React and component-driven development for fast, scalable apps.">React Development</div>
-      <div class="pill" data-info="Node.js and Express for creating efficient server-side applications.">Backend Basics</div>
-      <div class="pill" data-info="Version control with Git/GitHub for collaboration and safe code management.">Git & GitHub</div>
-      <div class="pill" data-info="Accessibility principles to make apps usable for everyone.">Accessibility</div>
-    </div>
-    <div id="pill-info">Click a pill to see details here.</div>
-  </section>
-
-  <!-- Projects -->
-  <section>
-    <h2>Projects</h2>
-    <div class="gallery">
-      <div class="project" data-project="1">
-        <img src="assets/project1.png" alt="Project 1">
-        <p>Game Prototype – A click-counter mini game.</p>
-      </div>
-      <div class="project" data-project="2">
-        <img src="assets/project2.png" alt="Project 2">
-        <p>AI API Experiment – Mock AI Q&A.</p>
-      </div>
-      <div class="project" data-project="3">
-        <img src="assets/project3.png" alt="Project 3">
-        <p>Note-taking Tool – Save notes in local storage.</p>
-      </div>
-      <div class="project" data-project="math">
-        <img src="assets/math.png" alt="Math Snippet">
-        <p>Interactive Math – Try live calculations.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Modal -->
-  <div class="modal" id="projectModal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div id="modalBody"></div>
-    </div>
-  </div>
-
-</main>
-
+<!-- ========================= -->
+<!-- CODE PLAYGROUND SECTION -->
+<!-- ========================= -->
+<section id="code-playground">
+  <h2>Code Playground</h2>
+  <div id="playground-container">
+    <p>Write HTML/CSS/JavaScript below and click <strong>Run</strong> to see it in action:</p>
+    <textarea id="codeInput">
+<!-- Example: -->
+<h1 style="color:gray;">Hello World!</h1>
 <script>
-/* Loading screen */
-const loadingScreen = document.getElementById('loading-screen');
-const blog = document.getElementById('blog');
-loadingScreen.addEventListener('click',()=>{
-  loadingScreen.style.opacity='0';
-  loadingScreen.style.pointerEvents='none';
-  blog.style.opacity='1';
-  document.body.style.overflow='auto';
-});
-
-/* Pills interaction */
-const pills = document.querySelectorAll('.pill');
-const pillInfo = document.getElementById('pill-info');
-pills.forEach(pill=>{
-  pill.addEventListener('click',()=>{
-    pills.forEach(p=>p.classList.remove('active'));
-    pill.classList.add('active');
-    pillInfo.textContent = pill.dataset.info;
-  });
-});
-
-/* Projects modal logic */
-const projects = document.querySelectorAll('.project');
-const modal = document.getElementById('projectModal');
-const modalBody = document.getElementById('modalBody');
-const closeBtn = modal.querySelector('.close');
-
-projects.forEach(project=>{
-  project.addEventListener('click', ()=>{
-    const id = project.dataset.project;
-    modal.style.display = 'block';
-    modalBody.innerHTML = '';
-
-    if(id==='1'){ // Game Prototype
-      const output = document.createElement('p'); output.id = 'gameOutput';
-      const btn = document.createElement('button'); btn.textContent='Click Me!';
-      let clickCount=0;
-      btn.onclick = ()=>{ clickCount++; output.textContent='Count: '+clickCount; }
-      output.textContent='Click the button to increase count!';
-      modalBody.appendChild(output); modalBody.appendChild(btn);
-
-    } else if(id==='2'){ // AI API Experiment
-      const input = document.createElement('input'); input.placeholder='Ask a question...';
-      const btn = document.createElement('button'); btn.textContent='Send';
-      const output = document.createElement('p');
-      btn.onclick = ()=>{
-        const question = input.value.trim();
-        if(!question){ output.textContent='Please type a question.'; return; }
-        const responses = ["Interesting question!","Try experimenting.","Let me think...","Several ways to do that.","Here's an idea."];
-        output.textContent='AI Response: '+responses[Math.floor(Math.random()*responses.length)];
-      };
-      modalBody.appendChild(input); modalBody.appendChild(btn); modalBody.appendChild(output);
-
-    } else if(id==='3'){ // Note-taking Tool
-      const textarea = document.createElement('textarea'); textarea.rows=5; textarea.placeholder='Type your notes here...';
-      const btn = document.createElement('button'); btn.textContent='Save Note';
-      const status = document.createElement('p');
-      btn.onclick = ()=>{
-        const note = textarea.value;
-        if(!note){ status.textContent='Nothing to save!'; return; }
-        localStorage.setItem('myNote', note);
-        status.textContent='Note saved!';
-      };
-      const saved = localStorage.getItem('myNote'); if(saved) textarea.value = saved;
-      modalBody.appendChild(textarea); modalBody.appendChild(btn); modalBody.appendChild(status);
-
-    } else if(id==='math'){ // Interactive Math
-      const input = document.createElement('input'); input.placeholder='Type a math expression, e.g., 5+3*2';
-      const btn = document.createElement('button'); btn.textContent='Calculate';
-      const output = document.createElement('p');
-      btn.onclick = ()=>{
-        const code = input.value;
-        try{
-          let result = Function('"use strict"; return ('+code+')')();
-          output.textContent = 'Result: '+result;
-        }catch(err){
-          output.textContent = 'Error: '+err;
-        }
-      };
-      modalBody.appendChild(input); modalBody.appendChild(btn); modalBody.appendChild(output);
-    }
-  });
-});
-
-/* Close modal */
-closeBtn.onclick = ()=>{ modal.style.display='none'; }
-window.onclick = e=>{ if(e.target===modal) modal.style.display='none'; }
+  console.log("Hello from inside the iframe!");
 </script>
+    </textarea>
+    <button id="runBtn">Run Code</button>
+    <iframe id="preview" sandbox="allow-scripts allow-same-origin"></iframe>
+  </div>
+</section>
 
+<!-- ========================= -->
+<!-- DEV LOG SECTION -->
+<!-- ========================= -->
+<section id="dev-log">
+  <h2>Developer Log</h2>
+  <p>Write Markdown to create quick dev notes. Click <strong>Render</strong> to convert to HTML.</p>
+  <textarea id="markdownInput"># My First Dev Log  
+Today I added a **Code Playground** to my portfolio.  
+- Learned about `iframe` sandboxing.  
+- Practiced Markdown parsing with [marked.js](https://github.com/markedjs/marked).  
+  </textarea>
+  <button id="renderBtn">Render Markdown</button>
+  <div id="devLogPreview"></div>
+</section>
+
+<!-- marked.js for Markdown rendering -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  // Code Playground
+  const runBtn = document.getElementById('runBtn');
+  const codeInput = document.getElementById('codeInput');
+  const preview = document.getElementById('preview');
+  runBtn.addEventListener('click', () => {
+    const code = codeInput.value;
+    const blob = new Blob([code], { type: 'text/html' });
+    preview.src = URL.createObjectURL(blob);
+  });
+
+  // Dev Log
+  const renderBtn = document.getElementById('renderBtn');
+  const markdownInput = document.getElementById('markdownInput');
+  const devLogPreview = document.getElementById('devLogPreview');
+  renderBtn.addEventListener('click', () => {
+    const raw = markdownInput.value;
+    devLogPreview.innerHTML = marked.parse(raw);
+  });
+
+  // Render initial markdown on load
+  devLogPreview.innerHTML = marked.parse(markdownInput.value);
+</script>
 </body>
 </html>
