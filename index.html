@@ -26,65 +26,83 @@ body, html {
 @keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 
 section {padding:2rem; margin-bottom:2rem; border-bottom:1px solid #333;}
-h2 {color:#00ffcc;}
+h2 {color:#ccc;}
 p {line-height:1.5;}
 
 /* Pills for Skills */
 .pills {display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1rem;}
 .pill {
   padding:0.5rem 1rem;
-  border:1px solid #00ffcc;
+  border:1px solid #888;
   border-radius:999px;
   cursor:pointer;
   background:#111;
+  color:#bbb;
   transition:0.3s;
 }
 .pill:hover, .pill.active {
-  background:#00ffcc;
+  background:#ccc;
   color:black;
-  box-shadow:0 0 10px #00ffcc66, 0 0 20px #00ffcc33;
+  box-shadow:0 0 10px #aaa6, 0 0 20px #aaa3;
 }
 #pill-info {
   margin-top:1rem;
   background:#111;
-  border:1px solid #00ffcc;
+  border:1px solid #888;
   padding:1rem;
   border-radius:8px;
   min-height:60px;
+  color:#ccc;
 }
 
 /* Projects */
 .gallery {display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem;}
 .project {
-  background:#111; border:1px solid #00ffcc;
+  background:#111; border:1px solid #888;
   border-radius:8px; padding:1rem; text-align:center;
   cursor:pointer; transition:0.3s; position:relative;
 }
 .project:hover {
-  box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33;
+  box-shadow:0 0 10px #aaa6,0 0 20px #aaa3;
   transform:translateY(-2px);
 }
 .project img {max-width:100%; border-radius:5px;}
 
 /* Modal */
-.modal {display:none; position:fixed; z-index:10000; left:0; top:0; width:100%; height:100%; overflow:auto; background:rgba(0,0,0,0.8);}
+.modal {
+  display:none; position:fixed; z-index:10000;
+  left:0; top:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.8);
+}
 .modal-content {
-  background:#111; margin:10% auto; padding:1rem;
-  border:1px solid #00ffcc; width:90%; max-width:500px;
-  border-radius:8px; color:white; position:relative;
+  background:#111;
+  border:1px solid #888;
+  width:90%; max-width:500px;
+  border-radius:8px;
+  color:white;
+  position:relative;
+  margin:8% auto;
+  padding:1rem;
+  display:flex;
+  flex-direction:column;
 }
 .close {
-  color:#00ffcc; position:absolute; top:10px; right:20px;
-  font-size:2rem; font-weight:bold; cursor:pointer;
+  color:#ccc;
+  position:absolute;
+  top:10px;
+  right:15px;
+  font-size:2rem;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 button {
   padding:0.5rem 1rem;
   border:none; border-radius:5px;
-  background:#00ffcc; color:black; font-weight:bold;
+  background:#ccc; color:black; font-weight:bold;
   cursor:pointer; transition:0.3s; margin-top:0.5rem;
 }
-button:hover {box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33;}
+button:hover {box-shadow:0 0 10px #aaa6,0 0 20px #aaa3;}
 input, textarea {
   width:100%; padding:0.5rem;
   border-radius:5px; border:1px solid #444;
@@ -112,11 +130,15 @@ input, textarea {
     <h2>Skills</h2>
     <p>Click a topic to learn more:</p>
     <div class="pills">
-      <div class="pill" data-info="HTML, CSS, and JavaScript form the backbone of my web projects, ensuring clean structure and interactive experiences.">Web Development</div>
+      <div class="pill" data-info="HTML, CSS, and JavaScript form the backbone of my web projects, ensuring clean structure and interactivity.">Web Development</div>
       <div class="pill" data-info="UI (User Interface) focuses on visuals—colors, layouts, and elements that users interact with.">UI Design</div>
-      <div class="pill" data-info="UX (User Experience) ensures the product feels natural, intuitive, and enjoyable for users.">UX Design</div>
+      <div class="pill" data-info="UX (User Experience) ensures the product feels natural, intuitive, and enjoyable.">UX Design</div>
       <div class="pill" data-info="Responsive design allows websites to look great on any device, from phones to desktops.">Responsive Design</div>
       <div class="pill" data-info="Tools like Figma and Adobe XD help me rapidly prototype and collaborate on designs.">Prototyping</div>
+      <div class="pill" data-info="Experience with React and component-driven development for fast, scalable apps.">React Development</div>
+      <div class="pill" data-info="Node.js and Express for creating efficient server-side applications.">Backend Basics</div>
+      <div class="pill" data-info="Version control with Git/GitHub for collaboration and safe code management.">Git & GitHub</div>
+      <div class="pill" data-info="Accessibility principles to make apps usable for everyone.">Accessibility</div>
     </div>
     <div id="pill-info">Click a pill to see details here.</div>
   </section>
