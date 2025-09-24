@@ -95,9 +95,16 @@
     color: #fff;
     border: 1px solid #00ffcc;
     z-index: 1000;
-    display: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
     font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+  }
+
+  .tooltip.visible {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .tooltip::after {
@@ -200,22 +207,25 @@
   const tooltip = document.getElementById('tooltip');
 
   pills.forEach(pill => {
-    pill.addEventListener('click', (e) => {
+    pill.addEventListener('mouseenter', (e) => {
       tooltip.textContent = pill.getAttribute('data-info');
       tooltip.style.display = 'block';
-
-      // Position tooltip above the pill
-      const rect = pill.getBoundingClientRect();
-      tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + window.scrollY + 'px';
-      tooltip.style.left = rect.left + 'px';
+      tooltip.classList.add('visible');
     });
-  });
 
-  // Hide tooltip when clicking anywhere else
-  document.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('pill')) {
-      tooltip.style.display = 'none';
-    }
+    pill.addEventListener('mousemove', (e) => {
+      const tooltipWidth = tooltip.offsetWidth;
+      let left = e.pageX - tooltipWidth/2;
+      if(left < 0) left = 5;
+      if(left + tooltipWidth > window.innerWidth) left = window.innerWidth - tooltipWidth - 5;
+      tooltip.style.left = left + 'px';
+      tooltip.style.top = e.pageY - tooltip.offsetHeight - 10 + 'px';
+    });
+
+    pill.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('visible');
+      setTimeout(() => { tooltip.style.display = 'none'; }, 300);
+    });
   });
 </script>
 
