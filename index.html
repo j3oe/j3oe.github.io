@@ -283,11 +283,11 @@ button{cursor:pointer}
 <section id="contact">
   <h2>Contact Me</h2>
   <div class="skills-container" style="justify-content:center;">
-    <a href="mailto:j0seph@outlook.it" class="skill-pill" style="display:flex; align-items:center; gap:8px;">
+    <a href="mailto:j0seph@outlook.it" class="skill-pill contact-link" style="display:flex; align-items:center; gap:8px;">
       <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email">
       <span>Email</span>
     </a>
-    <a href="https://github.com/j3oe" target="_blank" class="skill-pill" style="display:flex; align-items:center; gap:8px;">
+    <a href="https://github.com/j3oe" target="_blank" class="skill-pill contact-link" style="display:flex; align-items:center; gap:8px;">
       <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
       <span>GitHub</span>
     </a>
@@ -318,7 +318,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const tooltipText = document.getElementById('tooltipText');
   const tooltipClose = document.getElementById('tooltipClose');
 
-  document.querySelectorAll('.skill-pill').forEach(pill => {
+  // Only skill pills NOT in contact section trigger tooltip
+  document.querySelectorAll('.skill-pill:not(.contact-link)').forEach(pill => {
     pill.addEventListener('click', () => {
       if(activeUI && activeUI !== tooltip){ activeUI.style.display='none'; activeUI.classList.remove('visible'); }
       tooltipText.textContent = pill.dataset.info;
