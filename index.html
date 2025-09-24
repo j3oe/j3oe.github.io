@@ -3,196 +3,250 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Josephuv Portfolio</title>
+<title>Josephuv's Portfolio</title>
+
+<!-- Math.js for proper math evaluation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+
 <style>
-  body {
-    background:#000;
-    color:#fff;
-    font-family:Segoe UI, sans-serif;
-    margin:0;
-    padding:20px;
-    line-height:1.6;
-  }
-  h1,h2,h3 { color:#0ff; margin-top:30px; }
-  section { margin-bottom:40px; }
+/* === Global === */
+body{
+  margin:0;
+  background:#000;
+  color:#eee;
+  font-family:Segoe UI, sans-serif;
+}
+section{
+  padding:40px 20px;
+  max-width:1000px;
+  margin:auto;
+}
+h1,h2,h3{color:#fff;text-align:center;margin-bottom:20px;}
+button{cursor:pointer}
 
-  /* Skills */
-  .skills { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
-  .skill-pill {
-    background:#222;
-    color:#fff;
-    padding:8px 14px;
-    border-radius:20px;
-    cursor:pointer;
-    transition:background 0.3s;
-  }
-  .skill-pill:hover { background:#555; }
+/* === About Me === */
+.about-box{
+  background:#111;
+  border:1px solid #333;
+  padding:20px;
+  border-radius:12px;
+  line-height:1.6;
+  max-width:800px;
+  margin:auto;
+}
 
-  /* Tooltip */
-  .tooltip {
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background:rgba(0,0,0,0.7);
-    display:none; align-items:center; justify-content:center;
-  }
-  .tooltip.visible { display:flex; }
-  .tooltip-box {
-    background:#111;
-    padding:20px;
-    border-radius:10px;
-    max-width:300px;
-    text-align:center;
-    position:relative;
-  }
-  .tooltip-close {
-    position:absolute;
-    top:8px; right:12px;
-    cursor:pointer;
-    color:#0ff;
-  }
+/* === Skills === */
+.skills-container{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+  margin-top:20px;
+}
+.skill-pill{
+  background:#444;
+  color:#fff;
+  padding:10px 18px;
+  border-radius:20px;
+  border:1px solid #666;
+  transition:background 0.3s;
+}
+.skill-pill:hover{background:#666;}
+.tooltip{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#111;
+  border:1px solid #666;
+  padding:20px;
+  border-radius:12px;
+  max-width:300px;
+  text-align:center;
+  display:none;
+  z-index:999;
+}
+.tooltip.visible{display:block;}
+.tooltip .close{
+  position:absolute;
+  top:8px;
+  right:12px;
+  color:#999;
+  font-size:18px;
+  cursor:pointer;
+}
 
-  /* Projects */
-  .projects { display:flex; flex-wrap:wrap; gap:15px; }
-  .project {
-    background:#111;
-    padding:20px;
-    width:220px;
-    text-align:center;
-    border-radius:12px;
-    cursor:pointer;
-    transition:background 0.3s;
-  }
-  .project:hover { background:#222; }
+/* === Projects === */
+.projects-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  max-width:900px;
+  margin:30px auto;
+}
+.project{
+  background:#111;
+  padding:20px;
+  border:1px solid #333;
+  border-radius:12px;
+  text-align:center;
+  transition:background 0.3s;
+}
+.project:hover{background:#222;}
+#projectModal{
+  display:none;
+  position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.8);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+.modal-content{
+  background:#111;
+  padding:20px;
+  border-radius:12px;
+  border:1px solid #555;
+  min-width:300px;
+  max-width:600px;
+  min-height:200px;
+  position:relative;
+}
+.modal-content .close{
+  position:absolute;
+  top:8px;
+  right:12px;
+  color:#aaa;
+  font-size:22px;
+  cursor:pointer;
+}
+.game-btn, .calc-btn, .note-btn{
+  display:block;
+  margin:10px auto;
+  padding:10px 16px;
+  border-radius:8px;
+  border:1px solid #666;
+  background:#333;
+  color:#fff;
+}
 
-  /* Modal */
-  .modal {
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background:rgba(0,0,0,0.7);
-    display:none; align-items:center; justify-content:center;
-  }
-  .modal-content {
-    background:#111;
-    padding:20px;
-    border-radius:10px;
-    max-width:400px;
-    width:90%;
-    text-align:center;
-    position:relative;
-  }
-  .modal-close {
-    position:absolute;
-    top:8px; right:12px;
-    cursor:pointer;
-    color:#0ff;
-  }
-
-  /* Playground & Dev Log */
-  .playground, .devlog {
-    background:#111;
-    padding:20px;
-    border-radius:12px;
-    max-width:800px;
-    margin-top:20px;
-  }
-  textarea {
-    width:100%;
-    min-height:180px;
-    background:#000;
-    color:#0f0;
-    padding:10px;
-    border:1px solid #444;
-    resize:vertical;
-    box-sizing:border-box;
-    font-family:monospace;
-  }
-  pre {
-    background:#000;
-    color:#0f0;
-    padding:12px;
-    overflow:auto;
-    min-height:60px;
-  }
-  button {
-    background:#0ff;
-    border:none;
-    padding:8px 16px;
-    cursor:pointer;
-    margin-top:10px;
-    border-radius:6px;
-    font-weight:bold;
-  }
-  button:hover { background:#0cc; }
+/* === Playground & Dev Log === */
+.play-container{
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
+  max-width:900px;
+  margin:2rem auto;
+  background:#111;
+  padding:1rem;
+  border:1px solid #333;
+  border-radius:12px;
+}
+.play-container textarea{
+  width:100%;
+  min-height:300px;
+  font-family:monospace;
+  font-size:16px;
+  line-height:1.4;
+  background:#000;
+  color:#eee;
+  padding:1rem;
+  border:1px solid #444;
+  resize:vertical;
+  overflow:auto;
+  border-radius:8px;
+}
+.play-container button{
+  align-self:flex-start;
+  padding:0.5rem 1rem;
+  background:#444;
+  border:1px solid #666;
+  color:#fff;
+  border-radius:8px;
+  transition:background 0.3s;
+}
+.play-container button:hover{background:#666;}
+.play-output{
+  width:100%;
+  min-height:250px;
+  background:#000;
+  color:#0f0;
+  padding:1rem;
+  border:1px solid #444;
+  overflow:auto;
+  font-family:monospace;
+  font-size:15px;
+  border-radius:8px;
+}
 </style>
 </head>
 <body>
 
-<h1>Josephuv Portfolio</h1>
-
+<!-- === ABOUT === -->
 <section id="about">
-  <h2>About Me</h2>
-  <p>
-    I've been coding for a couple of years now and I've created a variety of things—some for games and some for academic use, such as note-taking tools and experimental AI projects that help me understand how bots and APIs operate behind the scenes.
-  </p>
+  <h1>About Me</h1>
+  <div class="about-box">
+    <p>
+      I've been coding for a couple of years now and I've created a variety of things
+      some for games and some for academic use, such as note takers and utilities that help
+      me, as just a normal human, deeply understand what AI bots look at.
+      Exploring back-end APIs and experimenting with AI interactions drives my curiosity every day.
+    </p>
+  </div>
 </section>
 
+<!-- === SKILLS === -->
 <section id="skills">
   <h2>Skills</h2>
-  <div class="skills">
-    <div class="skill-pill" data-info="Building modern, responsive websites.">Web Development</div>
-    <div class="skill-pill" data-info="Crafting clean and intuitive interfaces.">UI Design</div>
-    <div class="skill-pill" data-info="Optimizing the user experience.">UX Design</div>
-    <div class="skill-pill" data-info="Designing for all screen sizes.">Responsive Design</div>
-    <div class="skill-pill" data-info="Creating quick interactive prototypes.">Prototyping</div>
-    <div class="skill-pill" data-info="JavaScript logic and interactivity.">JavaScript</div>
-    <div class="skill-pill" data-info="CSS animations and layouts.">CSS Animation</div>
+  <div class="skills-container">
+    <div class="skill-pill" data-info="Building responsive websites with HTML, CSS, JS.">Web Development</div>
+    <div class="skill-pill" data-info="Crafting modern user interfaces.">UI Design</div>
+    <div class="skill-pill" data-info="Designing smooth and intuitive experiences.">UX Design</div>
+    <div class="skill-pill" data-info="Layouts that adapt to any device.">Responsive Design</div>
+    <div class="skill-pill" data-info="Rapidly turning ideas into prototypes.">Prototyping</div>
+    <div class="skill-pill" data-info="Creating reusable components for large apps.">Component Architecture</div>
+    <div class="skill-pill" data-info="Optimizing performance and accessibility.">Web Performance</div>
   </div>
+  <div class="tooltip" id="skillTooltip"><span class="close" id="tooltipClose">✖</span><p id="tooltipText"></p></div>
 </section>
 
+<!-- === PROJECTS === -->
 <section id="projects">
   <h2>Projects</h2>
-  <div class="projects">
-    <div class="project" data-project="1">Project 1<br>Game Prototype</div>
-    <div class="project" data-project="2">Project 2<br>Calculator</div>
-    <div class="project" data-project="3">Project 3<br>Note-taking Tool</div>
+  <div class="projects-grid">
+    <div class="project" data-project="1"><h3>Project 1</h3><p>Game Prototype</p></div>
+    <div class="project" data-project="2"><h3>Project 2</h3><p>AI API Experiment</p></div>
+    <div class="project" data-project="3"><h3>Project 3</h3><p>Note taking Tool</p></div>
   </div>
 </section>
 
-<section id="playground" class="playground">
-  <h2>Code Playground</h2>
-  <p>Type JavaScript or math.js expressions and run them live:</p>
-  <textarea id="playgroundInput">// Example: math.evaluate('6+3^6')</textarea>
-  <button id="playgroundRun">Run</button>
-  <pre id="playgroundOutput"></pre>
-</section>
-
-<section id="devlog" class="devlog">
-  <h2>Dev Log</h2>
-  <p>Write simple Markdown (use **bold**, *italic*):</p>
-  <textarea id="devlogInput">**Hello World** from my Dev Log!</textarea>
-  <button id="devlogRender">Render</button>
-  <div id="devlogOutput" style="margin-top:15px;"></div>
-</section>
-
-<!-- Tooltip -->
-<div class="tooltip" id="skillTooltip">
-  <div class="tooltip-box">
-    <span class="tooltip-close" id="tooltipClose">✖</span>
-    <p id="tooltipText"></p>
-  </div>
-</div>
-
-<!-- Project Modal -->
-<div class="modal" id="projectModal">
+<div id="projectModal">
   <div class="modal-content">
-    <span class="modal-close" id="projectClose">✖</span>
+    <span class="close" id="projectClose">✖</span>
     <div id="projectBody"></div>
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+<!-- === CODE PLAYGROUND === -->
+<section id="playground">
+  <h2>Code Playground</h2>
+  <div class="play-container">
+    <textarea id="playgroundInput" placeholder="// Type math expressions or JavaScript here"></textarea>
+    <button id="playgroundRun">Run</button>
+    <pre class="play-output" id="playgroundOutput"></pre>
+  </div>
+</section>
+
+<!-- === DEV LOG === -->
+<section id="devlog">
+  <h2>Dev Log</h2>
+  <div class="play-container">
+    <textarea id="devlogInput" placeholder="Write Markdown here..."></textarea>
+    <button id="devlogRender">Render</button>
+    <div class="play-output" id="devlogOutput"></div>
+  </div>
+</section>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -217,16 +271,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const projectBodies = {
     1: `<h3>Game Prototype</h3>
         <p>A simple click counter game.</p>
-        <button id="gameBtn">Click me</button>
+        <button class="game-btn" id="gameBtn">Click me</button>
         <p id="gameScore">Score: 0</p>`,
     2: `<h3>Calculator</h3>
-        <p>Enter a math expression (e.g. 6+3^6):</p>
+        <p>Enter a math expression (supports ^, sqrt(), sin(), etc.):</p>
         <input type="text" id="calcInput" style="width:80%;padding:6px;background:#000;color:#fff;border:1px solid #555;">
-        <button id="calcRun">Calculate</button>
+        <button class="calc-btn" id="calcRun">Calculate</button>
         <p id="calcResult">Result: </p>`,
-    3: `<h3>Note-taking Tool</h3>
+    3: `<h3>Note taking Tool</h3>
         <textarea id="noteInput" placeholder="Write a note..." style="width:90%;height:100px;background:#000;color:#fff;border:1px solid #555;"></textarea>
-        <button id="saveNote">Save</button>
+        <button class="note-btn" id="saveNote">Save</button>
         <div id="noteList" style="margin-top:10px;"></div>`
   };
 
@@ -243,7 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
         gameBtn.addEventListener('click',()=>{score++;gameScore.textContent="Score: "+score;});
       }
 
-      if(key==="2"){ // Calculator (math.js ONLY)
+      if(key==="2"){ // Calculator (math.js)
         const calcRun=document.getElementById('calcRun');
         const calcInput=document.getElementById('calcInput');
         const calcResult=document.getElementById('calcResult');
@@ -276,12 +330,13 @@ document.addEventListener("DOMContentLoaded", () => {
   projectClose.addEventListener('click',()=>projectModal.style.display="none");
   window.addEventListener('click',e=>{ if(e.target===projectModal) projectModal.style.display="none"; });
 
-  /* ===== Code Playground (math.js powered) ===== */
+  /* ===== Code Playground ===== */
   const runBtn = document.getElementById('playgroundRun');
   const input  = document.getElementById('playgroundInput');
   const output = document.getElementById('playgroundOutput');
   runBtn.addEventListener('click',()=>{
     try{
+      // use math.js to allow both numbers and functions
       const res = math.evaluate(input.value);
       output.textContent = String(res);
     }catch(err){
