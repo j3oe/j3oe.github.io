@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Josephuv's Portfolio</title>
 
-<!-- Math.js for proper math evaluation -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
 
 <style>
@@ -35,11 +34,11 @@ button{cursor:pointer}
   align-items:center;
   z-index:2000;
   transition: opacity 0.8s ease;
-  cursor:pointer;  /* click anywhere */
+  cursor:pointer;
 }
 #loadingScreen.fade-out { opacity:0; pointer-events:none; }
 #loadingScreen img{
-  width:250px;  /* bigger cross */
+  width:250px;
   height:250px;
   animation: spin 2s linear infinite;
 }
@@ -276,23 +275,22 @@ button{cursor:pointer}
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Remove any hash in URL and scroll to top
-  if (window.location.hash) history.replaceState(null, '', window.location.pathname);
+  // Remove hash & scroll to top
+  if(window.location.hash) history.replaceState(null,'',window.location.pathname);
   window.scrollTo(0,0);
 
+  // ===== Loading screen =====
   const loadingScreen = document.getElementById('loadingScreen');
   const aboutSection = document.getElementById('about');
-
-  // Clicking anywhere on loading screen hides it and scrolls to About Me
-  loadingScreen.addEventListener('click', () => {
+  loadingScreen.addEventListener('click',()=>{
     loadingScreen.classList.add('fade-out');
-    loadingScreen.addEventListener('transitionend', () => {
+    loadingScreen.addEventListener('transitionend',()=>{
       loadingScreen.style.display='none';
       aboutSection.scrollIntoView({behavior:'smooth'});
-    }, { once:true });
+    },{once:true});
   });
 
-  /* ===== Skills Tooltip ===== */
+  // ===== Skills Tooltip =====
   const tooltip = document.getElementById('skillTooltip');
   const tooltipText = document.getElementById('tooltipText');
   const tooltipClose = document.getElementById('tooltipClose');
@@ -305,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
   tooltipClose.addEventListener('click',()=>tooltip.classList.remove('visible'));
   window.addEventListener('click',e=>{ if(e.target===tooltip) tooltip.classList.remove('visible'); });
 
-  /* ===== Projects ===== */
+  // ===== Projects =====
   const projectModal = document.getElementById('projectModal');
   const projectBody  = document.getElementById('projectBody');
   const projectClose = document.getElementById('projectClose');
@@ -327,23 +325,30 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   document.querySelectorAll('.project').forEach(p=>{
-    p.addEventListener('click', ()=>{
+    p.addEventListener('click',()=>{
       const key = p.dataset.project;
-      projectBody.innerHTML = projectBodies[key] || "<p>No content.</p>";
 
+      // Reset modal content
+      projectBody.innerHTML = projectBodies[key] || "<p>No content.</p>";
       projectModal.style.display = "flex";
 
-      if(key==="1"){ let score=0;
-        const gameBtn=document.getElementById('gameBtn');
-        const gameScore=document.getElementById('gameScore');
-        gameBtn.addEventListener('click',()=>{score++;gameScore.textContent="Score: "+score;});
+      // ===== Attach only the relevant listener =====
+      if(key==="1"){
+        let score=0;
+        const gameBtn = document.getElementById('gameBtn');
+        const gameScore = document.getElementById('gameScore');
+        const newBtn = gameBtn.cloneNode(true);
+        gameBtn.parentNode.replaceChild(newBtn,gameBtn);
+        newBtn.addEventListener('click',()=>{score++; gameScore.textContent="Score: "+score;});
       }
 
       if(key==="2"){
         const calcRun=document.getElementById('calcRun');
         const calcInput=document.getElementById('calcInput');
         const calcResult=document.getElementById('calcResult');
-        calcRun.addEventListener('click',()=>{
+        const newBtn = calcRun.cloneNode(true);
+        calcRun.parentNode.replaceChild(newBtn,calcRun);
+        newBtn.addEventListener('click',()=>{
           try{ const res = math.evaluate(calcInput.value); calcResult.textContent="Result: "+res; }
           catch(err){ calcResult.textContent="Error: "+err; }
         });
@@ -354,17 +359,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const noteInput=document.getElementById('noteInput');
         const noteList=document.getElementById('noteList');
         let notes=[];
-        saveNote.addEventListener('click',()=>{
+        const newBtn = saveNote.cloneNode(true);
+        saveNote.parentNode.replaceChild(newBtn,saveNote);
+        newBtn.addEventListener('click',()=>{
           if(noteInput.value.trim()){ notes.push(noteInput.value.trim()); noteInput.value=''; noteList.innerHTML=notes.map(n=>`<p>- ${n}</p>`).join(''); }
         });
       }
+
     });
   });
 
   projectClose.addEventListener('click',()=>projectModal.style.display="none");
   window.addEventListener('click',e=>{ if(e.target===projectModal) projectModal.style.display="none"; });
 
-  /* ===== Code Playground ===== */
+  // ===== Code Playground =====
   const runBtn = document.getElementById('playgroundRun');
   const input  = document.getElementById('playgroundInput');
   const output = document.getElementById('playgroundOutput');
@@ -373,7 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
     catch(err){ output.textContent = "Error: "+err; }
   });
 
-  /* ===== Dev Log ===== */
+  // ===== Dev Log =====
   const devBtn = document.getElementById('devlogRender');
   const devIn  = document.getElementById('devlogInput');
   const devOut = document.getElementById('devlogOutput');
