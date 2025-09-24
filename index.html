@@ -15,6 +15,7 @@
       color: white;
     }
 
+    /* Loading screen */
     #loading-screen {
       position: fixed;
       top: 0; left: 0;
@@ -39,6 +40,7 @@
       100% { transform: rotate(360deg); }
     }
 
+    /* Blog content */
     #blog {
       opacity: 0;
       transform: translateY(30px);
@@ -66,7 +68,12 @@
       border-top: 1px solid #333;
     }
 
-    /* Portfolio styles */
+    /* Animated dots */
+    #dots {
+      color: white;
+    }
+
+    /* Portfolio & pills */
     .skill-group {
       margin-top: 1rem;
     }
@@ -89,12 +96,61 @@
       border-radius: 999px;
       font-size: 0.9rem;
       transition: background-color 0.3s, transform 0.3s;
-      cursor: default;
+      cursor: pointer;
     }
 
     .pill:hover {
       background-color: #555;
       transform: translateY(-2px);
+    }
+
+    /* Modal styles */
+    .modal {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #111;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+      max-width: 400px;
+      width: 90%;
+      display: none;
+      z-index: 10000;
+      color: white;
+    }
+
+    .modal h3 {
+      margin-top: 0;
+      color: #fff;
+    }
+
+    .modal p {
+      margin-bottom: 1rem;
+    }
+
+    .modal-close {
+      background-color: #222;
+      color: white;
+      padding: 0.3rem 0.7rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      float: right;
+    }
+
+    .modal-close:hover {
+      background-color: #555;
+    }
+
+    /* Overlay */
+    #modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      display: none;
+      z-index: 9999;
     }
   </style>
 </head>
@@ -122,22 +178,22 @@
       <div class="skill-group">
         <h3>Web Development</h3>
         <div class="pills">
-          <span class="pill">HTML</span>
-          <span class="pill">CSS</span>
-          <span class="pill">JavaScript</span>
-          <span class="pill">React</span>
-          <span class="pill">Node.js</span>
+          <span class="pill" data-description="HTML is the backbone of web content structure.">HTML</span>
+          <span class="pill" data-description="CSS is used for styling web pages, creating layouts and visual designs.">CSS</span>
+          <span class="pill" data-description="JavaScript makes web pages interactive and dynamic.">JavaScript</span>
+          <span class="pill" data-description="React is a modern JS framework for building responsive UI.">React</span>
+          <span class="pill" data-description="Node.js allows server-side JavaScript development.">Node.js</span>
         </div>
       </div>
 
       <div class="skill-group">
         <h3>UI / UX Development</h3>
         <div class="pills">
-          <span class="pill">Figma</span>
-          <span class="pill">Adobe XD</span>
-          <span class="pill">Tailwind CSS</span>
-          <span class="pill">Responsive Design</span>
-          <span class="pill">Accessibility</span>
+          <span class="pill" data-description="Figma is a tool for designing UI mockups and prototypes.">Figma</span>
+          <span class="pill" data-description="Adobe XD helps create UI/UX designs and interactive prototypes.">Adobe XD</span>
+          <span class="pill" data-description="Tailwind CSS allows quick styling with utility-first classes.">Tailwind CSS</span>
+          <span class="pill" data-description="Responsive Design ensures your site works on all devices.">Responsive Design</span>
+          <span class="pill" data-description="Accessibility ensures web content is usable by everyone.">Accessibility</span>
         </div>
       </div>
     </section>
@@ -156,8 +212,17 @@
     </footer>
   </div>
 
-  <!-- Animated dots script -->
+  <!-- Modal & overlay -->
+  <div id="modal-overlay"></div>
+  <div class="modal" id="skill-modal">
+    <button class="modal-close" id="modal-close">X</button>
+    <h3 id="modal-title"></h3>
+    <p id="modal-description"></p>
+  </div>
+
+  <!-- Scripts -->
   <script>
+    // Animated dots
     const dots = document.getElementById('dots');
     let dotCount = 0;
     let increasing = true;
@@ -172,10 +237,8 @@
       }
       dots.textContent = '.'.repeat(dotCount);
     }, 500);
-  </script>
 
-  <!-- Loading screen script -->
-  <script>
+    // Loading screen
     const loadingScreen = document.getElementById('loading-screen');
     const blog = document.getElementById('blog');
 
@@ -184,6 +247,33 @@
       loadingScreen.style.pointerEvents = 'none';
       blog.classList.add('visible');
       document.body.style.overflow = 'auto';
+    });
+
+    // Modal functionality
+    const pills = document.querySelectorAll('.pill');
+    const modal = document.getElementById('skill-modal');
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+    const modalClose = document.getElementById('modal-close');
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        modalTitle.textContent = pill.textContent;
+        modalDescription.textContent = pill.getAttribute('data-description');
+        modal.style.display = 'block';
+        modalOverlay.style.display = 'block';
+      });
+    });
+
+    modalClose.addEventListener('click', () => {
+      modal.style.display = 'none';
+      modalOverlay.style.display = 'none';
+    });
+
+    modalOverlay.addEventListener('click', () => {
+      modal.style.display = 'none';
+      modalOverlay.style.display = 'none';
     });
   </script>
 
