@@ -4,27 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Josephuv Portfolio</title>
-<!-- Optional reCAPTCHA -->
-<script src="https://www.google.com/recaptcha/api.js?render=YOUR_SITE_KEY"></script>
 <style>
-  /* Reset & body */
   body, html {
-    margin:0;
-    padding:0;
+    margin:0; padding:0;
     font-family:'Segoe UI', sans-serif;
-    background:black;
-    color:white;
-    overflow:hidden;
-    scroll-behavior: smooth;
+    background:black; color:white;
+    overflow:hidden; scroll-behavior:smooth;
   }
 
   /* Loading Screen */
   #loading-screen {
-    position:fixed; top:0; left:0;
-    width:100%; height:100%;
+    position:fixed; top:0; left:0; width:100%; height:100%;
     display:flex; justify-content:center; align-items:center;
-    background:black; cursor:pointer;
-    z-index:9999; transition: opacity 1s ease;
+    background:black; cursor:pointer; z-index:9999;
+    transition: opacity 1s ease;
   }
   #loading-screen img { width:max(60px,10vw); height:auto; animation:spin 2s linear infinite; }
   @keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
@@ -71,24 +64,13 @@
   }
   .tooltip.visible { opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
 
-  /* Contact Form */
-  form#contact-form { display:flex; flex-direction:column; gap:1rem; max-width:500px; }
-  .form-group label { display:block; margin-bottom:0.3rem; color:#ccc; }
-  .form-group input, .form-group textarea {
-    width:100%; padding:0.6rem 0.8rem; border-radius:5px; border:1px solid #444;
-    background:#111; color:white; transition:0.3s, box-shadow 0.3s;
-  }
-  .form-group input:focus, .form-group textarea:focus {
-    outline:none; border-color:#00ffcc; box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33;
-  }
-  form#contact-form button {
-    padding:0.6rem 1.2rem; border:none; border-radius:5px; background:#00ffcc;
-    color:black; font-weight:bold; cursor:pointer; transition:0.3s, box-shadow 0.3s;
-  }
-  form#contact-form button:hover { box-shadow:0 0 15px #00ffcc66,0 0 25px #00ffcc33; }
-  #form-status { margin-top:0.5rem; font-weight:bold; color:#00ffcc; }
-
-  @media(max-width:600px){ .pills{gap:0.3rem;} .pill{padding:0.4rem 0.8rem; font-size:0.85rem;} }
+  /* Math Snippets */
+  .snippet { margin-bottom:2rem; background:#111; border:1px solid #00ffcc; border-radius:8px; padding:1rem; }
+  .snippet label { display:block; margin-bottom:0.5rem; color:#ccc; }
+  .snippet input { width:100%; padding:0.5rem; border-radius:5px; border:1px solid #444; background:#111; color:white; margin-bottom:0.5rem; }
+  .snippet button { padding:0.5rem 1rem; border:none; border-radius:5px; background:#00ffcc; color:black; font-weight:bold; cursor:pointer; transition:0.3s; }
+  .snippet button:hover { box-shadow:0 0 10px #00ffcc66,0 0 20px #00ffcc33; }
+  .snippet .output { background:#111; color:#0f0; padding:0.5rem; border-radius:5px; min-height:1.5em; font-family:monospace; }
 </style>
 </head>
 <body>
@@ -96,7 +78,6 @@
 <!-- Loading Screen -->
 <div id="loading-screen"><img src="assets/cross.png" alt="Loading animation"></div>
 
-<!-- Blog content -->
 <main id="blog">
   <section><h1>Hello<span id="dots"></span></h1></section>
 
@@ -110,11 +91,11 @@
     <div class="skill-group">
       <h3>Web Development</h3>
       <div class="pills">
-        <span class="pill" data-info="HTML structures the content of webpages." tabindex="0">HTML</span>
-        <span class="pill" data-info="CSS styles websites and layouts." tabindex="0">CSS</span>
-        <span class="pill" data-info="JavaScript adds interactivity." tabindex="0">JavaScript</span>
-        <span class="pill" data-info="React library for UI components." tabindex="0">React</span>
-        <span class="pill" data-info="Node.js enables server-side JS." tabindex="0">Node.js</span>
+        <span class="pill" data-info="HTML structures webpages." tabindex="0">HTML</span>
+        <span class="pill" data-info="CSS styles pages." tabindex="0">CSS</span>
+        <span class="pill" data-info="JS adds interactivity." tabindex="0">JavaScript</span>
+        <span class="pill" data-info="React for UI components." tabindex="0">React</span>
+        <span class="pill" data-info="Node.js for backend JS." tabindex="0">Node.js</span>
       </div>
     </div>
     <div class="skill-group">
@@ -131,28 +112,22 @@
   </section>
 
   <section>
-    <h2>Kontakt</h2>
-    <p>Máte-li dotazy nebo zájem o spolupráci, vyplňte prosím formulář níže nebo mě kontaktujte přímo e-mailem.</p>
+    <h2>Interactive Math Snippets</h2>
 
-    <form id="contact-form" action="https://formspree.io/f/xkgqnyww" method="POST">
-      <div class="form-group">
-        <label for="name">Jméno</label>
-        <input type="text" id="name" name="name" placeholder="Vaše jméno" required>
-      </div>
+    <div class="snippet">
+      <label for="math1">Enter a math expression:</label>
+      <input type="text" id="math1" placeholder="e.g., 5*7+2">
+      <button onclick="runMath('math1','output1')">Run</button>
+      <pre class="output" id="output1"></pre>
+    </div>
 
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="_replyto" placeholder="Váš email" required>
-      </div>
+    <div class="snippet">
+      <label for="math2">Try another calculation:</label>
+      <input type="text" id="math2" placeholder="e.g., Math.sqrt(81)">
+      <button onclick="runMath('math2','output2')">Run</button>
+      <pre class="output" id="output2"></pre>
+    </div>
 
-      <div class="form-group">
-        <label for="message">Zpráva</label>
-        <textarea id="message" name="message" rows="5" placeholder="Vaše zpráva" required></textarea>
-      </div>
-
-      <button type="submit">Odeslat</button>
-      <p id="form-status"></p>
-    </form>
   </section>
 
   <footer>&copy; 2025 Josephuv Blog. Děkuji za návštěvu!</footer>
@@ -205,33 +180,18 @@
     }
   });
 
-  // Contact Form Submission (AJAX)
-  const contactForm = document.getElementById('contact-form');
-  const formStatus = document.getElementById('form-status');
-  contactForm.addEventListener('submit', async e=>{
-    e.preventDefault();
-    const formData = new FormData(contactForm);
-
-    // Optional reCAPTCHA
-    if(window.grecaptcha){
-      const token = await grecaptcha.execute('YOUR_SITE_KEY',{action:'submit'});
-      formData.append('g-recaptcha-response',token);
-    }
-
+  // Function to run math snippets safely
+  function runMath(inputId, outputId){
+    const code = document.getElementById(inputId).value;
+    const output = document.getElementById(outputId);
     try{
-      const response = await fetch(contactForm.action,{
-        method:'POST', body:formData, headers:{'Accept':'application/json'}
-      });
-      if(response.ok){
-        formStatus.textContent='Děkuji! Vaše zpráva byla odeslána.';
-        contactForm.reset();
-      } else{
-        formStatus.textContent='Ups… něco se pokazilo. Zkuste to prosím znovu.';
-      }
-    } catch(err){
-      formStatus.textContent='Ups… něco se pokazilo. Zkuste to prosím znovu.';
+      // Only allow math operations
+      let result = Function('"use strict"; return ('+code+')')();
+      output.textContent = result;
+    }catch(err){
+      output.textContent = 'Error: '+err;
     }
-  });
+  }
 </script>
 </body>
 </html>
