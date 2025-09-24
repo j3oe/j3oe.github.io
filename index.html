@@ -70,6 +70,7 @@ button{cursor:pointer}
   border-radius:20px;
   border:1px solid #666;
   transition:background 0.3s;
+  text-decoration:none;
 }
 .skill-pill:hover{background:#666;}
 .tooltip{
@@ -198,6 +199,12 @@ button{cursor:pointer}
   font-size:15px;
   border-radius:8px;
 }
+
+/* === Contact / Social Links === */
+#contact .skills-container{
+  margin-top:20px;
+}
+#contact img{width:24px;height:24px;}
 </style>
 </head>
 <body>
@@ -272,11 +279,26 @@ button{cursor:pointer}
   </div>
 </section>
 
+<!-- === CONTACT / SOCIAL LINKS === -->
+<section id="contact">
+  <h2>Contact Me</h2>
+  <div class="skills-container" style="justify-content:center;">
+    <a href="mailto:j0seph@outlook.it" class="skill-pill" style="display:flex; align-items:center; gap:8px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email">
+      <span>Email</span>
+    </a>
+    <a href="https://github.com/j3oe" target="_blank" class="skill-pill" style="display:flex; align-items:center; gap:8px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
+      <span>GitHub</span>
+    </a>
+  </div>
+</section>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  let activeUI = null; // Tracks the currently open UI (tooltip or modal)
+  let activeUI = null; // Tracks currently open UI
 
-  // Scroll to top
+  // Scroll to top on load
   if(window.location.hash) history.replaceState(null,'',window.location.pathname);
   window.scrollTo(0,0);
 
@@ -298,9 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll('.skill-pill').forEach(pill => {
     pill.addEventListener('click', () => {
-      // Close any active UI
       if(activeUI && activeUI !== tooltip){ activeUI.style.display='none'; activeUI.classList.remove('visible'); }
-
       tooltipText.textContent = pill.dataset.info;
       tooltip.style.display='block';
       tooltip.classList.add('visible');
@@ -334,15 +354,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll('.project').forEach(p=>{
     p.addEventListener('click', ()=>{
-      // Close any active UI
       if(activeUI && activeUI !== projectModal){ activeUI.style.display='none'; activeUI.classList.remove('visible'); }
-
       const key = p.dataset.project;
       projectBody.innerHTML = projectBodies[key] || "<p>No content.</p>";
       projectModal.style.display = "flex";
       activeUI = projectModal;
 
-      // Setup project-specific buttons
+      // Project-specific buttons
       if(key==="1"){
         let score=0;
         const gameBtn = document.getElementById('gameBtn');
