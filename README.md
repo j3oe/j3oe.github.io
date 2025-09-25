@@ -28,3 +28,44 @@ I focus on building interactive, efficient, and visually appealing web projects.
 - Exploring AI, APIs, and back end integrations  
 
 I aim to make projects that are not only functional but also a joy to interact with, and I enjoy documenting my journey so others can learn or get inspired.
+
+
+
+## Timeline
+
+<div style="position: relative; padding-left: 40px; border-left: 2px solid #ccc;">
+
+<!-- Week 1 -->
+<div style="position: relative; margin-bottom: 30px;">
+  <div style="position: absolute; left: -12px; top: 0; width: 20px; height: 20px; background: #4CAF50; border-radius: 50%;"></div>
+  <h3 style="margin: 0; color: #4CAF50;">Week 1</h3>
+  <p style="margin: 2px 0;">• Initial project setup</p>
+  <p style="margin: 2px 0;">• Create basic file structure</p>
+</div>
+
+<!-- Week 2 -->
+<div style="position: relative; margin-bottom: 30px;">
+  <div style="position: absolute; left: -12px; top: 0; width: 20px; height: 20px; background: #2196F3; border-radius: 50%;"></div>
+  <h3 style="margin: 0; color: #2196F3;">Week 2</h3>
+  <p style="margin: 2px 0;">• Implement core functionality</p>
+  <p style="margin: 2px 0;">• Add first unit tests</p>
+</div>
+
+<!-- Week 3 -->
+<div style="position: relative; margin-bottom: 30px;">
+  <div style="position: absolute; left: -12px; top: 0; width: 20px; height: 20px; background: #FF9800; border-radius: 50%;"></div>
+  <h3 style="margin: 0; color: #FF9800;">Week 3</h3>
+  <p style="margin: 2px 0;">• Add UI components</p>
+  <p style="margin: 2px 0;">• Connect frontend and backend</p>
+</div>
+
+<!-- Week 4 -->
+<div style="position: relative; margin-bottom: 30px;">
+  <div style="position: absolute; left: -12px; top: 0; width: 20px; height: 20px; background: #f44336; border-radius: 50%;"></div>
+  <h3 style="margin: 0; color: #f44336;">Week 4</h3>
+  <p style="margin: 2px 0;">• Testing and bug fixes</p>
+  <p style="margin: 2px 0;">• Optimize performance</p>
+</div>
+
+</div>
+
