@@ -67,5 +67,23 @@ I aim to make projects that are not only functional but also a joy to interact w
   <p style="margin: 2px 0;">• Optimize performance</p>
 </div>
 
+<!-- Week 5 -->
+<div style="position: relative; margin-bottom: 30px;">
+  <div style="position: absolute; left: -12px; top: 0; width: 20px; height: 20px; background: #f44336; border-radius: 50%;"></div>
+  <h3 style="margin: 0; color: #f44336;">Week 5</h3>
+  <p style="margin: 2px 0;">• Keep track of the information I've been getting</p>
+  <p style="margin: 2px 0;">• Making the information I'm putting into the site easier to read for people</p>
+</div>
+
+<!-- Week 6 -->
+<div style="position: relative; margin-bottom: 30px;">
+  <div style="position: absolute; left: -12px; top: 0; width: 20px; height: 20px; background: #f44336; border-radius: 50%;"></div>
+  <h3 style="margin: 0; color: #f44336;">Week 6</h3>
+  <p style="margin: 2px 0;">• Create the best blog/app site known to man</p>
+  <p style="margin: 2px 0;">• That's it I don't need 7 weeks</p>
+</div>
+
+
+
 </div>
 
