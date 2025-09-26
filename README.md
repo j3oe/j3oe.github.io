@@ -29,7 +29,7 @@ I focus on building interactive, efficient, and visually appealing web projects.
 
 I aim to make projects that are not only functional but also a joy to interact with, and I enjoy documenting my journey so others can learn or get inspired.
 
-
+---
 
 ## Timeline
 
@@ -83,7 +83,41 @@ I aim to make projects that are not only functional but also a joy to interact w
   <p style="margin: 2px 0;">• That's it I don't need 7 weeks</p>
 </div>
 
-
-
 </div>
 
+---
+
+## 🚦 First Project Check-In
+
+### Intro
+My project is **j3oe.github.io**, a personal portfolio and demo site.  
+The goal is to showcase my web development work, experiments, and contact info in a clean, fast, single-page format.
+
+### Research
+- Looked at modern portfolio site layouts for inspiration.  
+- Explored GitHub Metrics and interactive demos to display activity and stats.  
+- Compared static-site hosting options and chose GitHub Pages for simplicity.
+
+### Revisions / Changes
+- **Initial Plan:** multiple sub-pages for different projects.  
+- **Change:** simplified to a single-page design for faster deployment and easier updates.  
+- Adjusted animations and scripts to improve mobile performance.
+
+### Work Completed
+- `index.html` – core site structure and layout.  
+- `main.js` – JavaScript for interactive behavior.  
+- `assets/` – images and other media.  
+- `README.md` – project description, portfolio link, and contact email.  
+- ~199 commits showing continuous iteration and improvements.
+
+### Challenges / Redirection
+- Mobile performance required simplifying some animations and deferring non-essential scripts.  
+- Balancing visual polish with rapid deployment led to focusing on a functional single page first.
+
+### Next Steps
+- Immediate: refine mobile responsiveness and add screenshots/examples to the README.  
+- Short-term: add 2–3 interactive demos with short write-ups.  
+- Long-term: expand to include blog posts and technical tutorials.
+
+### Personal Focus
+Finalize a polished single-page portfolio and add concise documentation for each project/demo.
