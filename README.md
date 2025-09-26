@@ -87,7 +87,7 @@ I aim to make projects that are not only functional but also a joy to interact w
 
 ---
 
-## 🚦 First Project Check-In
+## First Project Check-In
 
 ### Intro
 My project is **j3oe.github.io**, a personal portfolio and demo site.  
@@ -100,7 +100,7 @@ The goal is to showcase my web development work, experiments, and contact info i
 
 ### Revisions / Changes
 - **Initial Plan:** multiple sub-pages for different projects.  
-- **Change:** simplified to a single-page design for faster deployment and easier updates.  
+- **Change:** simplified to a single page design for faster deployment and easier updates.  
 - Adjusted animations and scripts to improve mobile performance.
 
 ### Work Completed
@@ -108,7 +108,7 @@ The goal is to showcase my web development work, experiments, and contact info i
 - `main.js` – JavaScript for interactive behavior.  
 - `assets/` – images and other media.  
 - `README.md` – project description, portfolio link, and contact email.  
-- ~199 commits showing continuous iteration and improvements.
+- ~300 commits showing continuous iteration and improvements.
 
 ### Challenges / Redirection
 - Mobile performance required simplifying some animations and deferring non-essential scripts.  
@@ -120,4 +120,4 @@ The goal is to showcase my web development work, experiments, and contact info i
 - Long-term: expand to include blog posts and technical tutorials.
 
 ### Personal Focus
-Finalize a polished single-page portfolio and add concise documentation for each project/demo.
+Finalize a polished single page portfolio and add concise documentation for each project/demo.
