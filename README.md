@@ -91,12 +91,12 @@ I aim to make projects that are not only functional but also a joy to interact w
 
 ### Intro
 My project is **j3oe.github.io**, a personal portfolio and demo site.  
-The goal is to showcase my web development work, experiments, and contact info in a clean, fast, single-page format.
+The goal is to showcase my web development work experiments and contact info in a clean, fast, single page format.
 
 ### Research
 - Looked at modern portfolio site layouts for inspiration.  
 - Explored GitHub Metrics and interactive demos to display activity and stats.  
-- Compared static-site hosting options and chose GitHub Pages for simplicity.
+- Compared static site hosting options and chose GitHub Pages for simplicity.
 
 ### Revisions / Changes
 - **Initial Plan:** multiple sub-pages for different projects.  
