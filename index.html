@@ -48,18 +48,6 @@ min-width:300px;max-width:600px;min-height:200px;position:relative;}
 .game-btn,.calc-btn,.note-btn{display:block;margin:10px auto;padding:10px 16px;
 border-radius:8px;border:1px solid #666;background:#333;color:#fff;}
 
-/* === Playground & Dev Log === */
-.play-container{display:flex;flex-direction:column;gap:1rem;max-width:900px;
-margin:2rem auto;background:#111;padding:1rem;border:1px solid #333;border-radius:12px;}
-.play-container textarea{width:100%;min-height:300px;font-family:monospace;font-size:16px;
-line-height:1.4;background:#000;color:#eee;padding:1rem;border:1px solid #444;
-resize:vertical;overflow:auto;border-radius:8px;}
-.play-container button{align-self:flex-start;padding:0.5rem 1rem;background:#444;
-border:1px solid #666;color:#fff;border-radius:8px;transition:background 0.3s;}
-.play-container button:hover{background:#666;}
-.play-output{width:100%;min-height:250px;background:#000;color:#0f0;padding:1rem;
-border:1px solid #444;overflow:auto;font-family:monospace;font-size:15px;border-radius:8px;}
-
 /* === Contact === */
 #contact .skills-container{margin-top:20px;}
 #contact img{width:24px;height:24px;}
@@ -81,8 +69,6 @@ border:1px solid #444;overflow:auto;font-family:monospace;font-size:15px;border-
     <p>I've been coding for a couple of years now and I've created a variety of things some for games and some for academic use, such as note takers and utilities that help me, as just a normal human, deeply understand what AI bots look at. Exploring back end APIs and experimenting with AI interactions drives my curiosity every day.</p>
   </div>
 </section>
-
-
 
 <section id="skills">
   <h2>Skills</h2>
@@ -113,24 +99,6 @@ border:1px solid #444;overflow:auto;font-family:monospace;font-size:15px;border-
     <div id="projectBody"></div>
   </div>
 </div>
-
-<section id="playground">
-  <h2>Code Playground</h2>
-  <div class="play-container">
-    <textarea id="playgroundInput" placeholder="// Type JavaScript here"></textarea>
-    <button id="playgroundRun">Run</button>
-    <pre class="play-output" id="playgroundOutput"></pre>
-  </div>
-</section>
-
-<section id="devlog">
-  <h2>Dev Log</h2>
-  <div class="play-container">
-    <textarea id="devlogInput" placeholder="Write Markdown here..."></textarea>
-    <button id="devlogRender">Render</button>
-    <div class="play-output" id="devlogOutput"></div>
-  </div>
-</section>
 
 <section id="contact">
   <h2>Contact Me</h2>
@@ -249,28 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   projectClose.addEventListener('click',()=>projectModal.style.display="none");
   window.addEventListener('click',e=>{if(e.target===projectModal)projectModal.style.display="none";});
-
-  // Playground
-  const runBtn=document.getElementById('playgroundRun');
-  const input=document.getElementById('playgroundInput');
-  const output=document.getElementById('playgroundOutput');
-  runBtn.addEventListener('click',()=>{
-    try{output.textContent=math.evaluate(input.value);}
-    catch(err){output.textContent="Error: "+err;}
-  });
-
-  // Dev Log
-  const devBtn=document.getElementById('devlogRender');
-  const devIn=document.getElementById('devlogInput');
-  const devOut=document.getElementById('devlogOutput');
-  devIn.value=localStorage.getItem('devLog')||'';
-  devBtn.addEventListener('click',()=>{
-    let text=devIn.value.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
-                         .replace(/\*(.*?)\*/g,"<i>$1</i>")
-                         .replace(/\n/g,"<br>");
-    devOut.innerHTML=text;
-    localStorage.setItem('devLog',devIn.value);
-  });
 });
 </script>
 </body>
