@@ -5,7 +5,7 @@ I try to write clean, efficient, and thoughtful code while exploring new technol
 
 If you have suggestions, feedback, or just want to say hi, I’d genuinely appreciate hearing from you. I love connecting with other developers, learning new perspectives, and improving my projects.
 
-**Email:** [j0seph@outlook.it](mailto:j0seph@outlook.it)  
+**Email:** [j0seph@outlook.it](mailto:j__@outlook.cz)  
 **Portfolio:** [https://j3oe.github.io](https://j3oe.github.io)  
 
 ---
